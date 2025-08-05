@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CLT Worksheet Solutions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    details {
+      margin-bottom: 20px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    summary {
+      font-weight: bold;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+    p, li {
+      font-size: 1em;
+      line-height: 1.5;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Central Limit Theorem: Full Solutions</h1>
+
+  <details>
+    <summary>1. Time to Walk to Campus (Normal Distribution)</summary>
+    <p>Given: μ = 14, σ = 3, X = 18. We use the normal distribution:</p>
+    <p>Calculate z-score:</p>
+    <code>z = (18 - 14) / 3 = 1.33</code>
+    <p>Using a z-table or calculator: P(Z &lt; 1.33) ≈ 0.9082</p>
+    <p>So, P(X &gt; 18) = 1 - 0.9082 = <strong>0.0918</strong></p>
+  </details>
+
+  <details>
+    <summary>2. Uniform Distribution, Single Sample (Flour Bags)</summary>
+    <p>Uniform from a = 980 to b = 1020. Find P(X &gt; 1010)</p>
+    <code>P = (1020 - 1010) / (1020 - 980) = 10 / 40 = 0.25</code>
+    <p><strong>Answer: 0.25</strong></p>
+  </details>
+
+  <details>
+    <summary>3. Uniform Distribution, Sampling Distribution (36 Orders)</summary>
+    <p>Uniform a = 10, b = 40. So:</p>
+    <ul>
+      <li>μ = (10 + 40)/2 = 25</li>
+      <li>σ = (40 - 10)/√12 ≈ 8.66</li>
+      <li>σ<sub>X̄</sub> = σ / √n = 8.66 / √36 = 1.44</li>
+    </ul>
+    <p>Find P(X̄ &lt; 27):</p>
+    <code>z = (27 - 25)/1.44 ≈ 1.39</code><br>
+    <p>P(Z &lt; 1.39) ≈ 0.9177</p>
+    <p><strong>Answer: ≈ 0.9177</strong></p>
+  </details>
+
+  <details>
+    <summary>4. Normal Temperature Range</summary>
+    <p>μ = 98.6, σ = 0.7. Find P(98 ≤ X ≤ 99):</p>
+    <ul>
+      <li>z<sub>1</sub> = (98 - 98.6)/0.7 ≈ -0.86</li>
+      <li>z<sub>2</sub> = (99 - 98.6)/0.7 ≈ 0.57</li>
+    </ul>
+    <p>Using z-table:</p>
+    <code>P(Z &lt; 0.57) ≈ 0.7157, P(Z &lt; -0.86) ≈ 0.1949</code><br>
+    <p>P = 0.7157 - 0.1949 = <strong>0.5208</strong></p>
+  </details>
+
+  <details>
+    <summary>5. Skewed Distribution, Sampling Mean</summary>
+    <p>μ = 50, σ = 5, n = 64, X̄ = 51.</p>
+    <p>σ<sub>X̄</sub> = 5 / √64 = 0.625</p>
+    <code>z = (51 - 50)/0.625 = 1.6</code><br>
+    <p>P(Z &gt; 1.6) = 1 - P(Z &lt; 1.6) ≈ 1 - 0.9452 = <strong>0.0548</strong></p>
+  </details>
+
+  <details>
+    <summary>6. Top 5% of Normally Distributed Boxes</summary>
+    <p>μ = 420, σ = 18. We find x such that P(X &gt; x) = 0.05</p>
+    <p>This corresponds to z = 1.645 (using inverse z-table)</p>
+    <code>x = μ + zσ = 420 + 1.645 × 18 ≈ 420 + 29.61 = <strong>449.61g</strong></code>
+  </details>
+
+</body>
+</html>
