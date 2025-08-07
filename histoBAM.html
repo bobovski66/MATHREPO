@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Histogram and Frequency Table</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #4d8fac;
+            text-align: center;
+        }
+
+        /* Input and Button Styling */
+        #fileInput, #textInput, button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #4d8fac;
+            font-size: 16px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #4d8fac;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3a6e8a;
+        }
+
+        /* Canvas for Histogram */
+        #histogram {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        /* Table Styling */
+        #outputTable {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #outputTable th {
+            background-color: #4d8fac;
+            color: #fff;
+            padding: 10px;
+        }
+
+        #outputTable td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Statistics Display */
+        #statsDisplay {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            #textInput, #fileInput, button, #outputTable, #statsDisplay {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload or Input Data for Histogram and Frequency Table</h1>
+
+    <!-- File Upload Option -->
+    <input type="file" id="fileInput" accept=".csv">
+    
+    <!-- Text Box Input Option -->
+    <textarea id="textInput" rows="4" placeholder="Enter comma-separated values here..."></textarea>
+    <button onclick="processInput()">Submit Data</button>
+
+    <!-- Slider for Bin Size -->
+    <label for="binSizeSlider">Select Bin Size: <span id="binSizeValue">5</span></label>
+    <input type="range" id="binSizeSlider" min="1" max="10" value="5" oninput="updateBinSize(this.value)">
+
+    <!-- Responsive Canvas for Histogram -->
+    <div style="width: 100%; max-width: 600px;">
+        <canvas id="histogram"></canvas>
+    </div>
+    
+    <!-- Download Options -->
+    <button onclick="downloadHistogram()">Download Histogram as PNG</button>
+    <button onclick="downloadCSV()">Download Data as CSV</button>
+
+    <!-- Table for Frequency Data -->
+    <table id="outputTable">
+        <thead>
+            <tr>
+                <th>Outcome</th>
+                <th>Frequency</th>
+                <th>Relative Frequency</th>
+                <th>Cumulative Relative Frequency</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+
+    <!-- Statistics Display Section -->
+    <div id="statsDisplay">
+        <h3>One-Variable Statistics</h3>
+        <p id="mean">Mean: N/A</p>
+        <p id="median">Median: N/A</p>
+        <p id="mode">Mode: N/A</p>
+        <p id="variance">Variance: N/A</p>
+        <p id="stdDev">Standard Deviation: N/A</p>
+        <p id="q1">Q1: N/A</p>
+        <p id="q3">Q3: N/A</p>
+    </div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', handleFile);
+        let tableData = [];
+        let binSize = 5;  // Default bin size
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = e.target.result;
+                    processData(data);
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function processInput() {
+            const data = document.getElementById('textInput').value;
+            if (data) {
+                processData(data);
+            }
+        }
+
+        function processData(data) {
+            // Split the data into an array and calculate frequencies
+            const dataPoints = data.split(',').map(item => item.trim());
+            const frequencies = {};
+            dataPoints.forEach(point => {
+                frequencies[point] = (frequencies[point] || 0) + 1;
+            });
+
+            // Compute relative frequencies and cumulative relative frequencies
+            const totalPoints = dataPoints.length;
+            let cumulativeRelativeFrequency = 0;
+            tableData = [];
+
+            Object.keys(frequencies).forEach(outcome => {
+                const frequency = frequencies[outcome];
+                const relativeFrequency = frequency / totalPoints;
+                cumulativeRelativeFrequency += relativeFrequency;
+                tableData.push({
+                    outcome: outcome,
+                    frequency: frequency,
+                    relativeFrequency: relativeFrequency.toFixed(2),
+                    cumulativeRelativeFrequency: cumulativeRelativeFrequency.toFixed(2)
+                });
+            });
+
+            // Display the table
+            displayTable(tableData);
+
+            // Display the histogram
+            displayHistogram(tableData);
+
+            // Calculate statistics
+            calculateStatistics(dataPoints);
+        }
+
+        function displayTable(tableData) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = ''; // Clear existing table
+
+            tableData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.outcome}</td>
+                    <td>${row.frequency}</td>
+                    <td>${row.relativeFrequency}</td>
+                    <td>${row.cumulativeRelativeFrequency}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function updateBinSize(value) {
+            document.getElementById('binSizeValue').textContent = value;
+            binSize = value;
+            // Re-display histogram with new bin size
+            if (tableData.length > 0) {
+                displayHistogram(tableData);
+            }
+        }
+
+        function displayHistogram(tableData) {
+            const ctx = document.getElementById('histogram').getContext('2d');
+
+            const labels = tableData.map(row => row.outcome);
+            const frequencies = tableData.map(row => row.relativeFrequency);
+
+            // Create bins based on the binSize value
+            const bins = [];
+            const binCount = Math.ceil(labels.length / binSize); // calculate number of bins
+            for (let i = 0; i < binCount; i++) {
+                const binLabel = labels.slice(i * binSize, (i + 1) * binSize).join(", ");
+                const binFreq = frequencies.slice(i * binSize, (i + 1) * binSize).reduce((acc, val) => acc + parseFloat(val), 0).toFixed(2);
+                bins.push({ label: binLabel, frequency: binFreq });
+            }
+
+            const binLabels = bins.map(bin => bin.label);
+            const binFrequencies = bins.map(bin => bin.frequency);
+
+            if (window.histogramChart) {
+                window.histogramChart.destroy();
+            }
+
+            window.histogramChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: binLabels,
+                    datasets: [{
+                        label: 'Relative Frequency',
+                        data: binFrequencies,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,  // Enables responsiveness
+                    maintainAspectRatio: true,  // Keep the aspect ratio
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function calculateStatistics(dataPoints) {
+            // Convert numerical data points to numbers
+            const numericData = dataPoints.map(Number).filter(n => !isNaN(n));
+            if (numericData.length === 0) return;
+
+            // Sort numeric data
+            numericData.sort((a, b) => a - b);
+
+            // Calculate mean
+            const mean = numericData.reduce((a, b) => a + b, 0) / numericData.length;
+
+            // Calculate median
+            const mid = Math.floor(numericData.length / 2);
+            const median = numericData.length % 2 !== 0 ? numericData[mid] : (numericData[mid - 1] + numericData[mid]) / 2;
+
+            // Calculate mode
+            const modeMap = {};
+            let mode = numericData[0];
+            let maxCount = 1;
+            numericData.forEach(num => {
+                modeMap[num] = (modeMap[num] || 0) + 1;
+                if (modeMap[num] > maxCount) {
+                    maxCount = modeMap[num];
+                    mode = num;
+                }
+            });
+
+            // Calculate variance and standard deviation
+            const variance = numericData.reduce((acc, num) => acc + Math.pow(num - mean, 2), 0) / numericData.length;
+            const stdDev = Math.sqrt(variance);
+
+            // Calculate quartiles
+            const q1 = numericData[Math.floor(numericData.length / 4)];
+            const q3 = numericData[Math.floor((numericData.length * 3) / 4)];
+
+            // Store statistics
+            tableData.statistics = {
+                mean: mean.toFixed(2),
+                median: median.toFixed(2),
+                mode: mode,
+                variance: variance.toFixed(2),
+                stdDev: stdDev.toFixed(2),
+                q1: q1,
+                q3: q3
+            };
+
+            // Display statistics
+            displayStatistics(tableData.statistics);
+        }
+
+        function displayStatistics(stats) {
+            document.getElementById('mean').textContent = `Mean: ${stats.mean}`;
+            document.getElementById('median').textContent = `Median: ${stats.median}`;
+            document.getElementById('mode').textContent = `Mode: ${stats.mode}`;
+            document.getElementById('variance').textContent = `Variance: ${stats.variance}`;
+            document.getElementById('stdDev').textContent = `Standard Deviation: ${stats.stdDev}`;
+            document.getElementById('q1').textContent = `Q1: ${stats.q1}`;
+            document.getElementById('q3').textContent = `Q3: ${stats.q3}`;
+        }
+
+        function downloadCSV() {
+            let csvContent = 'Outcome,Frequency,Relative Frequency,Cumulative Relative Frequency\n';
+            tableData.forEach(row => {
+                csvContent += `${row.outcome},${row.frequency},${row.relativeFrequency},${row.cumulativeRelativeFrequency}\n`;
+            });
+
+            if (tableData.statistics) {
+                csvContent += '\n';
+                csvContent += `Mean,${tableData.statistics.mean}\n`;
+                csvContent += `Median,${tableData.statistics.median}\n`;
+                csvContent += `Mode,${tableData.statistics.mode}\n`;
+                csvContent += `Variance,${tableData.statistics.variance}\n`;
+                csvContent += `Standard Deviation,${tableData.statistics.stdDev}\n`;
+                csvContent += `Q1,${tableData.statistics.q1}\n`;
+                csvContent += `Q3,${tableData.statistics.q3}\n`;
+            }
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'data_statistics.csv';
+            link.click();
+        }
+
+        function downloadHistogram() {
+            const canvas = document.getElementById('histogram');
+            const link = document.createElement('a');
+
+            // Set canvas scaling for high-quality image
+            const scaledCanvas = document.createElement('canvas');
+            const scale = 2; // Scaling factor for higher resolution
+            scaledCanvas.width = canvas.width * scale;
+            scaledCanvas.height = canvas.height * scale;
+
+            const scaledContext = scaledCanvas.getContext('2d');
+            scaledContext.scale(scale, scale);
+            scaledContext.drawImage(canvas, 0, 0);
+
+            // Create download link for the scaled canvas
+            link.href = scaledCanvas.toDataURL('image/png');
+            link.download = 'histogram.png';
+            link.click();
+        }
+    </script>
+</body>
+</html>

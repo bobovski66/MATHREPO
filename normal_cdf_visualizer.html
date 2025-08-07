@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Normal CDF Visualizer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.5/jstat.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 2em;
+    }
+    .box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 2em;
+      max-width: 700px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: auto;
+    }
+    label, select, input, button {
+      display: block;
+      margin-top: 1em;
+      font-size: 1em;
+    }
+    .result {
+      margin-top: 1.5em;
+      font-weight: bold;
+    }
+    canvas {
+      margin-top: 2em;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Normal CDF Calculator</h2>
+    <label>Mean (μ): <input type="number" id="mu" value="0" step="any"></label>
+    <label>Standard Deviation (σ): <input type="number" id="sigma" value="1" step="any"></label>
+    <label>Tail:
+      <select id="tail">
+        <option value="below">Below a</option>
+        <option value="above">Above a</option>
+        <option value="between">Between a and b</option>
+      </select>
+    </label>
+    <label>Value a: <input type="number" id="a" step="any"></label>
+    <div id="bInput" style="display:none">
+      <label>Value b: <input type="number" id="b" step="any"></label>
+    </div>
+    <button onclick="computeCDF()">Compute</button>
+    <div class="result" id="result">Result: —</div>
+    <canvas id="plot" height="300"></canvas>
+  </div>
+
+  <script>
+    const tailSelect = document.getElementById('tail');
+    const bInput = document.getElementById('bInput');
+    const canvas = document.getElementById('plot');
+    let chart = null;
+
+    tailSelect.addEventListener('change', () => {
+      bInput.style.display = tailSelect.value === 'between' ? 'block' : 'none';
+    });
+
+    function computeCDF() {
+      const mu = parseFloat(document.getElementById('mu').value);
+      const sigma = parseFloat(document.getElementById('sigma').value);
+      const a = parseFloat(document.getElementById('a').value);
+      const tail = document.getElementById('tail').value;
+      const b = parseFloat(document.getElementById('b')?.value);
+
+      let result = 0;
+      if (tail === 'below') {
+        result = jStat.normal.cdf(a, mu, sigma);
+      } else if (tail === 'above') {
+        result = 1 - jStat.normal.cdf(a, mu, sigma);
+      } else if (tail === 'between') {
+        result = jStat.normal.cdf(b, mu, sigma) - jStat.normal.cdf(a, mu, sigma);
+      }
+
+      document.getElementById('result').textContent = `Result: ${result.toFixed(6)}`;
+      drawChart(mu, sigma, a, b, tail);
+    }
+
+    function drawChart(mu, sigma, a, b, tail) {
+      if (chart) chart.destroy();
+      const x = [];
+      const y = [];
+      for (let i = mu - 4 * sigma; i <= mu + 4 * sigma; i += 0.1) {
+        x.push(i);
+        y.push(jStat.normal.pdf(i, mu, sigma));
+      }
+
+      const fillColor = x.map(val => {
+        if (tail === 'below') return val <= a ? 'rgba(52,152,219,0.5)' : 'rgba(0,0,0,0)';
+        if (tail === 'above') return val >= a ? 'rgba(231,76,60,0.5)' : 'rgba(0,0,0,0)';
+        if (tail === 'between') return val >= Math.min(a, b) && val <= Math.max(a, b) ? 'rgba(46,204,113,0.5)' : 'rgba(0,0,0,0)';
+        return 'rgba(0,0,0,0)';
+      });
+
+      const ctx = canvas.getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: x,
+          datasets: [{
+            label: 'Normal PDF',
+            data: y,
+            backgroundColor: fillColor,
+            borderWidth: 1,
+            barPercentage: 1.0,
+            categoryPercentage: 1.0,
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              ticks: {
+                callback: val => parseFloat(val).toFixed(1)
+              }
+            },
+            y: { beginAtZero: true }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
