@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Which Law Do I Use? — Labeled Triangle Guide</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root{
+      --bg:#0b1020; --panel:#11172b; --ink:#e7ecff; --muted:#aab5e6; --border:#243063;
+      --accent:#7cc3ff; --good:#6fe3a1; --bad:#ff7b7b; --note:#ffd166;
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+      font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;}
+    .wrap{max-width:980px;margin:2rem auto;padding:0 1rem;}
+    h1{font-size:1.9rem;margin:.2rem 0 1rem;}
+    h2{font-size:1.3rem;margin:1.2rem 0 .5rem;}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1rem 1.2rem;box-shadow:0 10px 30px rgba(0,0,0,.25);}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;}
+    .pill{display:inline-block;padding:.15rem .5rem;border-radius:999px;background:#1b2242;color:var(--muted);border:1px solid #283264;font-size:.85rem;margin-right:.4rem}
+    .step{border-left:3px solid #2b3b7a;padding-left:.8rem;margin:.65rem 0;}
+    .good{color:var(--good);} .bad{color:var(--bad);} .note{color:var(--note);} .small{color:var(--muted);}
+    .example{background:#0e1530;border:1px solid var(--border);border-radius:12px;padding:.7rem .9rem}
+    .tag{font-size:.75rem; fill:#aab5e6}
+    .given{fill:#6fe3a1; font-weight:700}
+    .given-line{stroke:#6fe3a1; stroke-dasharray:4 3}
+    .given-arc{stroke:#6fe3a1; fill:none}
+    .angle-label{fill:#e7ecff; font-size:12px}
+    .vertex{fill:#aab5e6; font-size:12px}
+    .side-label{fill:#e7ecff; font-size:12px}
+    .svgbox{width:100%; height:auto}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Which Law Do I Use?</h1>
+
+    <div class="card">
+      <div class="grid">
+        <div><span class="pill">Goal</span> Pick the right law based on what data are <em>given</em>.</div>
+        <div><span class="pill">Heuristic</span> Opposite pair → Sines. SAS/SSS → Cosines.</div>
+        <div><span class="pill">Remember</span> Bigger angle ↔ longer opposite side.</div>
+      </div>
+    </div>
+
+    <h2>Formulas</h2>
+    <div class="card grid">
+      <div>
+        <h3>Law of Sines</h3>
+        <p>\[\frac{a}{\sin A}=\frac{b}{\sin B}=\frac{c}{\sin C}\]</p>
+        <p class="small">Best for AAS/ASA or SSA (with care).</p>
+      </div>
+      <div>
+        <h3>Law of Cosines</h3>
+        <p>\[c^2=a^2+b^2-2ab\cos C\]</p>
+        <p class="small">Rotate \(a,b,c\) and \(A,B,C\) cyclically for the other forms.</p>
+      </div>
+    </div>
+
+    <h2>Common data patterns</h2>
+    <div class="card grid">
+
+      <!-- ASA / AAS -->
+      <div class="example">
+        <strong>ASA / AAS → Law of Sines</strong>
+        <svg class="svgbox" viewBox="0 0 180 120">
+          <path d="M20 100 L160 100 L100 25 Z" fill="none" stroke="#7cc3ff" stroke-width="2"/>
+          <text x="18" y="112" class="vertex">A</text>
+          <text x="156" y="112" class="vertex">B</text>
+          <text x="98" y="20" class="vertex">C</text>
+          <path d="M30 100 A10 10 0 0 1 40 92" class="given-arc"/>
+          <path d="M150 100 A10 10 0 0 0 140 92" class="given-arc"/>
+          <text x="42" y="90" class="given">∠A given</text>
+          <text x="128" y="90" class="given">∠B given</text>
+        </svg>
+        <div class="small">Two angles are known. Find \(C\) and use Sines.</div>
+      </div>
+
+      <!-- SAS -->
+      <div class="example">
+        <strong>SAS → Law of Cosines first</strong>
+        <svg class="svgbox" viewBox="0 0 180 120">
+          <path d="M20 100 L160 100 L100 25 Z" fill="none" stroke="#6fe3a1" stroke-width="2"/>
+          <text x="18" y="112" class="vertex">A</text>
+          <text x="156" y="112" class="vertex">B</text>
+          <text x="98" y="20" class="vertex">C</text>
+          <path d="M106 33 A12 12 0 0 1 94 33" class="given-arc"/>
+          <text x="108" y="33" class="given">∠C given</text>
+          <line x1="20" y1="100" x2="100" y2="25" class="given-line"/>
+          <line x1="160" y1="100" x2="100" y2="25" class="given-line"/>
+          <text x="50" y="65" class="given">b given</text>
+          <text x="128" y="65" class="given">a given</text>
+        </svg>
+        <div class="small">Two sides with included angle → Cosines, then Sines.</div>
+      </div>
+
+      <!-- SSS -->
+      <div class="example">
+        <strong>SSS → Law of Cosines</strong>
+        <svg class="svgbox" viewBox="0 0 180 120">
+          <path d="M20 100 L160 100 L100 25 Z" fill="none" stroke="#ffd166" stroke-width="2"/>
+          <text x="18" y="112" class="vertex">A</text>
+          <text x="156" y="112" class="vertex">B</text>
+          <text x="98" y="20" class="vertex">C</text>
+          <text x="85" y="112" class="given">c given</text>
+          <text x="50" y="65" class="given">b given</text>
+          <text x="128" y="65" class="given">a given</text>
+        </svg>
+        <div class="small">All sides are known → Cosines for one angle (largest first).</div>
+      </div>
+
+      <!-- SSA -->
+      <div class="example">
+        <strong>SSA (Ambiguous) → Law of Sines + check</strong>
+        <svg class="svgbox" viewBox="0 0 180 120">
+          <path d="M20 100 L160 100 L100 25 Z" fill="none" stroke="#ff7b7b" stroke-width="2"/>
+          <text x="18" y="112" class="vertex">A</text>
+          <text x="156" y="112" class="vertex">B</text>
+          <text x="98" y="20" class="vertex">C</text>
+          <text x="85" y="112" class="given">c given</text>
+          <line x1="20" y1="100" x2="100" y2="25" class="given-line"/>
+          <text x="50" y="65" class="given">b given</text>
+          <path d="M30 100 A10 10 0 0 1 40 92" class="given-arc"/>
+          <text x="42" y="90" class="given">∠A given</text>
+        </svg>
+        <div class="small">SSA can give 0/1/2 triangles → Sines, then test the other possible angle.</div>
+      </div>
+    </div>
+
+
+      </div>
+</body>
+</html>
