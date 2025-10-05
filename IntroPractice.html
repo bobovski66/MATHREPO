@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Practice Problems</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Styling for the container */
+        .question-container {
+            border: 2px solid #5d99c6; /* Softer blue */
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-title {
+            color: #5d99c6; /* Softer blue */
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .question-content {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .show-hide-links {
+            margin-bottom: 10px;
+            cursor: pointer;
+            color: #5d99c6;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .answer-content {
+            padding: 10px;
+            display: none;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            border: 1px solid #5d99c6;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .solution-title {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Statistics Practice Problems</h1>
+
+    <!-- Problem 1 -->
+    <div class="question-container">
+        <div class="question-title">Problem 1</div>
+        <div class="question-content">
+            Determine what the key terms refer to in the following study.<br><br>
+            A study was conducted at a local college to analyze the average cumulative GPA's of students who graduated last year. Fill in the letter of the phrase that best describes each of the items below.<br><br>
+            1. Population _____ 2. Statistic _____ 3. Parameter _____ 4. Sample _____ 5. Variable _____ 6. Data _____<br>
+            <ul>
+                <li>a. all students who attended the college last year</li>
+                <li>b. the cumulative GPA of one student who graduated from the college last year</li>
+                <li>c. 3.65, 2.80, 1.50, 3.90</li>
+                <li>d. a group of students who graduated from the college last year, randomly selected</li>
+                <li>e. the average cumulative GPA of students who graduated from the college last year</li>
+                <li>f. all students who graduated from the college last year</li>
+                <li>g. the average cumulative GPA of students in the study who graduated from the college last year</li>
+            </ul>
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution1')">[Show/Hide Solution]</div>
+
+        <!-- Solution -->
+        <div id="solution1" class="answer-content">
+            <div class="solution-title">Solution</div>
+            <p>1. f; 2. g; 3. e; 4. d; 5. b; 6. c</p>
+        </div>
+    </div>
+
+    <!-- Problem 2 -->
+    <div class="question-container">
+        <div class="question-title">Problem 2</div>
+        <div class="question-content">
+            Determine what the key terms refer to in the following study.<br><br>
+            As part of a study designed to test the safety of electric automobiles, the National Transportation Safety Board collected and reviewed data about the effects of a crash on test dummies. Here is the criterion they used:<br>
+            <table style="width: 100%; border: 1px solid #333; border-collapse: collapse; text-align: center;">
+                <tr>
+                    <th style="border: 1px solid #333; padding: 8px;">Speed at which Cars Crashed</th>
+                    <th style="border: 1px solid #333; padding: 8px;">Location of "drivers" (i.e., dummies)</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #333; padding: 8px;">35 miles/hour</td>
+                    <td style="border: 1px solid #333; padding: 8px;">Front Seat</td>
+                </tr>
+            </table><br>
+            Cars with dummies in the front seats were crashed into a wall at a speed of 35 miles per hour. We want to know the proportion of dummies in the driver’s seat that would have had head injuries, if they had been actual drivers. We start with a simple random sample of 75 cars.
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution2')">[Show/Hide Solution]</div>
+
+        <!-- Solution -->
+        <div id="solution2" class="answer-content">
+            <div class="solution-title">Solution</div>
+            <p>The <strong>population</strong> is all cars containing dummies in the front seat.</p>
+            <p>The <strong>sample</strong> is the 75 cars, selected by a simple random sample.</p>
+            <p>The <strong>parameter</strong> is the proportion of driver dummies (if they had been real people) who would have suffered head injuries in the population.</p>
+            <p>The <strong>statistic</strong> is the proportion of driver dummies (if they had been real people) who would have suffered head injuries in the sample.</p>
+            <p>The <strong>variable</strong> X = whether a dummy (if it had been a real person) would have suffered head injuries.</p>
+            <p>The <strong>data</strong> are either: yes, had head injury, or no, did not.</p>
+        </div>
+    </div>
+
+    <!-- Problem 3 -->
+    <div class="question-container">
+        <div class="question-title">Problem 3</div>
+        <div class="question-content">
+            Determine what the key terms refer to in the following study.<br><br>
+            An insurance company would like to determine the proportion of all medical doctors who have been involved in one or more malpractice lawsuits. The company selects 500 doctors at random from a professional directory and determines the number in the sample who have been involved in a malpractice lawsuit.
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution3')">[Show/Hide Solution]</div>
+
+        <!-- Solution -->
+        <div id="solution3" class="answer-content">
+            <div class="solution-title">Solution</div>
+            <p>The <strong>population</strong> is all medical doctors listed in the professional directory.</p>
+            <p>The <strong>parameter</strong> is the proportion of medical doctors who have been involved in one or more malpractice suits in the population.</p>
+            <p>The <strong>sample</strong> is the 500 doctors selected at random from the professional directory.</p>
+            <p>The <strong>statistic</strong> is the proportion of medical doctors who have been involved in one or more malpractice suits in the sample.</p>
+            <p>The <strong>variable</strong> X = whether an individual doctor has been involved in a malpractice suit.</p>
+            <p>The <strong>data</strong> are either: yes, was involved in one or more malpractice lawsuits, or no, was not.</p>
+        </div>
+    </div>
+
+    <!-- Problem 4 -->
+    <div class="question-container">
+        <div class="question-title">Problem 4</div>
+        <div class="question-content">
+            You go to the supermarket and purchase three cans of soup (19 ounces tomato bisque, 14.1 ounces lentil, and 19 ounces Italian wedding), two packages of nuts (walnuts and peanuts), four different kinds of vegetables (broccoli, cauliflower, spinach, and carrots), and two desserts (16 ounces pistachio ice cream and 32 ounces chocolate chip cookies).<br><br>
+            Name data sets that are quantitative discrete, quantitative continuous, and qualitative.
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution4')">[Show/Hide Solution]</div>
+
+        <!-- Solution -->
+        <div id="solution4" class="answer-content">
+            <div class="solution-title">Solution</div>
+            <p>One Possible Solution:</p>
+            <ul>
+                <li>The three cans of soup, two packages of nuts, four kinds of vegetables, and two desserts are quantitative discrete data because you count them.</li>
+                <li>The weights of the soups (19 ounces, 14.1 ounces, 19 ounces) are quantitative continuous data because you measure weights as precisely as possible.</li>
+                <li>Types of soups, nuts, vegetables, and desserts are qualitative data because they are categorical.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Problem 5 -->
+    <div class="question-container">
+        <div class="question-title">Problem 5</div>
+        <div class="question-content">
+            Work collaboratively to determine the correct data type (quantitative or qualitative). Indicate whether quantitative data are continuous or discrete. Hint: Data that are discrete often start with the words "the number of."<br>
+            <ul>
+                <li>a. the number of pairs of shoes you own</li>
+                <li>b. the type of car you drive</li>
+                <li>c. the distance it is from your home to the nearest grocery store</li>
+                <li>d. the number of classes you take per school year</li>
+                <li>e. the type of calculator you use</li>
+                <li>f. weights of dogs at an animal shelter</li>
+                <li>g. number of correct answers on a quiz</li>
+                <li>h. IQ scores (This may cause some discussion.)</li>
+            </ul>
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution5')">[Show/Hide Solution]</div>
+
+        <!-- Solution -->
+        <div id="solution5" class="answer-content">
+            <div class="solution-title">Solution</div>
+            <p>Items a, d, and g are quantitative discrete; items c, f, and h are quantitative continuous; items b and e are qualitative, or categorical.</p>
+        </div>
+    </div>
+
+    <!-- Problem 6 -->
+    <div class="question-container">
+        <div class="question-title">Problem 6</div>
+        <div class="question-content">
+            A study is done to determine the average tuition that San Jose State undergraduate students pay per semester. Each student in the following samples is asked how much tuition they paid for the Fall semester. What is the type of sampling in each case?<br>
+            <ul>
+                <li>a. A sample of 100 undergraduate San Jose State students is taken by organizing the students’ names by classification (first-year, sophomore, junior, or senior), and then selecting 25 students from each.</li>
+                <li>b. A random number generator is used to select a student from the alphabetical listing of all undergraduate students in the Fall semester. Starting with that student, every 50th student is chosen until 75 students are included in the sample.</li>
+                <li>c. A completely random method is used to select 75 students. Each undergraduate student in the fall semester has the same probability of being chosen at any stage of the sampling process.</li>
+                <li>d. The first-year, sophomore, junior, and senior years are numbered one, two, three, and four, respectively. A random number generator is used to pick two of those years. All students in those two years are in the sample.</li>
+                <li>e. An administrative assistant is asked to stand in front of the library one Wednesday and to ask the first 100 undergraduate students he encounters what they paid for tuition the Fall semester. Those 100 students are the sample.</li>
+            </ul>
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution6')">[Show/Hide Solution]</div>
+
+        <!-- Solution -->
+        <div id="solution6" class="answer-content">
+            <div class="solution-title">Solution</div>
+            <p>a. stratified; b. systematic; c. simple random; d. cluster; e. convenience</p>
+        </div>
+    </div>
+    <!-- Problem 7 -->
+    <div class="question-container">
+        <div class="question-title">Problem 7</div>
+        <div class="question-content">
+            Determine the type of sampling used (simple random, stratified, systematic, cluster, or convenience).<br><br>
+            <ul>
+                <li>a. A soccer coach selects six players from a group of boys aged eight to ten, seven players from a group of boys aged 11 to 12, and three players from a group of boys aged 13 to 14 to form a recreational soccer team.</li>
+                <li>b. A pollster interviews all human resource personnel in five different high-tech companies.</li>
+                <li>c. A high school educational researcher interviews 50 public high school teachers and 50 private high school teachers.</li>
+                <li>d. A medical researcher interviews every third cancer patient from a list of cancer patients at a local hospital.</li>
+                <li>e. A high school counselor uses a computer to generate 50 random numbers and then picks students whose names correspond to the numbers.</li>
+                <li>f. A student interviews classmates in their algebra class to determine how many pairs of jeans a student owns, on the average.</li>
+            </ul>
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution7')">[Show/Hide Solution]</div>
+
+        <!-- Solution -->
+        <div id="solution7" class="answer-content">
+            <div class="solution-title">Solution</div>
+            <p>a. stratified; b. cluster; c. stratified; d. systematic; e. simple random; f. convenience</p>
+        </div>
+    </div>
+
+    <!-- Problem 8 -->
+    <div class="question-container">
+        <div class="question-title">Problem 8</div>
+        <div class="question-content">
+            Suppose ABC College has 10,000 part-time students (the population). We are interested in the average amount of money a part-time student spends on books in the fall term. Asking all 10,000 students is an almost impossible task.<br><br>
+            Suppose we take two different samples.<br><br>
+            First, we use convenience sampling and survey ten students from a first-term organic chemistry class. Many of these students are also taking first-term calculus in addition to the organic chemistry class. The amount of money they spend on books is as follows:<br>
+            <ul>
+                <li>\$128; \$67; \$175; \$116; \$120; \$44; \$87; \$150; \$93; \$153</li>
+            </ul>
+            The second sample is taken using a list of senior citizens who take P.E. classes and taking every fifth senior citizen on the list, for a total of ten senior citizens. They spend:<br>
+            <ul>
+                <li>\$50; \$40; \$36; \$15; \$50; \$100; \$40; \$32; \$23; \$22</li>
+            </ul>
+            It is unlikely that any student is in both samples.<br><br>
+
+            <strong>Problem:</strong> a. Do you think that either of these samples is representative of (or is characteristic of) the entire 10,000 part-time student population?
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution8a')">[Show/Hide Solution]</div>
+
+        <!-- Solution for 8a -->
+        <div id="solution8a" class="answer-content">
+            <div class="solution-title">Solution for Problem 8a</div>
+            <p>No. The first sample probably consists of science-oriented students. Besides the chemistry course, some of them are also taking first-term calculus. Books for these classes tend to be expensive. Most of these students are, more than likely, paying more than the average part-time student for their books.</p>
+            <p>The second sample is a group of senior citizens who are, more than likely, taking courses for health and interest. The amount of money they spend on books is probably much less than the average part-time student. Both samples are biased. Also, in both cases, not all students have a chance to be in either sample.</p>
+        </div>
+
+        <div class="question-content">
+            <strong>Problem:</strong> b. Since these samples are not representative of the entire population, is it wise to use the results to describe the entire population?
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution8b')">[Show/Hide Solution]</div>
+
+        <!-- Solution for 8b -->
+        <div id="solution8b" class="answer-content">
+            <div class="solution-title">Solution for Problem 8b</div>
+            <p>No. For these samples, each member of the population did not have an equally likely chance of being chosen.</p>
+        </div>
+
+        <div class="question-content">
+            Suppose we take a third sample. We choose ten different part-time students from the disciplines of chemistry, math, English, psychology, sociology, history, nursing, physical education, art, and early childhood development. We assume that these are the only disciplines in which part-time students at ABC College are enrolled (and that an equal number of part-time students are enrolled in each of the disciplines). Each student is chosen using simple random sampling. Using a calculator, random numbers are generated and a student from a particular discipline is selected if they have a corresponding number. The students spend the following amounts:<br>
+            <ul>
+                <li>\$180; \$80; \$150; \$85; \$26; \$75; \$180; \$200; \$200; \$150</li>
+            </ul>
+        </div>
+
+        <div class="question-content">
+            <strong>Problem:</strong> c. Is the sample biased?
+        </div>
+
+        <!-- Show/Hide Solution Link -->
+        <div class="show-hide-links" onclick="toggleSolution('solution8c')">[Show/Hide Solution]</div>
+
+        <!-- Solution for 8c -->
+        <div id="solution8c" class="answer-content">
+            <div class="solution-title">Solution for Problem 8c</div>
+            <p>The sample is unbiased, but a larger sample would be recommended to increase the likelihood that the sample will be close to representative of the population. However, for a biased sampling technique, even a large sample runs the risk of not being representative of the population.</p>
+            <p>Students often ask if it is "good enough" to take a sample, instead of surveying the entire population. If the survey is done well, the answer is yes.</p>
+        </div>
+    </div>
+
+
+    
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const links = document.querySelectorAll(".show-hide-links");
+        links.forEach(link => {
+            link.addEventListener("click", function () {
+                const targetId = this.getAttribute("onclick").match(/'(.*?)'/)[1];
+                const answerBox = document.getElementById(targetId);
+                if (answerBox) {
+                    answerBox.style.display = (answerBox.style.display === "block") ? "none" : "block";
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>
