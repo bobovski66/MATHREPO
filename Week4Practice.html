@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Probability Practice Problems</title>
+    <style>
+        body { 
+            font-family: 'Verdana', sans-serif; 
+            background-color: #f4f4f9; 
+            line-height: 1.7; 
+            color: #333; 
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 30px auto; 
+            padding: 20px; 
+            background: #fff; 
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.1); 
+            border-radius: 10px; 
+        }
+        h2 { 
+            color: #4CAF50; 
+            font-family: 'Arial', sans-serif; 
+            font-size: 24px; 
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin-bottom: 20px; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            text-align: center; 
+        }
+        th { 
+            background-color: #e0e0e0; 
+        }
+        button { 
+            background-color: #4CAF50; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: background-color 0.3s ease; 
+        }
+        button:hover { 
+            background-color: #388E3C; 
+        }
+        .solution { 
+            display: none; 
+            margin-top: 15px; 
+            background-color: #f9f9f9; 
+            padding: 15px; 
+            border-radius: 5px; 
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.05); 
+        }
+        .math-solution { 
+            background-color: #eef; 
+            padding: 10px; 
+            font-size: 16px; 
+            border-radius: 5px; 
+            white-space: pre-wrap; 
+            overflow-x: auto; 
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Problem 1</h2>
+    <p>A box is filled with several party favors. It contains 12 hats, 15 noisemakers, ten finger traps, and five bags of confetti. One party favor is chosen from the box at random.</p>
+    <p>Let \( H \) = the event of getting a hat.</p>
+    <p>Let \( N \) = the event of getting a noisemaker.</p>
+    <p>Let \( F \) = the event of getting a finger trap.</p>
+    <p>Let \( C \) = the event of getting a bag of confetti.</p>
+    <ol>
+        <li>Find \( P(H) \).</li>
+        <li>Find \( P(N) \).</li>
+        <li>Find \( P(F) \).</li>
+        <li>Find \( P(C) \).</li>
+    </ol>
+    <button onclick="toggleSolution('solution1')">Show/Hide Solution</button>
+    <div class="solution" id="solution1">
+        <p><strong>Solution:</strong></p>
+        <div class="math-solution">
+            Total number of items: \( 12 + 15 + 10 + 5 = 42 \) <br>
+            \( P(H) = \frac{12}{42} = \frac{2}{7} \approx 0.286 \) <br>
+            \( P(N) = \frac{15}{42} = \frac{5}{14} \approx 0.357 \) <br>
+            \( P(F) = \frac{10}{42} = \frac{5}{21} \approx 0.238 \) <br>
+            \( P(C) = \frac{5}{42} \approx 0.119 \)
+        </div>
+    </div>
+
+    <h2>Problem 2</h2>
+    <p>A jar of 150 jelly beans contains 22 red jelly beans, 38 yellow, 20 green, 28 purple, 26 blue, and the rest are orange. One jelly bean is chosen from the box at random.</p>
+    <p>Let \( B \) = the event of getting a blue jelly bean.</p>
+    <p>Let \( G \) = the event of getting a green jelly bean.</p>
+    <p>Let \( O \) = the event of getting an orange jelly bean.</p>
+    <p>Let \( P \) = the event of getting a purple jelly bean.</p>
+    <p>Let \( R \) = the event of getting a red jelly bean.</p>
+    <p>Let \( Y \) = the event of getting a yellow jelly bean.</p>
+    <ol>
+        <li>Find \( P(B) \).</li>
+        <li>Find \( P(G) \).</li>
+        <li>Find \( P(P) \).</li>
+        <li>Find \( P(R) \).</li>
+        <li>Find \( P(Y) \).</li>
+        <li>Find \( P(O) \).</li>
+    </ol>
+    <button onclick="toggleSolution('solution2')">Show/Hide Solution</button>
+    <div class="solution" id="solution2">
+        <p><strong>Solution:</strong></p>
+        <div class="math-solution">
+            \( P(B) = \frac{26}{150} = \frac{13}{75} \approx 0.173 \) <br>
+            \( P(G) = \frac{20}{150} = \frac{2}{15} \approx 0.133 \) <br>
+            \( P(P) = \frac{28}{150} = \frac{14}{75} \approx 0.187 \) <br>
+            \( P(R) = \frac{22}{150} = \frac{11}{75} \approx 0.147 \) <br>
+            \( P(Y) = \frac{38}{150} = \frac{19}{75} \approx 0.253 \) <br>
+            Number of orange beans: \( 150 - (22 + 38 + 20 + 28 + 26) = 16 \) <br>
+            \( P(O) = \frac{16}{150} = \frac{8}{75} \approx 0.107 \)
+        </div>
+    </div>
+
+    <h2>Problem 3</h2>
+    <p>A standard deck of 52 playing cards is used:</p>
+    <ol>
+        <li>What is the probability of drawing a heart \( \heartsuit \)?</li>
+        <ul>
+            <li>i) How many heart cards are there in a standard deck?</li>
+            <li>ii) What is the total number of cards in the deck?</li>
+            <li>iii) Calculate the probability of drawing a heart.</li>
+        </ul>
+        <li>What is the probability of drawing a face card (Jack, Queen, or King)?</li>
+        <li>What is the probability of drawing a card that is both a heart and a face card?</li>
+    </ol>
+    <button onclick="toggleSolution('solution3')">Show/Hide Solution</button>
+    <div class="solution" id="solution3">
+        <p><strong>Solution:</strong></p>
+        <div class="math-solution">
+            a) There are 13 heart cards in a standard deck. <br>
+            Total cards: 52 <br>
+            \( P(\heartsuit) = \frac{13}{52} = \frac{1}{4} = 0.25 \) <br><br>
+            b) Each suit has 3 face cards (Jack, Queen, King). <br>
+            \( P(\text{face card}) = \frac{3 \times 4}{52} = \frac{12}{52} = \frac{3}{13} \approx 0.231 \) <br><br>
+            c) There are 3 face cards that are also hearts. <br>
+            \( P(\text{heart face card}) = \frac{3}{52} \approx 0.058 \)
+        </div>
+    </div>
+
+    <h2>Problem 4</h2>
+    <p>The table below shows the number of students in different age groups at a local community college:</p>
+    <table>
+        <tr><th>Age Group</th><th>Frequency</th></tr>
+        <tr><td>18-21</td><td>450</td></tr>
+        <tr><td>22-25</td><td>375</td></tr>
+        <tr><td>26-30</td><td>210</td></tr>
+        <tr><td>31-35</td><td>120</td></tr>
+        <tr><td>36-40</td><td>60</td></tr>
+        <tr><td>41-45</td><td>35</td></tr>
+    </table>
+    <ol>
+        <li>How many students are there in total at the community college?</li>
+        <li>What is the probability that a randomly chosen student is between 26 and 30 years old?</li>
+        <li>What is the probability that a randomly chosen student is 25 years old or older?</li>
+    </ol>
+    <button onclick="toggleSolution('solution4')">Show/Hide Solution</button>
+    <div class="solution" id="solution4">
+        <p><strong>Solution:</strong></p>
+        <div class="math-solution">
+            a) Total students: <br>
+            \( 450 + 375 + 210 + 120 + 60 + 35 = 1250 \) <br><br>
+            b) \( P(\text{26-30}) = \frac{210}{1250} = 0.168 \) <br><br>
+            c) Students 25 or older: <br>
+            \( 375 + 210 + 120 + 60 + 35 = 800 \) <br>
+            \( P(\text{≥ 25}) = \frac{800}{1250} = 0.64 \)
+        </div>
+    </div>
+</div>
+<script>
+    function toggleSolution(solutionId) {
+        var element = document.getElementById(solutionId);
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+            MathJax.typesetPromise([element]);
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
