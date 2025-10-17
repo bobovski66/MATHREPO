@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Online Study Flowchart — Reverse Engineer Your Week</title>
+  <style>
+    :root{
+      --bg: #0f172a; /* slate-900 */
+      --panel: #111827; /* gray-900 */
+      --ink: #e5e7eb; /* gray-200 */
+      --muted:#94a3b8; /* slate-400 */
+      --accent:#22d3ee; /* cyan-400 */
+      --accent2:#a78bfa; /* violet-400 */
+      --ok:#34d399; /* emerald-400 */
+      --warn:#f59e0b; /* amber-500 */
+      --danger:#f43f5e; /* rose-500 */
+      --link:#38bdf8; /* sky-400 */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Noto Sans, Ubuntu, Cantarell, Arial;
+      background: radial-gradient(1200px 700px at 10% -10%, #1e293b88, transparent), var(--bg);
+      color:var(--ink);
+    }
+    a{color:var(--link)}
+    .wrap{max-width:1100px; margin:0 auto; padding:24px}
+    header{display:flex; gap:18px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+    h1{font-size:clamp(1.4rem, 2.6vw, 2rem); margin:0}
+    .sub{color:var(--muted); max-width:70ch}
+    .controls{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{border:1px solid #334155; background:#0b1220; color:var(--ink); padding:10px 12px; border-radius:12px; cursor:pointer}
+    .btn:hover{border-color:#475569}
+    .btn.accent{border-color:transparent; background: linear-gradient(90deg, var(--accent), var(--accent2)); color:#0b1220; font-weight:700}
+    .grid{display:grid; grid-template-columns:repeat(12, 1fr); gap:20px; margin-top:24px}
+    .card{background:linear-gradient(180deg, #0b1220, #0b1220), #0b1220; border:1px solid #1f2937; border-radius:16px; padding:16px; position:relative; box-shadow: 0 10px 30px rgba(0,0,0,.25)}
+    .card h3{margin:.2rem 0 .6rem; font-size:1.05rem}
+    .muted{color:var(--muted); font-size:.95rem}
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid #1f2937; background:#0b1220; font-size:.8rem; color:var(--muted)}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .chk{transform: scale(1.2)}
+    .arrow{position:absolute; inset:0; pointer-events:none}
+    .node{border:1px dashed #334155; border-radius:12px; padding:10px; margin-top:10px}
+    .actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+    .small{font-size:.9rem}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:.85rem; padding:.15rem .45rem; border:1px solid #334155; border-radius:6px; background:#0b1220; color:var(--ink)}
+
+    /* collapsible */
+    details{border:1px solid #1f2937; border-radius:12px; padding:10px 12px; background:#0b1220}
+    details>summary{cursor:pointer; list-style:none}
+    details>summary::-webkit-details-marker{display:none}
+    details[open]{border-color:#334155}
+
+    /* helper badges */
+    .badge{padding:2px 8px; border-radius:999px; font-size:.75rem; border:1px solid #334155; color:var(--muted)}
+    .ok{background: #052e26; border-color:#0b4b3e; color:#a7f3d0}
+    .warn{background:#2a1e04; border-color:#3b2a06; color:#fde68a}
+    .danger{background:#2b0a12; border-color:#3f0e18; color:#fecdd3}
+
+    footer{margin:26px 0 10px; color:#8091a7; font-size:.9rem}
+
+    /* responsive */
+    @media (max-width: 900px){
+      .grid{grid-template-columns: 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Reverse‑Engineer Your Week — Interactive Flowchart</h1>
+        <p class="sub">Start from the assigned tasks, work backwards to the concepts and computations you need, and loop through practice → attempt → check → ask for help. Your progress saves locally in this browser.</p>
+      </div>
+      <div class="controls">
+        <button class="btn" id="resetBtn" title="Clear all checkboxes and notes">Reset</button>
+        <button class="btn accent" id="printBtn" title="Print or save as PDF">Print / Save PDF</button>
+      </div>
+    </header>
+
+    <!-- ROW 1: Intake -->
+    <section class="grid">
+      <div class="card" style="grid-column: span 6;">
+        <div class="row"><span class="pill">1</span><h3>Scan this week’s assignments</h3></div>
+        <p class="muted small">Open the quiz, homework, discussion, and readings. Skim questions and deliverables.</p>
+        <div class="node">
+          <label><input class="chk" type="checkbox" data-key="scan-quiz"> Quiz reviewed</label><br>
+          <label><input class="chk" type="checkbox" data-key="scan-hw"> Homework reviewed</label><br>
+          <label><input class="chk" type="checkbox" data-key="scan-disc"> Discussion prompt reviewed</label>
+        </div>
+        <details style="margin-top:10px">
+          <summary><strong>Tip:</strong> Frame each task as a question</summary>
+          <p class="muted">“What is this asking me to compute or explain?” Write that in your own words.</p>
+        </details>
+      </div>
+
+      <div class="card" style="grid-column: span 6;">
+        <div class="row"><span class="pill">2</span><h3>Pick one representative problem</h3></div>
+        <p class="muted small">We’ll reverse‑engineer requirements from one problem, then apply to the rest.</p>
+        <textarea id="rep-problem" placeholder="Paste the problem (or summarize it) here…" style="width:100%; height:110px; border-radius:12px; border:1px solid #1f2937; background:#0b1220; color:var(--ink); padding:10px"></textarea>
+        <div class="actions">
+          <button class="btn" id="loadExample">Load example (probability)</button>
+          <span class="badge">You can overwrite this with your own.</span>
+        </div>
+      </div>
+
+      <!-- ROW 2: Split into Concept vs Computation -->
+      <div class="card" style="grid-column: span 6;">
+        <div class="row"><span class="pill">3A</span><h3>Identify the <em>concept</em></h3></div>
+        <p class="muted small">What definition(s) do you need? What does each term <em>mean</em> in this context?</p>
+        <ul class="muted small">
+          <li>Write the key definition in your own words.</li>
+          <li>Note the assumptions and what counts as a valid answer.</li>
+        </ul>
+        <textarea id="concept-notes" placeholder="e.g., Probability = favorable outcomes / all outcomes…" style="width:100%; height:90px; border-radius:12px; border:1px solid #1f2937; background:#0b1220; color:var(--ink); padding:10px"></textarea>
+        <div class="actions">
+          <label><input class="chk" type="checkbox" data-key="concept-clear"> I understand the concept</label>
+          <details style="margin-top:6px"><summary>Where to learn</summary>
+            <ul class="muted small">
+              <li>Textbook section(s) & course videos</li>
+              <li>Instructor’s notes & announcements</li>
+              <li>Search a reliable tutorial</li>
+            </ul>
+          </details>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column: span 6;">
+        <div class="row"><span class="pill">3B</span><h3>Identify the <em>computation</em></h3></div>
+        <p class="muted small">What formula, method, or step pattern gets you from data to answer?</p>
+        <ul class="muted small">
+          <li>Outline the steps you’ll take.</li>
+          <li>Find a similar <em>worked example</em> and practice once.</li>
+        </ul>
+        <textarea id="compute-notes" placeholder="e.g., Add counts → compute proportion → reduce fraction → decimal…" style="width:100%; height:90px; border-radius:12px; border:1px solid #1f2937; background:#0b1220; color:var(--ink); padding:10px"></textarea>
+        <div class="actions">
+          <label><input class="chk" type="checkbox" data-key="compute-clear"> I can do the computation</label>
+          <details style="margin-top:6px"><summary>Where to practice</summary>
+            <ul class="muted small">
+              <li>Practice sets & examples in the text</li>
+              <li>Instructor’s sample problems</li>
+              <li>Generate similar problems and try them</li>
+            </ul>
+          </details>
+        </div>
+      </div>
+
+      <!-- ROW 3: Attempt & Check -->
+      <div class="card" style="grid-column: span 6;">
+        <div class="row"><span class="pill">4</span><h3>Attempt the problem</h3></div>
+        <p class="muted small">Use your notes above. If you stall, ask: “Am I missing a definition (concept) or a step (computation)?”</p>
+        <label class="row"><input class="chk" type="checkbox" data-key="attempted"> Attempt completed</label>
+        <details style="margin-top:10px"><summary>Reflection prompt</summary>
+          <p class="muted small">What made progress possible? What blocked you? Note it so you can fix the bottleneck for the next problem.</p>
+          <textarea id="attempt-notes" placeholder="Quick reflection…" style="width:100%; height:70px; border-radius:12px; border:1px solid #1f2937; background:#0b1220; color:var(--ink); padding:10px"></textarea>
+        </details>
+      </div>
+
+      <div class="card" style="grid-column: span 6;">
+        <div class="row"><span class="pill">5</span><h3>Check & generalize</h3></div>
+        <p class="muted small">Verify your answer. Then ask, “What’s the general pattern I can reuse?”</p>
+        <label class="row"><input class="chk" type="checkbox" data-key="checked"> Answer checked</label>
+        <details style="margin-top:10px"><summary>General pattern</summary>
+          <textarea id="pattern-notes" placeholder="Write the reusable recipe in 2–4 steps…" style="width:100%; height:70px; border-radius:12px; border:1px solid #1f2937; background:#0b1220; color:var(--ink); padding:10px"></textarea>
+        </details>
+      </div>
+
+      <!-- ROW 4: Help Branch & Apply to Rest -->
+      <div class="card" style="grid-column: span 6;">
+        <div class="row"><span class="pill">6</span><h3>Still stuck? Branch to help</h3></div>
+        <p class="muted small">Try these in order. Ask a <em>specific</em> question: show your attempt and say where you got stuck.</p>
+        <ol class="small">
+          <li><span class="badge warn">Self‑help</span> Re‑read the definition or find one more example.</li>
+          <li><span class="badge">Peer/Tutor</span> Class discussion board or CC tutoring (in‑person/online).</li>
+          <li><span class="badge">Instructor</span> Message your instructor with your work and question.</li>
+          <li><span class="badge">AI Tutor</span> Use AI for targeted hints; write the final answer in your own words.</li>
+        </ol>
+        <label class="row"><input class="chk" type="checkbox" data-key="asked-help"> I asked for help (if needed)</label>
+      </div>
+
+      <div class="card" style="grid-column: span 6;">
+        <div class="row"><span class="pill">7</span><h3>Apply the pattern to the rest</h3></div>
+        <p class="muted small">Repeat the concept/computation split quickly for remaining tasks.</p>
+        <div class="node">
+          <label><input class="chk" type="checkbox" data-key="applied-quiz"> Finished quiz</label><br>
+          <label><input class="chk" type="checkbox" data-key="applied-hw"> Finished homework</label><br>
+          <label><input class="chk" type="checkbox" data-key="applied-disc"> Posted discussion & peer review</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:24px">
+      <div class="row"><span class="pill">Reference Example</span><h3 style="margin-left:6px">Probability</h3></div>
+      <p class="muted small">Use this as a template for the concept/computation split.</p>
+      <details>
+        <summary><strong>Problem:</strong> 125 “yes” and 290 “no” responses to “ran a red light last year.” Find the probability a random person had run a red light.</summary>
+        <div style="margin-top:8px">
+          <div class="row"><span class="badge">Concept</span><span class="muted small">Probability = favorable / total (as a fraction or decimal)</span></div>
+          <div class="row" style="margin-top:6px"><span class="badge">Computation</span><span class="muted small">Favorable = 125; total = 125+290; compute 125/(125+290); simplify/decimal.</span></div>
+        </div>
+      </details>
+    </section>
+
+    <footer>
+      <div>Pro‑tip: When in doubt, ask “Is my blocker a <em>definition</em> issue or a <em>steps</em> issue?” Fix the right bottleneck first.</div>
+    </footer>
+  </div>
+
+  <script>
+    // --- persistence helpers ---
+    const qs = (s, el=document)=>el.querySelector(s);
+    const qsa = (s, el=document)=>Array.from(el.querySelectorAll(s));
+    const K = (k)=>`flow_${k}`;
+
+    function save(key, value){ try{ localStorage.setItem(K(key), value);}catch(e){} }
+    function load(key, def=""){ try{ return localStorage.getItem(K(key)) ?? def;}catch(e){return def} }
+
+    // bind textareas
+    const textAreas = [
+      ["rep-problem", "repProblem"],
+      ["concept-notes", "conceptNotes"],
+      ["compute-notes", "computeNotes"],
+      ["attempt-notes", "attemptNotes"],
+      ["pattern-notes", "patternNotes"],
+    ];
+    textAreas.forEach(([id, key])=>{
+      const el = qs('#'+id); if(!el) return;
+      el.value = load(key);
+      el.addEventListener('input', ()=> save(key, el.value));
+    });
+
+    // bind checkboxes
+    qsa('.chk').forEach(ch=>{
+      const key = ch.dataset.key;
+      if(load(key, '0') === '1') ch.checked = true;
+      ch.addEventListener('change', ()=> save(key, ch.checked ? '1' : '0'));
+    });
+
+    // buttons
+    qs('#resetBtn').addEventListener('click', ()=>{
+      if(!confirm('Clear all saved progress on this flowchart?')) return;
+      // clear localStorage keys
+      Object.keys(localStorage).filter(k=>k.startsWith('flow_')).forEach(k=>localStorage.removeItem(k));
+      // reset UI
+      qsa('.chk').forEach(ch=> ch.checked = false);
+      textAreas.forEach(([id])=> qs('#'+id).value = "");
+    });
+
+    qs('#printBtn').addEventListener('click', ()=> window.print());
+
+    // load example
+    qs('#loadExample').addEventListener('click', ()=>{
+      const example = `A group of people were asked if they had run a red light in the last year. 125 responded "yes", and 290 responded "no".\n\nFind the probability that a random person had run a red light.`;
+      const ta = qs('#rep-problem');
+      ta.value = example; save('repProblem', example);
+      // also scaffold concept/compute
+      const c = 'Probability = favorable outcomes / total outcomes (context: people).';
+      const m = 'Steps: Add counts → yes = 125, total = 415 → compute 125/415 → convert to decimal (optional).';
+      qs('#concept-notes').value = c; save('conceptNotes', c);
+      qs('#compute-notes').value = m; save('computeNotes', m);
+    });
+  </script>
+</body>
+</html>
