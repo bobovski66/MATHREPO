@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics and Probability Essentials</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        h2 {
+            font-size: 1.3rem;
+            margin-top: 1em;
+            color: #4CAF50;
+        }
+        p {
+            margin-bottom: 1em;
+            font-size: 1rem;
+            color: #555;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        ul li {
+            background: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<h1>Statistics and Probability Essentials</h1>
+<p>Welcome! Here’s a quick guide to essential concepts in probability and statistics, with examples to illustrate each one.</p>
+
+<h2>1. Random Variable</h2>
+<ul>
+    <li>
+        <strong>Definition:</strong> A random variable is a numerical outcome of a random event. It can be discrete (specific values) or continuous (any value within a range).
+    </li>
+    <li>
+        <strong>Example:</strong> The number of heads obtained when flipping a coin 10 times is a discrete random variable.
+    </li>
+</ul>
+
+<h2>2. Probability Distribution</h2>
+<ul>
+    <li>
+        <strong>Definition:</strong> A probability distribution lists all possible values of a random variable and the probabilities associated with each value. For discrete variables, these probabilities must sum to 1.
+    </li>
+    <li>
+        <strong>Example:</strong> For a fair six-sided die, the probability distribution assigns a probability of 1/6 to each outcome (1 through 6).
+    </li>
+</ul>
+
+<h2>3. Mean (Expected Value)</h2>
+<ul>
+    <li>
+        <strong>Definition:</strong> The mean or expected value (\(\mu\)) of a random variable is the long-term average of its outcomes.
+    </li>
+    <li>
+        <strong>Formula:</strong> For a random variable with possible values \( x_1, x_2, \dots, x_n \) and probabilities \( p(x_1), p(x_2), \dots, p(x_n) \), the mean is calculated by multiplying each value \( x_i \) by its probability \( p(x_i) \) and adding them all up. This is written in summation notation as:
+        \[
+        \mu = \sum_{i=1}^n x_i \cdot p(x_i)
+        \]
+        Here, the symbol \(\sum\) (Sigma) means to "sum up" or "add together" each product \( x_i \cdot p(x_i) \) for all \( i \) values from 1 to \( n \).
+    </li>
+    <li>
+        <strong>Example:</strong> If you roll a fair six-sided die, the expected value of the outcome is 3.5, as calculated by summing each outcome times its probability.
+    </li>
+</ul>
+
+<h2>4. Variance and Standard Deviation</h2>
+<ul>
+    <li>
+        <strong>Variance (\(\sigma^2\)):</strong> Measures the spread of outcomes around the mean.
+    </li>
+    <li>
+        <strong>Formula:</strong> For a random variable with values \( x_1, x_2, \dots, x_n \), mean \(\mu\), and probabilities \( p(x_1), p(x_2), \dots, p(x_n) \), the variance is calculated by taking the difference between each value \( x_i \) and the mean \(\mu\), squaring it, multiplying by \( p(x_i) \), and summing these results. In summation notation:
+        \[
+        \sigma^2 = \sum_{i=1}^n (x_i - \mu)^2 \cdot p(x_i)
+        \]
+        where \(\sum\) means to add up each result for all \( i \) values from 1 to \( n \).
+    </li>
+    <li>
+        <strong>Standard Deviation (\(\sigma\)):</strong> The square root of the variance, providing a measure of how much outcomes vary around the mean in the original units of the random variable.
+    </li>
+    <li>
+        <strong>Formula:</strong> 
+        \[
+        \sigma = \sqrt{\sigma^2}
+        \]
+    </li>
+    <li>
+        <strong>Example:</strong> For a fair six-sided die, the standard deviation of the outcome values is approximately 1.71, indicating the typical deviation from the mean of 3.5.
+    </li>
+</ul>
+
+<h2>5. Key Distributions: Binomial and Geometric</h2>
+
+<h3>Binomial Distribution</h3>
+<ul>
+    <li>
+        <strong>Definition:</strong> The binomial distribution models the number of successes in a fixed number of independent trials, where each trial has only two possible outcomes (e.g., success/failure) and a constant probability of success.
+    </li>
+    <li>
+        <strong>Parameters:</strong> Number of trials (\( n \)) and probability of success in each trial (\( p \)).
+    </li>
+    <li>
+        <strong>Probability of exactly \( k \) successes:</strong>
+        \[
+        P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}
+        \]
+        where \(\binom{n}{k}\) is the number of ways to choose \( k \) successes from \( n \) trials.
+    </li>
+    <li>
+        <strong>Mean (\(\mu\)):</strong>
+        \[
+        \mu = n \cdot p
+        \]
+    </li>
+    <li>
+        <strong>Standard Deviation (\(\sigma\)):</strong>
+        \[
+        \sigma = \sqrt{n \cdot p \cdot (1 - p)}
+        \]
+    </li>
+    <li>
+        <strong>Example:</strong> If you flip a coin 10 times, the binomial distribution can model the probability of getting exactly 5 heads (with \( n = 10 \) and \( p = 0.5 \)).
+    </li>
+</ul>
+<div id="binomial-plot" style="width:100%;height:400px;"></div>
+
+<h3>Geometric Distribution</h3>
+<ul>
+    <li>
+        <strong>Definition:</strong> The geometric distribution models the number of trials needed to achieve the first success in a series of independent trials, each with a constant probability of success.
+    </li>
+    <li>
+        <strong>Parameter:</strong> Probability of success in each trial (\( p \)).
+    </li>
+    <li>
+        <strong>Probability of first success on the \( k \)th trial:</strong>
+        \[
+        P(X = k) = (1 - p)^{k - 1} p
+        \]
+    </li>
+    <li>
+        <strong>Mean (\(\mu\)):</strong>
+        \[
+        \mu = \frac{1}{p}
+        \]
+    </li>
+    <li>
+        <strong>Standard Deviation (\(\sigma\)):</strong>
+        \[
+        \sigma = \sqrt{\frac{1 - p}{p^2}}
+        \]
+    </li>
+    <li>
+        <strong>Example:</strong> If you’re rolling a die until you get a 6, the geometric distribution can model the probability that you get your first 6 on the 3rd roll (with \( p = \frac{1}{6} \)).
+    </li>
+</ul>
+<div id="geometric-plot" style="width:100%;height:400px;"></div>
+
+<h2>6. Additional Key Terms</h2>
+<ul>
+    <li>
+        <strong>Outcome:</strong> A possible result of a random event.
+    </li>
+    <li>
+        <strong>Event:</strong> A set of outcomes to which a probability is assigned.
+    </li>
+    <li>
+        <strong>Independent Events:</strong> Two events are independent if the occurrence of one does not affect the probability of the other.
+    </li>
+    <li>
+        <strong>Probability:</strong> A number between 0 and 1 representing the likelihood of an event. A probability of 0 means the event will not occur, while a probability of 1 means it will occur with certainty.
+    </li>
+</ul>
+
+<p>Each concept here is a fundamental building block for understanding probability and statistics. Feel free to refer back to this page anytime for a quick refresher!</p>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Plot for Binomial Distribution (n=10, p=0.5)
+        function plotBinomial() {
+            const n = 10;
+            const p = 0.5;
+            const xValues = Array.from({ length: n + 1 }, (_, k) => k);
+            const yValues = xValues.map(k => {
+                const binomialCoefficient = (n, k) => {
+                    let result = 1;
+                    for (let i = 1; i <= k; i++) result *= (n - i + 1) / i;
+                    return result;
+                };
+                return binomialCoefficient(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k);
+            });
+            Plotly.newPlot('binomial-plot', [{ x: xValues, y: yValues, type: 'bar' }],
+                { title: 'Binomial Distribution (n=10, p=0.5)', xaxis: { title: 'k (Number of Successes)' }, yaxis: { title: 'P(X=k)' } });
+        }
+
+        // Plot for Geometric Distribution (p=0.3)
+        function plotGeometric() {
+            const p = 0.3;
+            const xValues = Array.from({ length: 15 }, (_, k) => k + 1);
+            const yValues = xValues.map(k => Math.pow(1 - p, k - 1) * p);
+            Plotly.newPlot('geometric-plot', [{ x: xValues, y: yValues, type: 'bar' }],
+                { title: 'Geometric Distribution (p=0.3)', xaxis: { title: 'k (Trial Number of First Success)' }, yaxis: { title: 'P(X=k)' } });
+        }
+
+        plotBinomial();
+        plotGeometric();
+    });
+</script>
+
+</body>
+</html>
