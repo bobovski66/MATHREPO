@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guided Practice: Binomial and Geometric Distributions</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .example, .solution {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        .solution {
+            border-left: 4px solid #2196F3;
+        }
+        .calculator-link {
+            font-weight: bold;
+            color: #2196F3;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Guided Practice: Binomial and Geometric Distributions</h1>
+<p>In this lesson, we will go through two example problems, each related to a different probability distribution. We’ll determine whether each example involves a binomial or geometric distribution and work through the solution step-by-step.</p>
+
+<h2>Example 4.12</h2>
+<div class="example">
+    <p><strong>Problem:</strong> Approximately 70% of statistics students do their homework in time for it to be collected and graded. Each student does homework independently. In a statistics class of 50 students, what is the probability that at least 40 will do their homework on time? Students are selected randomly.</p>
+</div>
+
+<h3>Identifying the Distribution</h3>
+<p>This problem involves a <strong>binomial distribution</strong> because:</p>
+<ul>
+    <li>We have a fixed number of trials (50 students).</li>
+    <li>Each trial has two outcomes: a student either completes homework on time or doesn’t.</li>
+    <li>The probability of success (doing homework on time) is constant at 70% or 0.7 for each student.</li>
+</ul>
+
+<h3>Part 1: Calculating \( P(X = 40) \)</h3>
+<p>Let’s calculate the probability that exactly 40 students do their homework on time.</p>
+<ul>
+    <li>\( n = 50 \): The number of students (trials).</li>
+    <li>\( p = 0.7 \): The probability that a student does homework on time.</li>
+    <li>We want \( P(X = 40) \).</li>
+</ul>
+
+<div class="solution">
+    <h3>Solution: Manual Calculation of \( P(X = 40) \)</h3>
+    <p>The probability of exactly \( k \) successes in a binomial distribution is given by:</p>
+    \[
+    P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}
+    \]
+    <p>For this problem:</p>
+    <ul>
+        <li>\( n = 50 \)</li>
+        <li>\( k = 40 \)</li>
+        <li>\( p = 0.7 \)</li>
+    </ul>
+    
+    <h4>Step 1: Calculate the Binomial Coefficient \(\binom{50}{40}\)</h4>
+    \[
+    \binom{50}{40} = \frac{50!}{40! \cdot (50 - 40)!} = \frac{50!}{40! \cdot 10!}
+    \]
+    <p>Using a calculator or factorial table, you’ll find:</p>
+    \[
+    \binom{50}{40} \approx 10,272,278
+    \]
+
+    <h4>Step 2: Calculate \( p^{40} \)</h4>
+    \[
+    p^{40} = (0.7)^{40} \approx 3.23 \times 10^{-7}
+    \]
+
+    <h4>Step 3: Calculate \( (1 - p)^{10} \)</h4>
+    \[
+    (1 - p)^{10} = (0.3)^{10} \approx 5.9 \times 10^{-6}
+    \]
+
+    <h4>Step 4: Combine the Results</h4>
+    <p>Now, multiply these three components together:</p>
+    \[
+    P(X = 40) = \binom{50}{40} \cdot (0.7)^{40} \cdot (0.3)^{10}
+    \]
+    \[
+    P(X = 40) \approx 10,272,278 \cdot 3.23 \times 10^{-7} \cdot 5.9 \times 10^{-6} \approx 0.0196
+    \]
+    <p><strong>Answer:</strong> The probability that exactly 40 students do their homework on time is approximately 0.0196 or 1.96%.</p>
+</div>
+
+<h3>Part 2: Calculating \( P(X \geq 40) \)</h3>
+<p>Now, let’s calculate the probability that at least 40 students do their homework on time, \( P(X \geq 40) \). This is the sum of the probabilities for \( X = 40, 41, \dots, 50 \).</p>
+
+<div class="solution">
+    <h3>Solution Using Calculator</h3>
+    <p>To calculate \( P(X \geq 40) \), we can use the <a href="https://onlinestatbook.com/2/calculators/binomial_dist.html" target="_blank" class="calculator-link">Online Binomial Calculator</a>:</p>
+    <ol>
+        <li>Set <strong>n</strong> (number of trials) to 50.</li>
+        <li>Set <strong>p</strong> (probability of success) to 0.7.</li>
+        <li>Select <strong>Above</strong> and set it to 40 to calculate \( P(X \geq 40) \).</li>
+        <li>Click "Recalculate" to find the probability.</li>
+    </ol>
+    <p>The calculator gives \( P(X \geq 40) \approx 0.0402 \), or 4.02%.</p>
+</div>
+
+<hr>
+
+<h2>Example 4.19</h2>
+<div class="example">
+    <p><strong>Problem:</strong> Suppose that you are looking for a student at your college who lives within five miles of you. You know that 55% of the 25,000 students do live within five miles of you. You randomly contact students from the college <strong>until</strong> one says he or she lives within five miles of you. What is the probability that you need to contact four people?</p>
+</div>
+
+<h3>Identifying the Distribution</h3>
+<p>This problem involves a <strong>geometric distribution</strong> because:</p>
+<ul>
+    <li>We are counting the number of trials (contacts) until the first success.</li>
+    <li>Each contact is independent, with a constant probability of success (finding a student who lives within five miles) at 55% or 0.55.</li>
+</ul>
+
+<h3>Setting Up the Geometric Distribution</h3>
+<p>Let’s define the parameters:</p>
+<ul>
+    <li>\( p = 0.55 \): The probability that a student lives within five miles.</li>
+    <li>We want to find the probability that the first success (a student who lives within five miles) occurs on the 4th contact.</li>
+</ul>
+
+<div class="solution">
+    <h3>Solution</h3>
+    <p>The probability of getting the first success on the 4th trial in a geometric distribution is given by:</p>
+    \[
+    P(X = 4) = (1 - p)^{4 - 1} \cdot p
+    \]
+    <p>Substitute \( p = 0.55 \):</p>
+    \[
+    P(X = 4) = (1 - 0.55)^{3} \cdot 0.55
+    \]
+    \[
+    = (0.45)^3 \cdot 0.55 \approx 0.050
+    \]
+    <p><strong>Answer:</strong> The probability that you need to contact four people is approximately 0.050 or 5.0%.</p>
+</div>
+
+<hr>
+
+<h2>Summary</h2>
+<p>In these examples, we identified two types of probability distributions:</p>
+<ul>
+    <li><strong>Binomial Distribution</strong> (Example 4.12): Used when there’s a fixed number of trials and we’re counting the number of successes.</li>
+    <li><strong>Geometric Distribution</strong> (Example 4.19): Used when we’re counting the number of trials until the first success.</li>
+</ul>
+<p>Understanding the characteristics of each distribution helps us set up and solve these types of problems effectively!</p>
+
+</body>
+</html>

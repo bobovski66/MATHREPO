@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expected Value of a Random Variable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .content {
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+        .content p {
+            margin-bottom: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 15px;
+            background-color: #ffffff;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Discrete Probability Distribution and Expected Value</h1>
+
+<div class="content">
+    <p>A <strong>discrete probability distribution</strong> is a table or function that lists all possible values of a random variable along with their corresponding probabilities. The probabilities must sum to 1.</p>
+    <p>The <strong>expected value</strong> of a random variable, denoted by &mu;, represents the long-term average if the experiment is repeated many times. It’s calculated by summing the products of each possible value and its probability.</p>
+    <p>Let's work through the following example:</p>
+    <p>A soccer team plays zero, one, or two days per week. The probability that they play zero days is 0.2, one day is 0.5, and two days is 0.3. Calculate the expected number of days the team plays soccer per week.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>x (Days Played)</th>
+                <th>P(x) (Enter Probability)</th>
+                <th>x * P(x) (Enter Product)</th>
+            </tr>
+        </thead>
+        <tbody id="probabilityTable">
+            <tr>
+                <td>0</td>
+                <td><input type="text" id="prob0" placeholder=""></td>
+                <td><input type="text" id="prod0" placeholder=""></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><input type="text" id="prob1" placeholder=""></td>
+                <td><input type="text" id="prod1" placeholder=""></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><input type="text" id="prob2" placeholder=""></td>
+                <td><input type="text" id="prod2" placeholder=""></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button onclick="checkAnswers()">Check Answers</button>
+    <button onclick="showCorrectAnswersTable()">Show Correct Answers for Table</button>
+    <div id="feedback" class="feedback"></div>
+
+    <p>After filling out the table, enter the total expected value below:</p>
+    <input type="text" id="expectedValue" placeholder="">
+    <button onclick="checkExpectedValue()">Check Expected Value</button>
+    <button onclick="showCorrectExpectedValue()">Show Correct Expected Value</button>
+    <div id="evFeedback" class="feedback"></div>
+</div>
+
+<script>
+    function checkAnswers() {
+        const probValues = [0.2, 0.5, 0.3];
+        const prodValues = [0, 0.5, 0.6];
+        let correct = true;
+        let feedback = "";
+
+        for (let i = 0; i < 3; i++) {
+            const probInput = parseFloat(document.getElementById(`prob${i}`).value);
+            const prodInput = parseFloat(document.getElementById(`prod${i}`).value);
+
+            if (probInput !== probValues[i]) {
+                correct = false;
+                feedback += `P(x) for x=${i} is incorrect. `;
+            }
+
+            if (prodInput !== prodValues[i]) {
+                correct = false;
+                feedback += `x*P(x) for x=${i} is incorrect. `;
+            }
+        }
+
+        const feedbackElement = document.getElementById("feedback");
+        if (correct) {
+            feedbackElement.style.color = "green";
+            feedbackElement.textContent = "All answers are correct!";
+        } else {
+            feedbackElement.style.color = "red";
+            feedbackElement.textContent = feedback || "Some values are incorrect. Please try again.";
+        }
+    }
+
+    function showCorrectAnswersTable() {
+        const correctProbValues = [0.2, 0.5, 0.3];
+        const correctProdValues = [0, 0.5, 0.6];
+
+        for (let i = 0; i < 3; i++) {
+            document.getElementById(`prob${i}`).value = correctProbValues[i];
+            document.getElementById(`prod${i}`).value = correctProdValues[i];
+        }
+
+        const feedbackElement = document.getElementById("feedback");
+        feedbackElement.style.color = "blue";
+        feedbackElement.textContent = "Correct answers for the table have been filled in.";
+    }
+
+    function checkExpectedValue() {
+        const expectedValueInput = parseFloat(document.getElementById("expectedValue").value);
+        const correctExpectedValue = 1.1;
+
+        const evFeedback = document.getElementById("evFeedback");
+        if (expectedValueInput === correctExpectedValue) {
+            evFeedback.style.color = "green";
+            evFeedback.textContent = "Correct! The expected value is 1.1.";
+        } else {
+            evFeedback.style.color = "red";
+            evFeedback.textContent = "Incorrect. Try calculating again.";
+        }
+    }
+
+    function showCorrectExpectedValue() {
+        document.getElementById("expectedValue").value = 1.1;
+        const evFeedback = document.getElementById("evFeedback");
+        evFeedback.style.color = "blue";
+        evFeedback.textContent = "The correct expected value (1.1) has been filled in.";
+    }
+</script>
+
+</body>
+</html>

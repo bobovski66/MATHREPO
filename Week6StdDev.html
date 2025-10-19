@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expected Value and Standard Deviation of a Betting Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .content {
+            max-width: 700px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+        .content p {
+            margin-bottom: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 15px;
+            background-color: #ffffff;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            color: red;
+        }
+        .note {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Expected Value and Standard Deviation of a Betting Game</h1>
+
+<div class="content">
+    <p>In this problem, you’re betting on whether a moderate earthquake will occur over the next 48 hours. The probability of occurrence, <em>P(win)</em>, is 21.42%, while the probability of non-occurrence, <em>P(loss)</em>, is 78.58%. If you win, you gain $50. If you lose, you pay $20.</p>
+    
+    <p><strong>Problem:</strong></p>
+    <ol>
+        <li>Calculate the expected value, &mu;, for this bet.</li>
+        <li>Use the value of &mu; to calculate the variance components and standard deviation of the outcomes.</li>
+    </ol>
+
+    <p><strong>Definitions:</strong></p>
+    <ul>
+        <li><strong>Expected Value (&mu;):</strong> The long-term average outcome if you were to repeat this bet many times. It's calculated by summing the products of each possible outcome and its probability.</li>
+        <li><strong>Standard Deviation (&sigma;):</strong> A measure of the variation or spread of outcomes around the expected value. A higher standard deviation means more variability in the outcomes.</li>
+    </ul>
+
+    <p>Start by calculating the expected value, &mu;, before filling in the table:</p>
+    <label>Expected Value (&mu;): <input type="text" id="expectedValue" placeholder=""></label>
+    <button onclick="checkExpectedValue()">Check Expected Value</button>
+    <button onclick="showCorrectExpectedValue()">Show Correct Expected Value</button>
+    <div id="evFeedback" class="feedback"></div>
+
+    <p>Once you have calculated &mu;, complete the following table using your value of &mu;:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Outcome</th>
+                <th>x (Amount Won/Lost)</th>
+                <th>P(x) (Enter Probability)</th>
+                <th>x * P(x) (Expected Value Component)</th>
+                <th>(x - &mu;)² * P(x) (Variance Component)</th>
+            </tr>
+        </thead>
+        <tbody id="table">
+            <tr>
+                <td>WIN</td>
+                <td>50</td>
+                <td><input type="text" id="probWin" placeholder=""></td>
+                <td><input type="text" id="expWin" placeholder=""></td>
+                <td><input type="text" id="varWin" placeholder="" disabled></td>
+            </tr>
+            <tr>
+                <td>LOSE</td>
+                <td>-20</td>
+                <td><input type="text" id="probLose" placeholder=""></td>
+                <td><input type="text" id="expLose" placeholder=""></td>
+                <td><input type="text" id="varLose" placeholder="" disabled></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button onclick="checkAnswers()" id="checkAnswersButton" disabled>Check Table Answers</button>
+    <button onclick="showCorrectTableAnswers()">Show Correct Table Answers</button>
+    <div id="feedback" class="feedback"></div>
+    
+    <label>Standard Deviation (&sigma;): <input type="text" id="stdDev" placeholder=""></label>
+    <button onclick="checkStandardDeviation()">Check Standard Deviation</button>
+    <button onclick="showCorrectStandardDeviation()">Show Correct Standard Deviation</button>
+    <div id="stdDevFeedback" class="feedback"></div>
+    
+    <div class="note">
+        <p>Note: For exact answers, use fractions or two decimal places (like "0.21" or "21.42%"). Rounding errors can make a difference, so be precise!</p>
+    </div>
+</div>
+
+<script>
+    function checkExpectedValue() {
+        const expectedValueInput = parseFloat(document.getElementById("expectedValue").value.trim());
+        const correctExpectedValue = -5.006;
+
+        const evFeedback = document.getElementById("evFeedback");
+        if (Math.abs(expectedValueInput - correctExpectedValue) < 0.01) {
+            evFeedback.style.color = "green";
+            evFeedback.textContent = "Correct! The expected value is -5.006.";
+            document.getElementById("varWin").disabled = false;
+            document.getElementById("varLose").disabled = false;
+            document.getElementById("checkAnswersButton").disabled = false;
+        } else {
+            evFeedback.style.color = "red";
+            evFeedback.textContent = "Incorrect. Try calculating again.";
+        }
+    }
+
+    function showCorrectExpectedValue() {
+        document.getElementById("expectedValue").value = "-5.006";
+        const evFeedback = document.getElementById("evFeedback");
+        evFeedback.style.color = "blue";
+        evFeedback.textContent = "The correct expected value (-5.006) has been filled in.";
+    }
+
+    function checkAnswers() {
+        const correctValues = {
+            probWin: [0.2142, "21.42%", 0.21],
+            expWin: [10.71],
+            varWin: [648.1],
+            probLose: [0.7858, "78.58%", 0.78],
+            expLose: [-15.72],
+            varLose: [176.7]
+        };
+
+        let correct = true;
+        let feedback = "";
+
+        function checkInput(inputId, correctAnswers) {
+            const userInput = document.getElementById(inputId).value.trim();
+            return correctAnswers.some(answer => Math.abs(parseFloat(userInput) - answer) < 0.01 || answer === userInput);
+        }
+
+        if (!checkInput("probWin", correctValues.probWin)) feedback += "P(x) for WIN is incorrect. ";
+        if (!checkInput("expWin", correctValues.expWin)) feedback += "x*P(x) for WIN is incorrect. ";
+        if (!checkInput("varWin", correctValues.varWin)) feedback += "(x - μ)² * P(x) for WIN is incorrect. ";
+        if (!checkInput("probLose", correctValues.probLose)) feedback += "P(x) for LOSE is incorrect. ";
+        if (!checkInput("expLose", correctValues.expLose)) feedback += "x*P(x) for LOSE is incorrect. ";
+        if (!checkInput("varLose", correctValues.varLose)) feedback += "(x - μ)² * P(x) for LOSE is incorrect. ";
+
+        document.getElementById("feedback").textContent = correct ? "All answers are correct!" : feedback;
+    }
+
+    function showCorrectTableAnswers() {
+        document.getElementById("probWin").value = "0.2142";
+        document.getElementById("expWin").value = "10.71";
+        document.getElementById("varWin").value = "648.1";
+        document.getElementById("probLose").value = "0.7858";
+        document.getElementById("expLose").value = "-15.72";
+        document.getElementById("varLose").value = "176.7";
+        document.getElementById("feedback").textContent = "Correct answers for the table have been filled in.";
+    }
+
+    function checkStandardDeviation() {
+        const stdDevInput = parseFloat(document.getElementById("stdDev").value.trim());
+        const correctStdDev = 28.72;
+        const stdDevFeedback = document.getElementById("stdDevFeedback");
+
+        if (Math.abs(stdDevInput - correctStdDev) < 0.01) {
+            stdDevFeedback.style.color = "green";
+            stdDevFeedback.textContent = "Correct! The standard deviation is approximately 28.72.";
+        } else {
+            stdDevFeedback.style.color = "red";
+            stdDevFeedback.textContent = "Incorrect. Try calculating again.";
+        }
+    }
+
+    function showCorrectStandardDeviation() {
+        document.getElementById("stdDev").value = "28.72";
+        document.getElementById("stdDevFeedback").textContent = "The correct standard deviation (28.72) has been filled in.";
+    }
+</script>
+
+</body>
+</html>

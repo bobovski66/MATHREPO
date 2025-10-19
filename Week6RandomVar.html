@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Toss Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            height: 100vh;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 90vh;
+        }
+        .instructions, .questions {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        .button-container {
+            margin: 10px 0;
+            text-align: center;
+        }
+        button {
+            padding: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            background-color: #ffffff;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 5px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .toss-counter {
+            font-weight: bold;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .chart-container {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Coin Toss Simulation</h1>
+
+    <div class="instructions">
+        <p>Toss a coin ten times and record the number of heads. After all members of the class have completed the experiment, fill in the frequency and relative frequency of each outcome.</p>
+    </div>
+
+    <div class="button-container">
+        <button onclick="tossCoin()">Toss the Coin</button>
+    </div>
+
+    <div class="toss-counter">Total Coin Tosses: <span id="totalTosses">0</span></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>x (Number of Heads)</th>
+                <th>Frequency of x</th>
+                <th>Relative Frequency of x</th>
+            </tr>
+        </thead>
+        <tbody id="frequencyTable">
+            <!-- Table rows will be generated dynamically here -->
+        </tbody>
+    </table>
+
+    <div class="chart-container">
+        <canvas id="histogram"></canvas>
+    </div>
+
+    <div class="questions">
+        <p><strong>Questions:</strong></p>
+        <ol>
+            <li>Which value(s) of x occurred most frequently?</li>
+            <li>If you tossed the coin 1,000 times, what values could x take on? Which value(s) of x do you think would occur most frequently?</li>
+            <li>What does the relative frequency column sum to?</li>
+        </ol>
+    </div>
+</div>
+
+<script>
+    // Initialize frequency counts for each possible outcome (0 to 10 heads)
+    const frequency = Array(11).fill(0);
+    let totalTosses = 0;
+
+    // Set up chart
+    const ctx = document.getElementById('histogram').getContext('2d');
+    const histogramChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Array.from({ length: 11 }, (_, i) => i),
+            datasets: [{
+                label: 'Frequency of Number of Heads',
+                data: frequency,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Number of Heads in 10 Tosses'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Frequency'
+                    }
+                }
+            }
+        }
+    });
+
+    function tossCoin() {
+        let headsCount = 0;
+        
+        // Simulate 10 coin tosses
+        for (let i = 0; i < 10; i++) {
+            if (Math.random() < 0.5) {
+                headsCount++;
+            }
+        }
+
+        // Update frequency and total tosses
+        frequency[headsCount]++;
+        totalTosses++;
+
+        document.getElementById('totalTosses').textContent = totalTosses;
+        updateTable();
+        updateChart();
+    }
+
+    function updateTable() {
+        const tableBody = document.getElementById("frequencyTable");
+        tableBody.innerHTML = ""; // Clear existing rows
+
+        // Generate rows for each possible outcome
+        frequency.forEach((count, heads) => {
+            const row = document.createElement("tr");
+
+            // Create cells for number of heads, frequency, and relative frequency
+            const headsCell = document.createElement("td");
+            headsCell.textContent = heads;
+            row.appendChild(headsCell);
+
+            const frequencyCell = document.createElement("td");
+            frequencyCell.textContent = count;
+            row.appendChild(frequencyCell);
+
+            const relativeFrequencyCell = document.createElement("td");
+            const relativeFrequency = (totalTosses > 0) ? (count / totalTosses).toFixed(3) : "0.000";
+            relativeFrequencyCell.textContent = relativeFrequency;
+            row.appendChild(relativeFrequencyCell);
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    function updateChart() {
+        histogramChart.data.datasets[0].data = frequency;
+        histogramChart.update();
+    }
+</script>
+
+</body>
+</html>
