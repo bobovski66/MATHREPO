@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Central Limit Theorem Playground</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      color: #222;
+      font-size: 16px; /* smaller */
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 8px 16px; /* tighter */
+      font-size: 18px;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 8px;
+      gap: 8px;
+      max-width: 1100px;   /* center and constrain width */
+      margin: 0 auto;
+    }
+    .panel {
+      background: #fff;
+      border-radius: 6px;
+      padding: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .panel.wide {
+      flex: 1 1 420px;
+      min-width: 360px;
+    }
+    .panel.narrow {
+      flex: 0 0 320px;
+      max-width: 340px;
+    }
+    h2 {
+      margin: 0 0 6px 0;
+      font-size: 18px;
+    }
+    label {
+      display: block;
+      margin-top: 6px;
+      margin-bottom: 2px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    select, input[type="range"], button {
+      width: 100%;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    button {
+      padding: 6px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+    button#drawButton { background: #2563eb; color: #fff; }
+    button#autoButton { background: #059669; color: #fff; }
+    button#resetButton { background: #6b7280; color: #fff; }
+
+    .small-text {
+      font-size: 12px;
+      color: #555;
+      margin-top: 4px;
+    }
+    .stats {
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header>
+  Central Limit Theorem Playground
+</header>
+
+<div class="container">
+  <!-- LEFT: Population -->
+  <div class="panel wide">
+    <h2>Population distribution</h2>
+
+    <label for="distSelect">Choose population shape:</label>
+    <select id="distSelect">
+      <option value="uniform">Uniform [0, 1]</option>
+      <option value="right">Right-skewed (exponential)</option>
+      <option value="left">Left-skewed</option>
+      <option value="bimodal">Bimodal (two clusters)</option>
+      <option value="heavy">Heavy-tailed (approx.)</option>
+    </select>
+
+    <p class="small-text">
+      The histogram below shows the population we’re sampling from.
+      The numbers &mu; and &sigma; are the (approximate) mean and standard deviation of this population.
+    </p>
+
+    <canvas id="populationChart" height="160"></canvas>
+
+    <div class="stats">
+      Population mean &mu; ≈ <span id="popMean">–</span><br />
+      Population std dev &sigma; ≈ <span id="popStd">–</span>
+    </div>
+  </div>
+
+  <!-- RIGHT: Controls + Sample Means -->
+  <div class="panel narrow">
+    <h2>Sampling controls</h2>
+
+    <label for="sampleSize">Sample size n:
+      <span id="sampleSizeLabel">10</span>
+    </label>
+    <input type="range" id="sampleSize" min="1" max="200" value="10" />
+
+    <label for="batchSize">Number of samples per click:
+      <span id="batchSizeLabel">50</span>
+    </label>
+    <input type="range" id="batchSize" min="1" max="200" value="50" />
+
+    <button id="drawButton">Draw samples</button>
+    <button id="autoButton">Start auto-run</button>
+    <button id="resetButton">Reset</button>
+
+    <label style="margin-top:8px; font-size: 13px;">
+      <input type="checkbox" id="showNormal" checked />
+      Show theoretical normal curve
+    </label>
+
+    <p class="small-text">
+      We draw many samples of size n from the population, compute their means, and
+      build the histogram below. By the central limit theorem, this histogram tends
+      to look normal as n grows.
+    </p>
+
+    <canvas id="meansChart" height="180"></canvas>
+
+    <div class="stats">
+      Current number of sample means: <span id="numMeans">0</span><br />
+      Mean of sample means ≈ <span id="meanOfMeans">–</span><br />
+      Std dev of sample means ≈ <span id="stdOfMeans">–</span><br />
+      Theoretical std dev &sigma;/√n ≈ <span id="theoryStd">–</span>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // ----------- RANDOM GENERATORS FOR POPULATIONS -----------
+  function randUniform() { return Math.random(); }
+
+  function randExponential(lambda = 1) {
+    return -Math.log(1 - Math.random()) / lambda;
+  }
+
+  function randLeftSkew() {
+    return 1.5 - randExponential(3);
+  }
+
+  function randBimodal() {
+    const center = Math.random() < 0.5 ? 0.25 : 0.75;
+    const sd = 0.05;
+    let u = Math.random(), v = Math.random();
+    let z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    return center + sd * z;
+  }
+
+  function randHeavyTail() {
+    let x;
+    do {
+      let u = Math.random() - 0.5;
+      x = Math.tan(Math.PI * u);
+      x = 0.5 + x / 4;
+    } while (x < 0 || x > 2);
+    return x;
+  }
+
+  function getPopulationSampler(distName) {
+    switch (distName) {
+      case "uniform": return randUniform;
+      case "right":   return () => randExponential(2);
+      case "left":    return randLeftSkew;
+      case "bimodal": return randBimodal;
+      case "heavy":   return randHeavyTail;
+      default:        return randUniform;
+    }
+  }
+
+  // ----------- BASIC STATS HELPERS -----------
+  function mean(arr) {
+    if (arr.length === 0) return NaN;
+    return arr.reduce((a,b) => a + b, 0) / arr.length;
+  }
+
+  function stddev(arr) {
+    if (arr.length < 2) return NaN;
+    const m = mean(arr);
+    const v = arr.reduce((s,x) => s + (x - m)*(x - m), 0) / (arr.length - 1);
+    return Math.sqrt(v);
+  }
+
+  function normalPdf(x, mu, sigma) {
+    const z = (x - mu) / sigma;
+    return Math.exp(-0.5*z*z) / (sigma * Math.sqrt(2*Math.PI));
+  }
+
+  // ----------- HISTOGRAM BINNING -----------
+  function makeBins(values, numBins) {
+    if (values.length === 0) return {edges: [], counts: []};
+
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const padding = (max - min) * 0.05 || 0.1;
+    const lo = min - padding;
+    const hi = max + padding;
+
+    const width = (hi - lo) / numBins;
+    const edges = [];
+    const counts = new Array(numBins).fill(0);
+
+    for (let i = 0; i <= numBins; i++) {
+      edges.push(lo + i*width);
+    }
+
+    values.forEach(v => {
+      let k = Math.floor((v - lo) / width);
+      if (k < 0) k = 0;
+      if (k >= numBins) k = numBins - 1;
+      counts[k]++;
+    });
+
+    return {edges, counts};
+  }
+
+  function binCenters(edges) {
+    const centers = [];
+    for (let i = 0; i < edges.length - 1; i++) {
+      centers.push( (edges[i] + edges[i+1]) / 2 );
+    }
+    return centers;
+  }
+
+  // ----------- DOM ELEMENTS -----------
+  const distSelect = document.getElementById("distSelect");
+  const sampleSizeInput = document.getElementById("sampleSize");
+  const batchSizeInput = document.getElementById("batchSize");
+  const sampleSizeLabel = document.getElementById("sampleSizeLabel");
+  const batchSizeLabel = document.getElementById("batchSizeLabel");
+
+  const drawButton = document.getElementById("drawButton");
+  const autoButton = document.getElementById("autoButton");
+  const resetButton = document.getElementById("resetButton");
+  const showNormalCheckbox = document.getElementById("showNormal");
+
+  const popMeanSpan = document.getElementById("popMean");
+  const popStdSpan = document.getElementById("popStd");
+
+  const numMeansSpan = document.getElementById("numMeans");
+  const meanOfMeansSpan = document.getElementById("meanOfMeans");
+  const stdOfMeansSpan = document.getElementById("stdOfMeans");
+  const theoryStdSpan = document.getElementById("theoryStd");
+
+  // ----------- STATE -----------
+  let popSampler = getPopulationSampler(distSelect.value);
+  let popMean = NaN;
+  let popStd = NaN;
+  let sampleMeans = [];
+  let autoInterval = null;
+
+  // ----------- CHARTS -----------
+  const populationCtx = document.getElementById("populationChart").getContext("2d");
+  const meansCtx = document.getElementById("meansChart").getContext("2d");
+
+  const populationChart = new Chart(populationCtx, {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [{
+        label: "Population histogram",
+        data: []
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: "Value" } },
+        y: { title: { display: true, text: "Frequency" } }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+
+  const meansChart = new Chart(meansCtx, {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [
+        {
+          label: "Sample means",
+          data: []
+        },
+        {
+          label: "Theoretical normal (scaled)",
+          type: "line",
+          data: [],
+          borderWidth: 2,
+          borderDash: [6,3]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: "Sample mean" } },
+        y: { title: { display: true, text: "Frequency / density (scaled)" } }
+      },
+      plugins: {
+        legend: { display: true }
+      }
+    }
+  });
+
+  // ----------- POPULATION SETUP -----------
+  function regeneratePopulation() {
+    popSampler = getPopulationSampler(distSelect.value);
+    const N = 4000;
+    const values = new Array(N);
+    for (let i = 0; i < N; i++) {
+      values[i] = popSampler();
+    }
+
+    popMean = mean(values);
+    popStd = stddev(values);
+
+    popMeanSpan.textContent = popMean.toFixed(3);
+    popStdSpan.textContent = popStd.toFixed(3);
+
+    const numBins = 20;
+    const {edges, counts} = makeBins(values, numBins);
+    const centers = binCenters(edges);
+
+    populationChart.data.labels = centers.map(x => x.toFixed(2));
+    populationChart.data.datasets[0].data = counts;
+    populationChart.update();
+
+    sampleMeans = [];
+    updateMeansChart();
+  }
+
+  // ----------- SAMPLING LOGIC -----------
+  function drawBatch() {
+    const n = parseInt(sampleSizeInput.value, 10);
+    const batchSize = parseInt(batchSizeInput.value, 10);
+
+    if (!Number.isFinite(popMean) || !Number.isFinite(popStd)) return;
+
+    for (let j = 0; j < batchSize; j++) {
+      let s = 0;
+      for (let i = 0; i < n; i++) {
+        s += popSampler();
+      }
+      sampleMeans.push(s / n);
+    }
+    updateMeansChart();
+  }
+
+  function updateMeansChart() {
+    numMeansSpan.textContent = sampleMeans.length.toString();
+
+    if (sampleMeans.length === 0) {
+      meansChart.data.labels = [];
+      meansChart.data.datasets[0].data = [];
+      meansChart.data.datasets[1].data = [];
+      meansChart.update();
+
+      meanOfMeansSpan.textContent = "–";
+      stdOfMeansSpan.textContent = "–";
+      theoryStdSpan.textContent = "–";
+      return;
+    }
+
+    const m = mean(sampleMeans);
+    const s = stddev(sampleMeans);
+    const n = parseInt(sampleSizeInput.value, 10);
+    const theoryStd = popStd / Math.sqrt(n);
+
+    meanOfMeansSpan.textContent = m.toFixed(3);
+    stdOfMeansSpan.textContent = s.toFixed(3);
+    theoryStdSpan.textContent = theoryStd.toFixed(3);
+
+    const numBins = 20;
+    const {edges, counts} = makeBins(sampleMeans, numBins);
+    const centers = binCenters(edges);
+
+    meansChart.data.labels = centers.map(x => x.toFixed(2));
+    meansChart.data.datasets[0].data = counts;
+
+    if (showNormalCheckbox.checked && Number.isFinite(theoryStd) && theoryStd > 0) {
+      const maxCount = Math.max(...counts, 1);
+      const xs = centers;
+      const ys = xs.map(x => normalPdf(x, popMean, theoryStd));
+
+      const maxPdf = Math.max(...ys);
+      const scale = maxPdf > 0 ? (0.9 * maxCount / maxPdf) : 0;
+
+      const scaledYs = ys.map(y => y * scale);
+      meansChart.data.datasets[1].data = scaledYs;
+      meansChart.data.datasets[1].hidden = false;
+    } else {
+      meansChart.data.datasets[1].data = [];
+      meansChart.data.datasets[1].hidden = true;
+    }
+
+    meansChart.update();
+  }
+
+  // ----------- EVENT HANDLERS -----------
+  distSelect.addEventListener("change", regeneratePopulation);
+
+  sampleSizeInput.addEventListener("input", () => {
+    sampleSizeLabel.textContent = sampleSizeInput.value;
+    updateMeansChart();
+  });
+
+  batchSizeInput.addEventListener("input", () => {
+    batchSizeLabel.textContent = batchSizeInput.value;
+  });
+
+  drawButton.addEventListener("click", drawBatch);
+
+  showNormalCheckbox.addEventListener("change", updateMeansChart);
+
+  resetButton.addEventListener("click", () => {
+    sampleMeans = [];
+    updateMeansChart();
+  });
+
+  autoButton.addEventListener("click", () => {
+    if (autoInterval === null) {
+      autoInterval = setInterval(drawBatch, 500);
+      autoButton.textContent = "Stop auto-run";
+    } else {
+      clearInterval(autoInterval);
+      autoInterval = null;
+      autoButton.textContent = "Start auto-run";
+    }
+  });
+
+  // ----------- INITIALIZE -----------
+  regeneratePopulation();
+  sampleSizeLabel.textContent = sampleSizeInput.value;
+  batchSizeLabel.textContent = batchSizeInput.value;
+});
+</script>
+</body>
+</html>
