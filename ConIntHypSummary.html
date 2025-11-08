@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confidence Intervals and Hypothesis Testing – Intro Stats Summary</title>
+
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {inlineMath: [['\\(','\\)'], ['$', '$']]}
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    h1, h2, h3, h4 {
+      margin-top: 1.3rem;
+    }
+    .box {
+      border-left: 4px solid #444;
+      padding-left: 0.9rem;
+      margin: 1rem 0;
+      background: #f5f5f5;
+    }
+    ul, ol {
+      margin-left: 1.4rem;
+    }
+    code {
+      background: #f7f7f7;
+      padding: 0.1rem 0.2rem;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Confidence Intervals and Hypothesis Testing</h1>
+  <h2>Introductory Statistics Summary</h2>
+
+  <h2>1. Confidence Intervals (CIs)</h2>
+
+  <p>
+    One major goal in this class is to <strong>estimate</strong> unknown population quantities,
+    such as a population mean or a population proportion. A <strong>confidence interval</strong>
+    does this by giving a whole <em>range</em> of reasonable values, not just a single guess.
+  </p>
+
+  <div class="box">
+    <p><strong>General CI pattern:</strong></p>
+    <p>\[
+      \text{estimate} \;\pm\; (\text{critical value}) \cdot (\text{standard error})
+    \]</p>
+  </div>
+
+  <h3>1.1 Proportions: from words to symbols</h3>
+
+  <p>
+    A <strong>proportion</strong> is a fraction or percentage in a yes/no situation.
+  </p>
+
+  <ul>
+    <li>Example: “proportion of students who drink coffee every day.”</li>
+    <li>In a sample:
+      \[
+        \text{sample proportion}
+        \;=\;
+        \frac{\text{number of “yes” in sample}}{\text{sample size}}.
+      \]
+    </li>
+  </ul>
+
+  <p>We use:</p>
+
+  <ul>
+    <li>\(p\): the <strong>population proportion</strong> (true, unknown).</li>
+    <li>\(\hat{p}\) (read “p-hat”): the <strong>sample proportion</strong> (what we compute).</li>
+  </ul>
+
+  <p>\[
+    \hat{p} = \frac{\text{number of “yes” in sample}}{\text{sample size}},
+    \qquad
+    p = \text{true proportion in the population (unknown)}.
+  \]</p>
+
+  <h3>1.2 CI for a population proportion \(p\)</h3>
+
+  <p>
+    Suppose a random sample of \(n = 400\) students has \(112\) who drink coffee every day.
+  </p>
+
+  <p>\[
+    \hat{p} = \frac{112}{400} = 0.28.
+  \]</p>
+
+  <p>
+    A (large-sample) \(95\%\) CI for the population proportion \(p\) is
+  </p>
+
+  <p>\[
+    \hat{p}
+    \;\pm\;
+    z^\ast \sqrt{\frac{\hat{p}(1-\hat{p})}{n}},
+  \]</p>
+
+  <p>
+    where \(z^\ast \approx 1.96\) for \(95\%\) confidence.
+  </p>
+
+  <p>\[
+    \text{SE}
+    =
+    \sqrt{\frac{0.28 \cdot 0.72}{400}}
+    \approx 0.022,
+  \]</p>
+
+  <p>\[
+    95\% \text{ CI: }
+    0.28 \pm 1.96(0.022)
+    \approx 0.28 \pm 0.043
+    = (0.237,\;0.323).
+  \]</p>
+
+  <p><strong>Interpretation (in context):</strong></p>
+  <p>
+    We are \(95\%\) confident that the true proportion of all students at this college
+    who drink coffee every day is between \(23.7\%\) and \(32.3\%\).
+  </p>
+
+  <h3>1.3 CI for a mean \(\mu\) and the Central Limit Theorem</h3>
+
+  <p>
+    Now suppose we measure a <strong>quantitative</strong> variable, like hours of sleep per night.
+    A sample of \(n = 40\) students gives:
+  </p>
+
+  <p>\[
+    \bar{x} = 6.8 \text{ hours}, \qquad s = 1.4 \text{ hours}.
+  \]</p>
+
+  <p>We want a CI for the population mean \(\mu\).</p>
+
+  <h4>Central Limit Theorem (CLT) – informal version</h4>
+
+  <p>If we take many random samples of size \(n\) from a population:</p>
+
+  <ul>
+    <li>The sample mean \(\bar{X}\) changes from sample to sample.</li>
+    <li>For large enough \(n\), the distribution of \(\bar{X}\) is approximately <strong>normal</strong>.</li>
+    <li>It is centered at the true mean \(\mu\), with standard deviation
+      \[
+        \sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}},
+      \]
+      where \(\sigma\) is the population standard deviation.
+    </li>
+  </ul>
+
+  <p>
+    We usually do not know \(\sigma\), so we estimate it with the sample standard deviation \(s\).
+    This leads us to use a <strong>\(t\)-distribution</strong> instead of the normal.
+  </p>
+
+  <h4>CI formula for the mean</h4>
+
+  <p>
+    A typical \(95\%\) CI for a population mean \(\mu\) is
+  </p>
+
+  <p>\[
+    \bar{x} \;\pm\; t^\ast \frac{s}{\sqrt{n}},
+  \]</p>
+
+  <p>
+    where \(t^\ast\) is a critical value from the \(t\)-distribution with \(n-1\) degrees of freedom.
+  </p>
+
+  <p>
+    For our example with \(n = 40\), a common choice is \(t^\ast \approx 2.02\) for \(95\%\) confidence.
+  </p>
+
+  <p>\[
+    \text{SE}
+    =
+    \frac{s}{\sqrt{n}}
+    =
+    \frac{1.4}{\sqrt{40}}
+    \approx 0.221,
+  \]</p>
+
+  <p>\[
+    95\% \text{ CI: }
+    6.8 \pm 2.02(0.221)
+    \approx 6.8 \pm 0.45
+    = (6.35,\;7.25).
+  \]</p>
+
+  <p><strong>Interpretation (in context):</strong></p>
+  <p>
+    We are \(95\%\) confident that the true average number of hours of sleep per night
+    for this student population is between \(6.35\) and \(7.25\) hours.
+  </p>
+
+  <h4>How the CLT justifies this CI</h4>
+
+  <p>
+    The CI for the mean is built on the <strong>sampling distribution</strong> of \(\bar{X}\):
+  </p>
+
+  <ul>
+    <li>By the CLT, \(\bar{X}\) is approximately normal for a random sample with large enough \(n\)
+        (or from an approximately normal population).</li>
+    <li>The spread of \(\bar{X}\) is about \(s/\sqrt{n}\).</li>
+  </ul>
+
+  <p>
+    Because \(\bar{X}\) is approximately normal, using
+    \(\bar{x} \pm t^\ast \dfrac{s}{\sqrt{n}}\)
+    gives a range that, in many repeated samples, would contain the true mean \(\mu\)
+    about \(95\%\) of the time.
+  </p>
+
+  <h3>1.4 What “95% confident” means</h3>
+
+  <p>
+    If we could take many random samples and build a CI from each one in the same way:
+  </p>
+
+  <ul>
+    <li>About \(95\%\) of those intervals would contain the true population value.</li>
+  </ul>
+
+  <p>
+    The parameter (\(p\) or \(\mu\)) is fixed; the intervals are what change from sample to sample.
+  </p>
+
+  <h3>1.5 Notation: critical values vs. test statistics</h3>
+
+  <p>Students often mix these up, so here is the distinction:</p>
+
+  <ul>
+    <li>\(z^\ast, t^\ast\): <strong>critical values</strong>.
+      <ul>
+        <li>Come from a table or technology.</li>
+        <li>Used to <em>build confidence intervals</em> and to set cutoff lines.</li>
+        <li>Example: \(z^\ast = 1.96\) for a \(95\%\) CI with the normal model.</li>
+      </ul>
+    </li>
+    <li>\(z, t\): <strong>test statistics</strong>.
+      <ul>
+        <li>Computed from your sample data.</li>
+        <li>Used to find the <em>p-value</em> in hypothesis tests.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="box">
+    <p>
+      Think:<br />
+      <strong>critical values</strong> \((z^\ast, t^\ast)\) = cutoffs,<br />
+      <strong>test statistics</strong> \((z, t)\) = what your data produced.
+    </p>
+  </div>
+
+  <h2>2. Hypothesis Tests</h2>
+
+  <p>
+    The second major goal is to <strong>test a claim</strong> about a population.
+    Instead of estimating the parameter, we start with a statement and ask:
+    “Does the data give strong evidence against this statement?”
+  </p>
+
+  <h3>2.1 Step 1: Hypotheses</h3>
+
+  <p>We set up two competing statements:</p>
+
+  <ul>
+    <li><strong>Null hypothesis</strong> \(H_0\): usually “no effect” or “no difference.” This is the default claim.</li>
+    <li><strong>Alternative hypothesis</strong> \(H_a\): what we look for evidence in favor of.</li>
+  </ul>
+
+  <p>Example for a proportion (coffee):</p>
+
+  <ul>
+    <li>\(H_0: p = 0.30\) (we assume \(30\%\) of students drink coffee daily).</li>
+    <li>\(H_a: p \neq 0.30\) (the population proportion is different from \(30\%\)).</li>
+  </ul>
+
+  <p>Example for a mean (sleep):</p>
+
+  <ul>
+    <li>\(H_0: \mu = 7\) (average sleep is 7 hours).</li>
+    <li>\(H_a: \mu < 7\) (students sleep less than 7 hours on average).</li>
+  </ul>
+
+  <h3>2.2 Step 2: Test statistic</h3>
+
+  <p>
+    We compare the sample result to what we would expect if \(H_0\) were true.
+  </p>
+
+  <p><strong>For a proportion:</strong></p>
+  <p>\[
+    z
+    =
+    \frac{\hat{p} - p_0}{\sqrt{\dfrac{p_0 (1 - p_0)}{n}}},
+  \]</p>
+  <p>where \(p_0\) is the null value (the number in \(H_0\), such as \(0.30\)).</p>
+
+  <p><strong>For a mean:</strong></p>
+  <p>\[
+    t
+    =
+    \frac{\bar{x} - \mu_0}{s / \sqrt{n}},
+  \]</p>
+  <p>where \(\mu_0\) is the null value for the mean.</p>
+
+  <h3>2.3 Step 3: P-value</h3>
+
+  <p>
+    The <strong>p-value</strong> is:
+  </p>
+
+  <div class="box">
+    <p>
+      The probability, assuming \(H_0\) is true, of getting a test statistic as extreme
+      or more extreme than the one we observed.
+    </p>
+  </div>
+
+  <ul>
+    <li>Small p-value \(\Rightarrow\) the data would be very unusual if \(H_0\) were true.</li>
+    <li>Large p-value \(\Rightarrow\) the data look compatible with \(H_0\).</li>
+  </ul>
+
+  <h3>2.4 Step 4: Decision and conclusion</h3>
+
+  <p>Choose a significance level \(\alpha\), often \(\alpha = 0.05\).</p>
+
+  <ul>
+    <li>If \(p \le \alpha\): <strong>reject</strong> \(H_0\).
+      The data provide statistically significant evidence for \(H_a\).</li>
+    <li>If \(p > \alpha\): <strong>fail to reject</strong> \(H_0\).
+      The data do not provide strong evidence against \(H_0\).</li>
+  </ul>
+
+  <p>
+    Important: “Failing to reject” is <em>not</em> the same as “proving \(H_0\) is true.”
+    It means: with this data, we do not see enough evidence to move away from \(H_0\).
+  </p>
+
+  <h2>3. Connecting CIs and Tests</h2>
+
+  <p>
+    For many common situations (like testing a mean or a proportion with a two-sided test):
+  </p>
+
+  <ul>
+    <li>A \(95\%\) confidence interval and a test at \(\alpha = 0.05\) give the
+        <strong>same decision</strong>.</li>
+    <li>If the null value (for \(\mu\) or \(p\)) is <strong>inside</strong> the \(95\%\) CI,
+        a two-sided test at \(\alpha = 0.05\) will fail to reject \(H_0\).</li>
+    <li>If the null value is <strong>outside</strong> the CI, the test will reject \(H_0\).</li>
+  </ul>
+
+  <p>Example:</p>
+
+  <ul>
+    <li>Claim: \(H_0: p = 0.50\) (50% support a candidate).</li>
+    <li>Poll: \(\hat{p} = 0.44\), \(95\%\) CI \(= (0.40, 0.48)\).</li>
+    <li>Since \(0.50\) is not in the interval, a two-sided test at \(\alpha = 0.05\)
+        would reject \(H_0\).</li>
+  </ul>
+
+  <p>CIs are helpful because they show:</p>
+
+  <ul>
+    <li>whether a null value is plausible, and</li>
+    <li>how large the effect might be (for both means and proportions).</li>
+  </ul>
+
+  <h2>4. Common Misunderstandings</h2>
+
+  <ul>
+    <li><strong>P-value misconception:</strong>
+      The p-value is <em>not</em> the probability that \(H_0\) is true.
+      It is a probability about the data, assuming \(H_0\) is true.</li>
+    <li><strong>CI misconception:</strong>
+      A \(95\%\) CI does <em>not</em> mean the parameter moves around.
+      The parameter is fixed; the interval is random from sample to sample.</li>
+    <li><strong>Statistical vs practical significance:</strong>
+      A very small p-value can come from a huge sample and a tiny effect that
+      does not matter in real life. Always ask:
+      “How big is the effect?” not just “Is it significant?”</li>
+  </ul>
+
+  <h2>5. Quick Checklist</h2>
+
+  <h3>For a confidence interval (mean or proportion)</h3>
+  <ul>
+    <li>Identify the parameter (mean \(\mu\) or proportion \(p\)).</li>
+    <li>Check conditions (random sample, large enough \(n\), or approximately normal population).</li>
+    <li>Compute estimate (\(\hat{p}\) or \(\bar{x}\)), standard error, and CI using \(z^\ast\) or \(t^\ast\).</li>
+    <li>Interpret in a full sentence in context.</li>
+  </ul>
+
+  <h3>For a hypothesis test</h3>
+  <ul>
+    <li>State \(H_0\) and \(H_a\) clearly in symbols and words.</li>
+    <li>Choose a significance level \(\alpha\).</li>
+    <li>Compute the test statistic (\(z\) or \(t\)) from your data.</li>
+    <li>Use the test statistic to find the p-value.</li>
+    <li>Compare p-value to \(\alpha\) and make a decision.</li>
+    <li>Write a conclusion in context (mention the population, not just the sample).</li>
+  </ul>
+
+</body>
+</html>
