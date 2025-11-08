@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confidence Intervals & Hypothesis Testing Practice</title>
+
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {inlineMath: [['\\(','\\)'], ['$', '$']]}
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    h1, h2 {
+      margin-top: 1.2rem;
+    }
+    .problem {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 1rem;
+      margin: 1rem 0;
+      background: #fafafa;
+    }
+    .label {
+      font-weight: 600;
+      color: #444;
+    }
+    details {
+      margin-top: 0.6rem;
+      background: #f4f4f4;
+      border-radius: 4px;
+      padding: 0.4rem 0.6rem;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    summary::marker {
+      font-size: 1.1em;
+    }
+    code {
+      background: #f7f7f7;
+      padding: 0.1rem 0.2rem;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Confidence Intervals & Hypothesis Testing – Practice Problems</h1>
+  <p>
+    Six practice problems: 3 on <strong>confidence intervals</strong> and 3 on
+    <strong>hypothesis tests</strong>. Click “Show solution” to reveal full solutions and explanations.
+  </p>
+
+  <h2>Confidence Interval Problems</h2>
+
+  <!-- Problem 1: CI for a proportion -->
+  <div class="problem">
+    <div class="label">Problem 1 (CI for a proportion)</div>
+    <p>
+      At a community college, a random sample of \(n = 150\) students is asked whether they
+      work at a paid job during the semester. In the sample, \(93\) students say “yes.”
+    </p>
+    <ol>
+      <li>Compute the sample proportion \(\hat{p}\) of students who work.</li>
+      <li>
+        Construct a \(95\%\) confidence interval for the true proportion \(p\) of all students
+        at this college who work during the semester.
+      </li>
+      <li>
+        Interpret your interval in a single sentence in the context of the problem.
+      </li>
+    </ol>
+
+    <details>
+      <summary>Show solution</summary>
+      <h4>Step 1: Sample proportion</h4>
+      <p>
+        \[
+        \hat{p} = \frac{\text{number of “yes”}}{n}
+               = \frac{93}{150}
+               = 0.62.
+        \]
+        So, \(62\%\) of the sample works during the semester.
+      </p>
+
+      <h4>Step 2: Check conditions</h4>
+      <ul>
+        <li>Random sample: stated in the problem.</li>
+        <li>Large enough sample: we want \(n\hat{p} \ge 10\) and \(n(1-\hat{p}) \ge 10\).
+          \[
+          n\hat{p} = 150(0.62) = 93 \ge 10,\quad
+          n(1-\hat{p}) = 150(0.38) = 57 \ge 10.
+          \]
+          Conditions are satisfied.
+        </li>
+      </ul>
+
+      <h4>Step 3: Compute the CI</h4>
+      <p>
+        Use the formula for a \(95\%\) CI for a population proportion:
+        \[
+        \hat{p} \pm z^\ast \sqrt{\frac{\hat{p}(1-\hat{p})}{n}},
+        \]
+        where \(z^\ast \approx 1.96\) for \(95\%\) confidence.
+      </p>
+      <p>
+        First find the standard error:
+        \[
+        \text{SE}
+        =
+        \sqrt{\frac{0.62(1-0.62)}{150}}
+        =
+        \sqrt{\frac{0.62 \cdot 0.38}{150}}
+        \approx \sqrt{\frac{0.2356}{150}}
+        \approx \sqrt{0.00157}
+        \approx 0.0396.
+        \]
+      </p>
+      <p>
+        Margin of error:
+        \[
+        \text{ME} = z^\ast \cdot \text{SE}
+        = 1.96 \cdot 0.0396
+        \approx 0.0776.
+        \]
+      </p>
+      <p>
+        CI:
+        \[
+        0.62 \pm 0.0776
+        = (0.5424,\; 0.6976).
+        \]
+        Rounded:
+        \[
+        (0.54,\; 0.70).
+        \]
+      </p>
+
+      <h4>Step 4: Interpretation</h4>
+      <p>
+        We are \(95\%\) confident that the true proportion of all students at this community
+        college who work at a paid job during the semester is between \(54\%\) and \(70\%\).
+      </p>
+    </details>
+  </div>
+
+  <!-- Problem 2: CI for a mean -->
+  <div class="problem">
+    <div class="label">Problem 2 (CI for a mean)</div>
+    <p>
+      A statistics instructor wants to estimate the average amount of time per week
+      her students spend on this course (including class, homework, and studying).
+      She takes a random sample of \(n = 25\) students and finds:
+    </p>
+    <ul>
+      <li>Sample mean: \(\bar{x} = 6.4\) hours</li>
+      <li>Sample standard deviation: \(s = 2.1\) hours</li>
+    </ul>
+    <p>
+      Assume the conditions for using a \(t\)-interval are met.
+    </p>
+    <ol>
+      <li>
+        Construct a \(95\%\) confidence interval for the true mean number of hours
+        students spend on the course per week.
+      </li>
+      <li>State the interval in a complete sentence.</li>
+    </ol>
+
+    <details>
+      <summary>Show solution</summary>
+      <h4>Step 1: Identify what we are estimating</h4>
+      <p>
+        We want a CI for the population mean \(\mu\): the true average weekly time
+        students spend on the course.
+      </p>
+
+      <h4>Step 2: Use the one-sample \(t\) CI formula</h4>
+      <p>
+        The \(95\%\) CI for \(\mu\) is
+        \[
+        \bar{x} \pm t^\ast \frac{s}{\sqrt{n}},
+        \]
+        where \(t^\ast\) comes from a \(t\)-distribution with \(n-1 = 24\) degrees of freedom.
+      </p>
+
+      <p>
+        For \(95\%\) confidence and \(24\) df, \(t^\ast \approx 2.064\) (from a table or technology).
+      </p>
+
+      <h4>Step 3: Compute the standard error and margin of error</h4>
+      <p>
+        \[
+        \text{SE} = \frac{s}{\sqrt{n}} = \frac{2.1}{\sqrt{25}} = \frac{2.1}{5} = 0.42.
+        \]
+      </p>
+      <p>
+        \[
+        \text{ME} = t^\ast \cdot \text{SE}
+        = 2.064 \cdot 0.42
+        \approx 0.867.
+        \]
+      </p>
+
+      <h4>Step 4: Construct the interval</h4>
+      <p>
+        \[
+        \bar{x} \pm \text{ME}
+        = 6.4 \pm 0.867
+        = (6.4 - 0.867,\; 6.4 + 0.867)
+        = (5.533,\; 7.267).
+        \]
+        Rounded, about \((5.53,\; 7.27)\) hours.
+      </p>
+
+      <h4>Step 5: Interpretation</h4>
+      <p>
+        We are \(95\%\) confident that the true average time students at this college
+        spend on the course per week is between about \(5.5\) and \(7.3\) hours.
+      </p>
+    </details>
+  </div>
+
+  <!-- Problem 3: CI & decision vs null value -->
+  <div class="problem">
+    <div class="label">Problem 3 (CI & comparing to a claim)</div>
+    <p>
+      A survey of \(n = 80\) adults in a city finds that their average daily screen time
+      (phone, computer, TV) is \(\bar{x} = 5.1\) hours, with a sample standard deviation of
+      \(s = 1.8\) hours. A local health group claims the mean screen time in the city is
+      \(\mu = 4.5\) hours.
+    </p>
+    <ol>
+      <li>
+        Construct a \(95\%\) confidence interval for the true mean screen time \(\mu\).
+        Assume conditions for a \(t\)-interval are met.
+      </li>
+      <li>
+        Based on your interval, does the data support or contradict the health group’s
+        claim of \(\mu = 4.5\) hours? Explain briefly.
+      </li>
+    </ol>
+
+    <details>
+      <summary>Show solution</summary>
+      <h4>Step 1: CI for the mean</h4>
+      <p>
+        Use
+        \[
+        \bar{x} \pm t^\ast \frac{s}{\sqrt{n}},
+        \]
+        with \(\bar{x} = 5.1\), \(s = 1.8\), \(n = 80\).
+      </p>
+      <p>
+        Degrees of freedom: \(n-1 = 79\). For a \(95\%\) CI, \(t^\ast \approx 1.99\)
+        (very close to the normal value \(1.96\)).
+      </p>
+
+      <p>
+        Standard error:
+        \[
+        \text{SE} = \frac{s}{\sqrt{n}}
+        = \frac{1.8}{\sqrt{80}}
+        \approx \frac{1.8}{8.944}
+        \approx 0.201.
+        \]
+      </p>
+
+      <p>
+        Margin of error:
+        \[
+        \text{ME} = t^\ast \cdot \text{SE}
+        \approx 1.99 \cdot 0.201
+        \approx 0.40.
+        \]
+      </p>
+
+      <p>
+        CI:
+        \[
+        5.1 \pm 0.40
+        = (4.70,\; 5.50).
+        \]
+      </p>
+
+      <h4>Step 2: Compare with the claim \(\mu = 4.5\)</h4>
+      <p>
+        The claimed value \(\mu = 4.5\) hours is <strong>not</strong> inside the
+        \(95\%\) confidence interval \((4.70,\; 5.50)\).
+      </p>
+      <p>
+        This suggests that \(4.5\) hours is not a plausible value for the true mean
+        based on this sample. The data <strong>contradict</strong> the health group’s claim
+        at the \(95\%\) confidence level.
+      </p>
+    </details>
+  </div>
+
+  <h2>Hypothesis Testing Problems</h2>
+
+  <!-- Problem 4: HT for a proportion -->
+  <div class="problem">
+    <div class="label">Problem 4 (test for a proportion)</div>
+    <p>
+      At a college, a long-standing belief is that about \(40\%\) of students commute
+      from more than 20 miles away. A new random sample of \(n = 120\) students shows
+      that \(60\) of them commute more than 20 miles.
+    </p>
+    <p>Test, at the \(\alpha = 0.05\) significance level, whether the proportion of students who commute more than 20 miles has changed from \(0.40\).</p>
+    <ol>
+      <li>State the null and alternative hypotheses.</li>
+      <li>Compute the test statistic \(z\).</li>
+      <li>Find (or approximate) the p-value.</li>
+      <li>State your conclusion in context.</li>
+    </ol>
+
+    <details>
+      <summary>Show solution</summary>
+      <h4>Step 1: Hypotheses</h4>
+      <p>
+        Let \(p\) be the true proportion of all students who commute more than 20 miles.
+      </p>
+      <p>
+        \[
+        H_0: p = 0.40
+        \]
+        \[
+        H_a: p \neq 0.40
+        \]
+        (two-sided test, because we are checking whether it “has changed.”)
+      </p>
+
+      <h4>Step 2: Sample proportion and conditions</h4>
+      <p>
+        \[
+        \hat{p} = \frac{60}{120} = 0.50.
+        \]
+      </p>
+      <p>
+        Check counts under \(H_0\):
+        \[
+        n p_0 = 120(0.40) = 48 \ge 10, \quad
+        n(1-p_0) = 120(0.60) = 72 \ge 10.
+        \]
+        Normal approximation is appropriate.
+      </p>
+
+      <h4>Step 3: Test statistic</h4>
+      <p>
+        Use
+        \[
+        z = \frac{\hat{p} - p_0}{\sqrt{\dfrac{p_0(1-p_0)}{n}}}.
+        \]
+      </p>
+      <p>
+        \[
+        z
+        =
+        \frac{0.50 - 0.40}{\sqrt{\dfrac{0.40(0.60)}{120}}}
+        =
+        \frac{0.10}{\sqrt{\dfrac{0.24}{120}}}
+        =
+        \frac{0.10}{\sqrt{0.002}}
+        =
+        \frac{0.10}{0.04472}
+        \approx 2.24.
+        \]
+      </p>
+
+      <h4>Step 4: P-value</h4>
+      <p>
+        This is a two-sided test, so
+        \[
+        p\text{-value} = 2P(Z \ge |2.24|).
+        \]
+        Looking up \(z = 2.24\) (or using technology) gives
+        \(P(Z \ge 2.24) \approx 0.0125\).
+      </p>
+      <p>
+        So
+        \[
+        p\text{-value} \approx 2(0.0125) = 0.025.
+        \]
+      </p>
+
+      <h4>Step 5: Decision and conclusion</h4>
+      <p>
+        Compare the p-value to \(\alpha = 0.05\):
+        \[
+        0.025 < 0.05 \Rightarrow \text{reject } H_0.
+        \]
+      </p>
+      <p>
+        There is statistically significant evidence at the \(5\%\) level that the
+        true proportion of students who commute more than 20 miles is no longer \(0.40\).
+        In this sample, the estimate is higher (\(0.50\)).
+      </p>
+    </details>
+  </div>
+
+  <!-- Problem 5: HT for a mean, one-sided -->
+  <div class="problem">
+    <div class="label">Problem 5 (test for a mean, one-sided)</div>
+    <p>
+      A fitness center advertises that members walk an average of at least
+      \(10{,}000\) steps per day. A skeptical member collects a random sample of
+      \(n = 16\) members and records their average daily steps over a week.
+      The sample mean is \(\bar{x} = 9{,}200\) steps, with sample standard deviation
+      \(s = 1{,}600\) steps.
+    </p>
+    <p>
+      Assume it is reasonable to use a \(t\)-test. Test, at \(\alpha = 0.05\),
+      whether the data provide evidence that the true mean number of steps is
+      <em>less</em> than \(10{,}000\) steps per day.
+    </p>
+    <ol>
+      <li>State \(H_0\) and \(H_a\).</li>
+      <li>Compute the test statistic.</li>
+      <li>Approximate the p-value.</li>
+      <li>State your conclusion in context.</li>
+    </ol>
+
+    <details>
+      <summary>Show solution</summary>
+      <h4>Step 1: Hypotheses</h4>
+      <p>
+        Let \(\mu\) be the true mean number of steps per day for members.
+      </p>
+      <p>
+        The claim “at least \(10{,}000\)” means the null is \(\mu = 10{,}000\)
+        and we test for less:
+        \[
+        H_0: \mu = 10{,}000
+        \]
+        \[
+        H_a: \mu < 10{,}000.
+        \]
+      </p>
+
+      <h4>Step 2: Test statistic</h4>
+      <p>
+        Use the one-sample \(t\)-test:
+        \[
+        t
+        =
+        \frac{\bar{x} - \mu_0}{s / \sqrt{n}}
+        =
+        \frac{9{,}200 - 10{,}000}{1{,}600 / \sqrt{16}}.
+        \]
+      </p>
+      <p>
+        \[
+        s / \sqrt{n} = \frac{1{,}600}{4} = 400.
+        \]
+        So
+        \[
+        t = \frac{-800}{400} = -2.0.
+        \]
+      </p>
+
+      <p>
+        Degrees of freedom: \(n - 1 = 15\).
+      </p>
+
+      <h4>Step 3: P-value</h4>
+      <p>
+        We need \(P(T_{15} \le -2.0)\). Using a \(t\)-table or technology,
+        \(P(T_{15} \le -2.0)\) is around \(0.03\) (exact value depends on table).
+      </p>
+      <p>
+        So the p-value is approximately \(0.03\).
+      </p>
+
+      <h4>Step 4: Decision and conclusion</h4>
+      <p>
+        Compare to \(\alpha = 0.05\):
+        \[
+        0.03 < 0.05 \Rightarrow \text{reject } H_0.
+        \]
+      </p>
+      <p>
+        There is statistically significant evidence at the \(5\%\) level that the
+        true mean number of steps per day for members is <strong>less</strong> than \(10{,}000\).
+        This calls the advertising claim into question.
+      </p>
+    </details>
+  </div>
+
+  <!-- Problem 6: HT for a proportion, one-sided & CI link -->
+  <div class="problem">
+    <div class="label">Problem 6 (test for a proportion, one-sided, and CI connection)</div>
+    <p>
+      A tutoring center believes that more than \(60\%\) of students who attend at least
+      four tutoring sessions in a term pass their math class. In a sample of \(n = 90\)
+      such students, \(62\) pass the class.
+    </p>
+    <p>
+      Test the claim at the \(\alpha = 0.05\) level.
+    </p>
+    <ol>
+      <li>State \(H_0\) and \(H_a\).</li>
+      <li>Compute the test statistic and p-value.</li>
+      <li>State your conclusion in context.</li>
+      <li>
+        (Conceptual) If you built a one-sided \(95\%\) lower confidence bound for \(p\),
+        would it be above or below \(0.60\)? Explain briefly using your test result.
+      </li>
+    </ol>
+
+    <details>
+      <summary>Show solution</summary>
+      <h4>Step 1: Hypotheses</h4>
+      <p>
+        Let \(p\) be the true proportion of students who pass after at least four
+        tutoring sessions.
+      </p>
+      <p>
+        “More than 60%” suggests:
+        \[
+        H_0: p = 0.60
+        \]
+        \[
+        H_a: p > 0.60.
+        \]
+      </p>
+
+      <h4>Step 2: Sample proportion and test statistic</h4>
+      <p>
+        \[
+        \hat{p} = \frac{62}{90} \approx 0.689.
+        \]
+      </p>
+      <p>
+        Check counts under \(H_0\):
+        \[
+        n p_0 = 90(0.60) = 54 \ge 10,\quad
+        n(1-p_0) = 90(0.40) = 36 \ge 10.
+        \]
+        Normal approximation is fine.
+      </p>
+
+      <p>
+        Test statistic:
+        \[
+        z = \frac{\hat{p} - p_0}{\sqrt{\dfrac{p_0(1-p_0)}{n}}}
+          = \frac{0.689 - 0.60}{\sqrt{\dfrac{0.60 \cdot 0.40}{90}}}.
+        \]
+      </p>
+      <p>
+        Denominator:
+        \[
+        \sqrt{\dfrac{0.24}{90}} = \sqrt{0.002666\ldots} \approx 0.0516.
+        \]
+      </p>
+      <p>
+        So
+        \[
+        z \approx \frac{0.089}{0.0516} \approx 1.72.
+        \]
+      </p>
+
+      <h4>Step 3: P-value</h4>
+      <p>
+        Since \(H_a: p > 0.60\), this is a right-tailed test:
+        \[
+        p\text{-value} = P(Z \ge 1.72).
+        \]
+        From a normal table or technology,
+        \(P(Z \ge 1.72) \approx 0.043\).
+      </p>
+
+      <h4>Step 4: Decision and conclusion</h4>
+      <p>
+        Compare to \(\alpha = 0.05\):
+        \[
+        0.043 < 0.05 \Rightarrow \text{reject } H_0.
+        \]
+      </p>
+      <p>
+        There is statistically significant evidence at the \(5\%\) level that
+        more than \(60\%\) of students who attend at least four tutoring sessions
+        pass their math class.
+      </p>
+
+      <h4>Step 5: CI connection (one-sided)</h4>
+      <p>
+        A one-sided \(95\%\) lower confidence bound for \(p\) would look like
+        \[
+        p > \hat{p} - z^\ast \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
+        \]
+        with an appropriate \(z^\ast\) for a one-sided \(95\%\) bound.
+      </p>
+      <p>
+        Since our test at \(\alpha = 0.05\) rejected \(H_0: p = 0.60\) in favor
+        of \(p > 0.60\), the one-sided lower bound should be
+        <strong>above</strong> \(0.60\). In other words, the CI perspective and the
+        hypothesis test are consistent: both suggest that \(p\) is greater than \(0.60\).
+      </p>
+    </details>
+  </div>
+
+</body>
+</html>
