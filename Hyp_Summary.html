@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Week 9 Summary: t-Distribution &amp; Hypothesis Tests with z and t</title>
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(','\\)'],['$','$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem 3rem 1rem;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      margin-top: 1.8rem;
+    }
+    .box {
+      border: 1px solid #ccc;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      background: #fafafa;
+      margin: 1rem 0 1.5rem 0;
+    }
+    .subheading {
+      font-weight: 600;
+      margin-top: 0.8rem;
+    }
+    table {
+      border-collapse: collapse;
+      margin: 0.5rem 0 1rem 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.3rem 0.5rem;
+      text-align: center;
+    }
+    th {
+      background: #f4f4f4;
+    }
+    ul, ol {
+      margin-top: 0.3rem;
+      margin-bottom: 0.7rem;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Week 9 Summary: t-Distribution &amp; Hypothesis Tests with z and t</h1>
+
+<p><em>What it is, when to use it, and how to test.</em></p>
+
+
+<hr>
+
+<h2>1. Why the t-distribution shows up</h2>
+
+<div class="box">
+  <p class="subheading">Sampling variability of s</p>
+  <p>
+    When we estimate a population mean \(\mu\) using a sample mean \(\bar X\), the natural
+    standardizer is \(\sigma / \sqrt{n}\). If \(\sigma\) is unknown, we plug in the sample SD \(s\),
+    which itself varies. That extra uncertainty makes the standardized statistic
+  </p>
+
+  <p style="text-align:center;">
+    \[
+      T = \frac{\bar X - \mu}{s / \sqrt{n}}
+    \]
+  </p>
+
+  <p>
+    follow a t-distribution (if data are normal), with degrees of freedom
+    \(\text{df} = n - 1\).
+  </p>
+
+  <p class="subheading">Shape and behavior</p>
+  <ul>
+    <li>The t-distribution is bell-shaped and centered at 0 like \(N(0,1)\), but has heavier tails.</li>
+    <li>As \(\text{df} \uparrow\), t looks more and more like \(N(0, 1)\).</li>
+    <li>Heavier tails \(\Rightarrow\) larger critical values than z for small/medium \(n\).</li>
+  </ul>
+</div>
+
+<hr>
+
+<h2>2. z vs. t: which one?</h2>
+
+<div class="box">
+  <ul>
+    <li>
+      <strong>Use z</strong> when the population SD \(\sigma\) is known
+      (or you have a very large sample with a well-justified process \(\sigma\)).  
+      Test statistic:
+      <p style="text-align:center;">
+        \[
+          z = \frac{\bar x - \mu_0}{\sigma / \sqrt{n}}.
+        \]
+      </p>
+    </li>
+
+    <li>
+      <strong>Use t</strong> when \(\sigma\) is unknown and estimated by \(s\) (the usual case).  
+      Test statistic:
+      <p style="text-align:center;">
+        \[
+          t = \frac{\bar x - \mu_0}{s / \sqrt{n}}, \quad \text{df} = n - 1.
+        \]
+      </p>
+    </li>
+
+    <li>
+      <strong>Assumptions (one-sample mean):</strong>
+      <ul>
+        <li>Random sample; independence.</li>
+        <li>
+          For t: data are approximately normal, or \(n\) is moderate/large
+          with no severe outliers.
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<hr>
+
+<h2>3. Hypothesis testing: general flow (one-sample mean)</h2>
+
+<ol>
+  <li>State \(H_0: \mu = \mu_0\) and \(H_a\) (\(&gt;\), &lt;, or \(\neq\)).</li>
+  <li>Choose the model: z (known \(\sigma\)) or t (unknown \(\sigma\)).</li>
+  <li>Compute the test statistic (z or t) and the p-value.</li>
+  <li>Decide: If \(p \le \alpha\), reject \(H_0\); else fail to reject.</li>
+  <li>
+    Conclude in context (plain language, mention direction if one-tailed).
+  </li>
+</ol>
+
+<hr>
+
+<h2>4. Worked Example (using z; known \(\sigma\))</h2>
+
+<div class="box">
+  <p class="subheading">Set-up (like the Week 9 pre-quiz z item)</p>
+  <p>
+    A manufacturer claims mean drift \(\mu_0 = 50\).
+    A sample of size \(n = 64\) gives \(\bar x = 53.1\).
+    Historical process SD is known: \(\sigma = 12\).
+    Test \(H_a: \mu &gt; 50\) at \(\alpha = 0.05\).
+  </p>
+
+  <p class="subheading">Test</p>
+
+  <p style="text-align:center;">
+    \[
+      z = \frac{53.1 - 50}{12 / \sqrt{64}}
+        = \frac{3.1}{1.5}
+        \approx 2.07.
+    \]
+  </p>
+
+  <p>
+    This is a right-tailed test, so
+    \[
+      p = P(Z \ge 2.07) \approx 0.019.
+    \]
+  </p>
+
+  <p class="subheading">Decision</p>
+  <p>
+    \(p \approx 0.019 &lt; 0.05 \Rightarrow\) Reject \(H_0\).
+  </p>
+
+  <p class="subheading">Conclusion</p>
+  <p>
+    There is evidence that the mean drift exceeds 50 units.
+  </p>
+</div>
+
+<hr>
+
+<h2>5. Worked Example (using t; unknown \(\sigma\))</h2>
+
+<div class="box">
+  <p class="subheading">Set-up</p>
+  <p>
+    We test whether mean oxygen uptake differs from \(\mu_0 = 72\).  
+    Sample: \(n = 16\), \(\bar x = 74.5\), \(s = 5.6\).  
+    Two-sided test, \(\alpha = 0.05\).
+  </p>
+
+  <p class="subheading">Test</p>
+
+  <p style="text-align:center;">
+    \[
+      t = \frac{74.5 - 72}{5.6 / \sqrt{16}}
+        = \frac{2.5}{1.4}
+        \approx 1.79,\quad \text{df} = 15.
+    \]
+  </p>
+
+  <p>
+    Two-sided critical value at \(\alpha = 0.05\) with df = 15:
+    \[
+      t^* \approx 2.131.
+    \]
+  </p>
+
+  <p class="subheading">Decision</p>
+  <p>
+    \(|t| = 1.79 &lt; 2.131 \Rightarrow\) Fail to reject \(H_0\).
+  </p>
+
+  <p class="subheading">Conclusion</p>
+  <p>
+    The data do not provide strong evidence that the mean differs from 72 (at 5%).
+  </p>
+</div>
+
+<hr>
+
+<h2>6. Formulas &amp; quick reference</h2>
+
+<div class="box">
+  <p class="subheading">Test statistics (one-sample mean)</p>
+
+  <p style="text-align:center;">
+    \[
+      z = \frac{\bar x - \mu_0}{\sigma / \sqrt{n}}
+      \quad \text{(known \(\sigma\))}
+    \]
+    \[
+      t = \frac{\bar x - \mu_0}{s / \sqrt{n}}, \quad \text{df} = n - 1
+      \quad \text{(unknown \(\sigma\))}
+    \]
+  </p>
+
+  <p class="subheading">p-values</p>
+  <ul>
+    <li>Right-tailed: \(p = P(\text{stat} \ge \text{observed})\).</li>
+    <li>Left-tailed: \(p = P(\text{stat} \le \text{observed})\).</li>
+    <li>Two-tailed: \(p = 2P(\text{stat} \ge |\text{observed}|)\).</li>
+  </ul>
+
+  <h3>Mini z-table (standard normal CDF \(\Phi(z)\))</h3>
+
+  <table>
+    <tr>
+      <th>z</th>
+      <th>-2.0</th>
+      <th>-1.96</th>
+      <th>-1.5</th>
+      <th>-1.0</th>
+      <th>-0.5</th>
+      <th>0</th>
+      <th>0.5</th>
+      <th>1.0</th>
+      <th>1.5</th>
+      <th>1.96</th>
+      <th>2.0</th>
+    </tr>
+    <tr>
+      <th>\(\Phi(z)\)</th>
+      <td>0.0228</td>
+      <td>0.0250</td>
+      <td>0.0668</td>
+      <td>0.1587</td>
+      <td>0.3085</td>
+      <td>0.5000</td>
+      <td>0.6915</td>
+      <td>0.8413</td>
+      <td>0.9332</td>
+      <td>0.9750</td>
+      <td>0.9772</td>
+    </tr>
+  </table>
+
+  <h3>Mini t critical values (two-tailed, \(\alpha = 0.05\))</h3>
+
+  <table>
+    <tr>
+      <th>df</th>
+      <th>5</th>
+      <th>8</th>
+      <th>10</th>
+      <th>12</th>
+      <th>15</th>
+      <th>20</th>
+      <th>30</th>
+      <th>\(\infty\)</th>
+    </tr>
+    <tr>
+      <th>\(t^*\)</th>
+      <td>2.571</td>
+      <td>2.306</td>
+      <td>2.228</td>
+      <td>2.179</td>
+      <td>2.131</td>
+      <td>2.086</td>
+      <td>2.042</td>
+      <td>1.960</td>
+    </tr>
+  </table>
+</div>
+
+<hr>
+
+<h2>7. Common pitfalls (and fixes)</h2>
+
+<ul>
+  <li>
+    <strong>Using z when \(\sigma\) is unknown:</strong>
+    If you don’t genuinely know \(\sigma\), use t with \(s\).
+  </li>
+  <li>
+    <strong>Two-tailed vs one-tailed:</strong>
+    Match \(H_a\) to the question. Two-tailed doubles the tail area.
+  </li>
+  <li>
+    <strong>Mixing SD and SE:</strong>
+    For testing \(\mu\), \(SE = \sigma / \sqrt{n}\) (or \(s / \sqrt{n}\)).
+  </li>
+  <li>
+    <strong>Normality for t:</strong>
+    For small \(n\), check that data aren’t wildly skewed or driven by outliers.
+  </li>
+  <li>
+    <strong>Context in the conclusion:</strong>
+    Always translate “reject / fail to reject” back to the story asked.
+  </li>
+</ul>
+
+</body>
+</html>
