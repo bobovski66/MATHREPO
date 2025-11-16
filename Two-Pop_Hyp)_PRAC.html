@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Two-Population Proportion Tests – Practice Examples</title>
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(','\\)'],['$','$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem 3rem 1rem;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      margin-top: 1.8rem;
+    }
+    .problem-box {
+      border: 1px solid #ccc;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      background: #fafafa;
+      margin-top: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    details {
+      margin-top: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .note {
+      background: #f4f4ff;
+      border-left: 4px solid #6666ff;
+      padding: 0.6rem 0.8rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+    .substep {
+      font-weight: 600;
+      margin-top: 0.6rem;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Two-Population Proportion Tests – Worked Examples</h1>
+
+<p class="note">
+Each problem below is a hypothesis test for the difference between two population
+proportions. The solutions follow the standard steps:
+(1) define parameters and hypotheses,
+(2) check conditions,
+(3) compute the pooled proportion,
+(4) find the standard error and test statistic,
+(5) compute the p-value,
+(6) interpret the result in context.
+</p>
+
+<hr>
+
+<h2>Example 1 – Influencer Click-Through Rates</h2>
+
+<div class="problem-box">
+  <p>
+    Two social media influencers, A and B, are running sponsored posts for the same product.
+    For a particular week:
+  </p>
+  <ul>
+    <li>Influencer A had 200 followers see the sponsored post, and 50 of them clicked the link.</li>
+    <li>Influencer B had 180 followers see the sponsored post, and 27 of them clicked the link.</li>
+  </ul>
+  <p>
+    We want to know if there is evidence that Influencer A has a higher true
+    click-through rate than Influencer B.
+    Use a significance level of \(\alpha = 0.05\).
+  </p>
+</div>
+
+<details>
+  <summary>Show full solution</summary>
+  <div>
+
+    <p class="substep">Step 1. Define parameters and hypotheses</p>
+
+    <p>
+      Let:
+    </p>
+    <ul>
+      <li>\(p_1\) = true click-through proportion for Influencer A.</li>
+      <li>\(p_2\) = true click-through proportion for Influencer B.</li>
+    </ul>
+
+    <p>
+      We are interested in whether \(p_1\) is higher than \(p_2\). The hypotheses:
+    </p>
+
+    <p>
+    \[
+    \begin{aligned}
+    H_0 &: p_1 - p_2 = 0 \quad (\text{no difference in true click-through rates}),\\[4pt]
+    H_a &: p_1 - p_2 > 0 \quad (\text{A has a higher true click-through rate than B}).
+    \end{aligned}
+    \]
+    </p>
+
+    <p class="substep">Step 2. Sample proportions and conditions</p>
+
+    <p>
+      From the data:
+    </p>
+    <ul>
+      <li>Influencer A: \(n_1 = 200\), \(x_1 = 50\), so \(\hat p_1 = \dfrac{50}{200} = 0.25.\)</li>
+      <li>Influencer B: \(n_2 = 180\), \(x_2 = 27\), so \(\hat p_2 = \dfrac{27}{180} = 0.15.\)</li>
+    </ul>
+
+    <p>
+      Check large counts:
+    </p>
+    <p>
+    \[
+    \begin{aligned}
+    n_1\hat p_1 &= 200 \cdot 0.25 = 50 \ge 10, \\
+    n_1(1 - \hat p_1) &= 200 \cdot 0.75 = 150 \ge 10, \\
+    n_2\hat p_2 &= 180 \cdot 0.15 = 27 \ge 10, \\
+    n_2(1 - \hat p_2) &= 180 \cdot 0.85 = 153 \ge 10.
+    \end{aligned}
+    \]
+    </p>
+
+    <p>
+      All are at least 10, so the normal approximation is reasonable. We also
+      assume the two groups of followers are independent.
+    </p>
+
+    <p class="substep">Step 3. Pooled proportion under the null</p>
+
+    <p>
+      Under \(H_0\), we treat both samples as coming from one population with
+      a common true click-through rate \(p\). The pooled estimate is:
+    </p>
+
+    <p>
+    \[
+    \hat p = \frac{x_1 + x_2}{n_1 + n_2}
+           = \frac{50 + 27}{200 + 180}
+           = \frac{77}{380}
+           \approx 0.2026.
+    \]
+    </p>
+
+    <p class="substep">Step 4. Standard error and test statistic</p>
+
+    <p>
+      Standard error:
+    </p>
+
+    <p>
+    \[
+    SE = \sqrt{\,\hat p(1 - \hat p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}
+       = \sqrt{0.2026 \cdot 0.7974 \left(\frac{1}{200} + \frac{1}{180}\right)}.
+    \]
+    </p>
+
+    <p>
+      Compute:
+    </p>
+
+    <p>
+    \[
+    \hat p(1 - \hat p) \approx 0.2026 \cdot 0.7974 \approx 0.1616,
+    \]
+    \[
+    \frac{1}{200} + \frac{1}{180} = 0.005 + 0.005555\ldots \approx 0.0106.
+    \]
+    </p>
+
+    <p>
+    \[
+    SE \approx \sqrt{0.1616 \cdot 0.0106} \approx \sqrt{0.00171} \approx 0.0413.
+    \]
+    </p>
+
+    <p>
+      The difference in sample proportions:
+    </p>
+
+    <p>
+    \[
+    \hat p_1 - \hat p_2 = 0.25 - 0.15 = 0.10.
+    \]
+    </p>
+
+    <p>
+      Test statistic:
+    </p>
+
+    <p>
+    \[
+    z = \frac{(\hat p_1 - \hat p_2) - 0}{SE}
+      = \frac{0.10}{0.0413}
+      \approx 2.42.
+    \]
+    </p>
+
+    <p class="substep">Step 5. p-value and decision</p>
+
+    <p>
+      This is a right-tailed test (\(H_a: p_1 - p_2 > 0\)), so:
+    </p>
+
+    <p>
+    \[
+    p\text{-value} = P(Z \ge 2.42).
+    \]
+    </p>
+
+    <p>
+      From the standard normal distribution, this probability is about \(0.0077\)
+      (less than 1%).
+    </p>
+
+    <p>
+      Since \(p\text{-value} \approx 0.0077 &lt; \alpha = 0.05\), we reject \(H_0\).
+    </p>
+
+    <p class="substep">Step 6. Conclusion in context</p>
+
+    <p>
+      At the 5% significance level, there is strong evidence that Influencer A
+      has a higher true click-through rate than Influencer B for this product,
+      at least for this week and these audiences.
+    </p>
+
+  </div>
+</details>
+
+<hr>
+
+<h2>Example 2 – Teaching Method and Pass Rates</h2>
+
+<div class="problem-box">
+  <p>
+    A college is comparing a traditional lecture-based teaching method with a new,
+    more interactive method for an introductory course. At the end of the term:
+  </p>
+  <ul>
+    <li>In the traditional section, 30 of 50 students passed the final exam.</li>
+    <li>In the interactive section, 42 of 60 students passed the final exam.</li>
+  </ul>
+  <p>
+    Is there evidence that the interactive method has a different pass rate than the
+    traditional method? Use \(\alpha = 0.05\) and a two-sided test.
+  </p>
+</div>
+
+<details>
+  <summary>Show full solution</summary>
+  <div>
+
+    <p class="substep">Step 1. Parameters and hypotheses</p>
+
+    <p>
+      Let:
+    </p>
+    <ul>
+      <li>\(p_1\) = true pass rate for the traditional method.</li>
+      <li>\(p_2\) = true pass rate for the interactive method.</li>
+    </ul>
+
+    <p>
+      We are testing for any difference (not specifically higher or lower), so:
+    </p>
+
+    <p>
+    \[
+    \begin{aligned}
+    H_0 &: p_1 - p_2 = 0, \\
+    H_a &: p_1 - p_2 \neq 0.
+    \end{aligned}
+    \]
+    </p>
+
+    <p class="substep">Step 2. Sample proportions and conditions</p>
+
+    <ul>
+      <li>Traditional: \(n_1 = 50\), \(x_1 = 30\), \(\hat p_1 = \dfrac{30}{50} = 0.60.\)</li>
+      <li>Interactive: \(n_2 = 60\), \(x_2 = 42\), \(\hat p_2 = \dfrac{42}{60} = 0.70.\)</li>
+    </ul>
+
+    <p>
+      Counts:
+    </p>
+
+    <p>
+    \[
+    \begin{aligned}
+    n_1\hat p_1 &= 50 \cdot 0.60 = 30 \ge 10, \\
+    n_1(1 - \hat p_1) &= 50 \cdot 0.40 = 20 \ge 10, \\
+    n_2\hat p_2 &= 60 \cdot 0.70 = 42 \ge 10, \\
+    n_2(1 - \hat p_2) &= 60 \cdot 0.30 = 18 \ge 10.
+    \end{aligned}
+    \]
+    </p>
+
+    <p>
+      All are large enough for the normal approximation.
+    </p>
+
+    <p class="substep">Step 3. Pooled proportion</p>
+
+    <p>
+    \[
+    \hat p
+    = \frac{x_1 + x_2}{n_1 + n_2}
+    = \frac{30 + 42}{50 + 60}
+    = \frac{72}{110}
+    \approx 0.6545.
+    \]
+    </p>
+
+    <p class="substep">Step 4. Standard error and \(z\)-statistic</p>
+
+    <p>
+    \[
+    SE = \sqrt{\,\hat p(1 - \hat p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}
+       = \sqrt{0.6545 \cdot 0.3455 \left(\frac{1}{50} + \frac{1}{60}\right)}.
+    \]
+    </p>
+
+    <p>
+    \[
+    \hat p(1 - \hat p) \approx 0.6545 \cdot 0.3455 \approx 0.226,
+    \]
+    \[
+    \frac{1}{50} + \frac{1}{60} = 0.02 + 0.0167 \approx 0.0367.
+    \]
+    </p>
+
+    <p>
+    \[
+    SE \approx \sqrt{0.226 \cdot 0.0367}
+       \approx \sqrt{0.00829}
+       \approx 0.0911.
+    \]
+    </p>
+
+    <p>
+      Difference in sample proportions:
+    </p>
+
+    <p>
+    \[
+    \hat p_1 - \hat p_2 = 0.60 - 0.70 = -0.10.
+    \]
+    </p>
+
+    <p>
+    \[
+    z = \frac{(\hat p_1 - \hat p_2) - 0}{SE}
+      = \frac{-0.10}{0.0911}
+      \approx -1.10.
+    \]
+    </p>
+
+    <p class="substep">Step 5. p-value and decision</p>
+
+    <p>
+      This is a two-sided test, so:
+    </p>
+
+    <p>
+    \[
+    p\text{-value} = 2P(Z \ge |z|) = 2P(Z \ge 1.10).
+    \]
+    </p>
+
+    <p>
+      From the standard normal table, \(P(Z \ge 1.10)\) is about \(0.136\), so:
+    </p>
+
+    <p>
+    \[
+    p\text{-value} \approx 2 \cdot 0.136 = 0.272.
+    \]
+    </p>
+
+    <p>
+      Since \(p\text{-value} \approx 0.272 &gt; 0.05\), we fail to reject \(H_0\).
+    </p>
+
+    <p class="substep">Step 6. Conclusion in context</p>
+
+    <p>
+      At the 5% significance level, we do not have strong evidence that the true
+      pass rate differs between the traditional and interactive teaching methods.
+      The observed difference (60% vs 70%) could plausibly be due to random variation.
+    </p>
+
+  </div>
+</details>
+
+<hr>
+
+<h2>Example 3 – On-Time Assignment Submissions (Online vs In-Person)</h2>
+
+<div class="problem-box">
+  <p>
+    An instructor teaches the same course in two formats: one online and one in-person.
+    Over the term, the instructor tracks whether students submit a particular major assignment
+    on time.
+  </p>
+  <ul>
+    <li>In the online section, 96 out of 150 students submitted the assignment on time.</li>
+    <li>In the in-person section, 105 out of 140 students submitted the assignment on time.</li>
+  </ul>
+  <p>
+    The instructor suspects that the online section might have a <em>lower</em> true on-time submission
+    rate than the in-person section. Test this claim at the \(\alpha = 0.05\) level using a left-tailed test.
+  </p>
+</div>
+
+<details>
+  <summary>Show full solution</summary>
+  <div>
+
+    <p class="substep">Step 1. Parameters and hypotheses</p>
+
+    <p>
+      Let:
+    </p>
+    <ul>
+      <li>\(p_1\) = true on-time submission rate in the online section.</li>
+      <li>\(p_2\) = true on-time submission rate in the in-person section.</li>
+    </ul>
+
+    <p>
+      The suspicion is that \(p_1\) is less than \(p_2\). So:
+    </p>
+
+    <p>
+    \[
+    \begin{aligned}
+    H_0 &: p_1 - p_2 = 0, \\
+    H_a &: p_1 - p_2 &lt; 0
+      \quad (\text{online section has a lower true on-time rate}).
+    \end{aligned}
+    \]
+    </p>
+
+    <p class="substep">Step 2. Sample proportions and conditions</p>
+
+    <ul>
+      <li>Online: \(n_1 = 150\), \(x_1 = 96\), \(\hat p_1 = \dfrac{96}{150} = 0.64.\)</li>
+      <li>In-person: \(n_2 = 140\), \(x_2 = 105\), \(\hat p_2 = \dfrac{105}{140} = 0.75.\)</li>
+    </ul>
+
+    <p>
+      Counts:
+    </p>
+
+    <p>
+    \[
+    \begin{aligned}
+    n_1\hat p_1 &= 150 \cdot 0.64 = 96 \ge 10, \\
+    n_1(1 - \hat p_1) &= 150 \cdot 0.36 = 54 \ge 10, \\
+    n_2\hat p_2 &= 140 \cdot 0.75 = 105 \ge 10, \\
+    n_2(1 - \hat p_2) &= 140 \cdot 0.25 = 35 \ge 10.
+    \end{aligned}
+    \]
+    </p>
+
+    <p>
+      Normal approximation conditions are satisfied. We also assume the two sections’
+      students are independent groups.
+    </p>
+
+    <p class="substep">Step 3. Pooled proportion</p>
+
+    <p>
+    \[
+    \hat p
+    = \frac{x_1 + x_2}{n_1 + n_2}
+    = \frac{96 + 105}{150 + 140}
+    = \frac{201}{290}
+    \approx 0.6931.
+    \]
+    </p>
+
+    <p class="substep">Step 4. Standard error and \(z\)-statistic</p>
+
+    <p>
+    \[
+    SE = \sqrt{\,\hat p(1 - \hat p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}.
+    \]
+    </p>
+
+    <p>
+    \[
+    \hat p(1 - \hat p)
+      \approx 0.6931 \cdot 0.3069
+      \approx 0.2128,
+    \]
+    \[
+    \frac{1}{n_1} + \frac{1}{n_2}
+      = \frac{1}{150} + \frac{1}{140}
+      \approx 0.00667 + 0.00714
+      \approx 0.01381.
+    \]
+    </p>
+
+    <p>
+    \[
+    SE \approx \sqrt{0.2128 \cdot 0.01381}
+       \approx \sqrt{0.00294}
+       \approx 0.0542.
+    \]
+    </p>
+
+    <p>
+      Difference in sample proportions:
+    </p>
+
+    <p>
+    \[
+    \hat p_1 - \hat p_2 = 0.64 - 0.75 = -0.11.
+    \]
+    </p>
+
+    <p>
+      Test statistic:
+    </p>
+
+    <p>
+    \[
+    z = \frac{(\hat p_1 - \hat p_2) - 0}{SE}
+      = \frac{-0.11}{0.0542}
+      \approx -2.03.
+    \]
+    </p>
+
+    <p class="substep">Step 5. p-value and decision</p>
+
+    <p>
+      This is a left-tailed test (\(H_a: p_1 - p_2 &lt; 0\)), so:
+    </p>
+
+    <p>
+    \[
+    p\text{-value} = P(Z \le -2.03).
+    \]
+    </p>
+
+    <p>
+      From the standard normal distribution, \(P(Z \le -2.03)\) is about \(0.021\).
+    </p>
+
+    <p>
+      Since \(p\text{-value} \approx 0.021 &lt; 0.05\), we reject \(H_0\).
+    </p>
+
+    <p class="substep">Step 6. Conclusion in context</p>
+
+    <p>
+      At the 5% significance level, there is statistical evidence that the online
+      section has a lower true on-time submission rate than the in-person section
+      for this assignment.
+    </p>
+
+  </div>
+</details>
+
+<hr>
+
+<h2>Example 4 – Email Marketing Subject Lines</h2>
+
+<div class="problem-box">
+  <p>
+    A company is A/B testing two email subject lines for a marketing campaign.
+  </p>
+  <ul>
+    <li>Subject Line A was sent to 300 customers; 84 of them opened the email.</li>
+    <li>Subject Line B was sent to 280 customers; 75 of them opened the email.</li>
+  </ul>
+  <p>
+    Does the data provide evidence that the true open rates for the two subject lines are different?
+    Use a two-sided test with \(\alpha = 0.05\).
+  </p>
+</div>
+
+<details>
+  <summary>Show full solution</summary>
+  <div>
+
+    <p class="substep">Step 1. Parameters and hypotheses</p>
+
+    <p>
+      Let:
+    </p>
+    <ul>
+      <li>\(p_1\) = true proportion of customers who open emails with Subject Line A.</li>
+      <li>\(p_2\) = true proportion of customers who open emails with Subject Line B.</li>
+    </ul>
+
+    <p>
+      We are testing for any difference:
+    </p>
+
+    <p>
+    \[
+    \begin{aligned}
+    H_0 &: p_1 - p_2 = 0, \\
+    H_a &: p_1 - p_2 \neq 0.
+    \end{aligned}
+    \]
+    </p>
+
+    <p class="substep">Step 2. Sample proportions and conditions</p>
+
+    <ul>
+      <li>Subject A: \(n_1 = 300\), \(x_1 = 84\), \(\hat p_1 = \dfrac{84}{300} = 0.28.\)</li>
+      <li>Subject B: \(n_2 = 280\), \(x_2 = 75\), \(\hat p_2 = \dfrac{75}{280} \approx 0.2679.\)</li>
+    </ul>
+
+    <p>
+      Counts:
+    </p>
+
+    <p>
+    \[
+    \begin{aligned}
+    n_1\hat p_1 &= 300 \cdot 0.28 = 84 \ge 10, \\
+    n_1(1 - \hat p_1) &= 300 \cdot 0.72 = 216 \ge 10, \\
+    n_2\hat p_2 &\approx 280 \cdot 0.2679 \approx 75 \ge 10, \\
+    n_2(1 - \hat p_2) &\approx 280 \cdot 0.7321 \approx 205 \ge 10.
+    \end{aligned}
+    \]
+    </p>
+
+    <p>
+      Conditions for the normal approximation are satisfied.
+    </p>
+
+    <p class="substep">Step 3. Pooled proportion</p>
+
+    <p>
+    \[
+    \hat p
+    = \frac{x_1 + x_2}{n_1 + n_2}
+    = \frac{84 + 75}{300 + 280}
+    = \frac{159}{580}
+    \approx 0.2741.
+    \]
+    </p>
+
+    <p class="substep">Step 4. Standard error and \(z\)-statistic</p>
+
+    <p>
+    \[
+    SE = \sqrt{\,\hat p(1 - \hat p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}
+       = \sqrt{0.2741 \cdot 0.7259 \left(\frac{1}{300} + \frac{1}{280}\right)}.
+    \]
+    </p>
+
+    <p>
+    \[
+    \hat p(1 - \hat p) \approx 0.2741 \cdot 0.7259 \approx 0.199, 
+    \]
+    \[
+    \frac{1}{300} + \frac{1}{280} \approx 0.00333 + 0.00357 = 0.00690.
+    \]
+    </p>
+
+    <p>
+    \[
+    SE \approx \sqrt{0.199 \cdot 0.00690}
+       \approx \sqrt{0.00137}
+       \approx 0.0371.
+    \]
+    </p>
+
+    <p>
+      Difference in sample proportions:
+    </p>
+
+    <p>
+    \[
+    \hat p_1 - \hat p_2 \approx 0.28 - 0.2679 \approx 0.0121.
+    \]
+    </p>
+
+    <p>
+      Test statistic:
+    </p>
+
+    <p>
+    \[
+    z = \frac{(\hat p_1 - \hat p_2) - 0}{SE}
+      \approx \frac{0.0121}{0.0371}
+      \approx 0.33.
+    \]
+    </p>
+
+    <p class="substep">Step 5. p-value and decision</p>
+
+    <p>
+      Two-sided test:
+    </p>
+
+    <p>
+    \[
+    p\text{-value} = 2P(Z \ge |0.33|).
+    \]
+    </p>
+
+    <p>
+      \(P(Z \ge 0.33)\) is about \(0.372\). So:
+    </p>
+
+    <p>
+    \[
+    p\text{-value} \approx 2 \cdot 0.372 = 0.744.
+    \]
+    </p>
+
+    <p>
+      Since \(p\text{-value} \approx 0.74 \gg 0.05\), we fail to reject \(H_0\).
+    </p>
+
+    <p class="substep">Step 6. Conclusion in context</p>
+
+    <p>
+      At the 5% significance level, there is no evidence that the true open rates differ
+      between Subject Line A and Subject Line B. The observed difference (about 28% vs 26.8%)
+      is small compared to the amount of random variation we expect in samples of this size.
+    </p>
+
+  </div>
+</details>
+
+<hr>
+
+<p>
+These four examples all use the same underlying structure:
+define parameters and hypotheses about \(p_1 - p_2\),
+check conditions, compute the pooled proportion and standard error,
+form a \(z\)-statistic, and then interpret the p-value back in the real-world context.
+</p>
+
+</body>
+</html>
