@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Two-Population Proportion Hypothesis Tests</title>
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(','\\)'],['$','$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem 3rem 1rem;
+      line-height: 1.6;
+    }
+    code {
+      background: #f4f4f4;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+    }
+    h1, h2, h3 {
+      margin-top: 2rem;
+    }
+    .example-box {
+      border: 1px solid #ccc;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      background: #fafafa;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .step-title {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .highlight {
+      background: #fff9c4;
+      padding: 0.1rem 0.25rem;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Two-Population Proportion Hypothesis Tests</h1>
+
+<p>
+In a two-population proportion test, we compare the percentage of “successes” in
+<strong>two separate groups</strong>.
+We are not just asking “what is the proportion in each group?” but:
+</p>
+
+<p class="highlight">
+  <strong>Is there evidence that the true proportions in the two populations are different?</strong>
+</p>
+
+<p>
+Let:
+</p>
+
+<ul>
+  <li>\(p_1\) = true proportion (percentage) of “success” in population 1</li>
+  <li>\(p_2\) = true proportion of “success” in population 2</li>
+</ul>
+
+<p>
+We do not know \(p_1\) and \(p_2\), so we take samples and compute:
+</p>
+
+<ul>
+  <li>\(\hat p_1 = x_1 / n_1\) from sample 1</li>
+  <li>\(\hat p_2 = x_2 / n_2\) from sample 2</li>
+</ul>
+
+<p>
+The parameter we care about is the <strong>difference</strong>:
+\[
+p_1 - p_2.
+\]
+The usual “no difference” null hypothesis is:
+\[
+H_0: p_1 - p_2 = 0 \quad (\text{equivalently } p_1 = p_2).
+\]
+The alternative hypothesis describes the kind of difference we are interested in:
+</p>
+
+<ul>
+  <li>Two-sided: \(H_a: p_1 - p_2 \neq 0\) (any difference)</li>
+  <li>Right-tailed: \(H_a: p_1 - p_2 > 0\) (population 1 has a higher proportion)</li>
+  <li>Left-tailed: \(H_a: p_1 - p_2 < 0\) (population 1 has a lower proportion)</li>
+</ul>
+
+<hr>
+
+<h2>General Recipe: Two-Proportion \(z\)-Test</h2>
+
+<p>
+We observe:
+</p>
+
+<ul>
+  <li>Group 1: \(x_1\) successes out of \(n_1\) &rarr; \(\hat p_1 = \dfrac{x_1}{n_1}\)</li>
+  <li>Group 2: \(x_2\) successes out of \(n_2\) &rarr; \(\hat p_2 = \dfrac{x_2}{n_2}\)</li>
+</ul>
+
+<h3>Step 1. Define parameters and hypotheses</h3>
+
+<p>
+Always start by naming your parameters clearly:
+</p>
+
+<ul>
+  <li>\(p_1\) = true proportion of success in population 1</li>
+  <li>\(p_2\) = true proportion of success in population 2</li>
+</ul>
+
+<p>
+Then write hypotheses about the <strong>difference</strong> \(p_1 - p_2\). For example:
+</p>
+
+<p>
+\[
+\begin{aligned}
+H_0 &: p_1 - p_2 = 0, \\
+H_a &: p_1 - p_2 \neq 0.
+\end{aligned}
+\]
+</p>
+
+<h3>Step 2. Check conditions</h3>
+
+<p>
+We need conditions to justify using a normal model:
+</p>
+
+<ol>
+  <li><strong>Independent samples:</strong> the two samples are independent of each other, and each sample is random (or comes from a randomized experiment).</li>
+  <li><strong>Large enough counts:</strong> in each group, we have enough “yes” and “no” responses:
+    \[
+    n_1 \hat p_1 \ge 10,\quad n_1(1 - \hat p_1) \ge 10,\quad
+    n_2 \hat p_2 \ge 10,\quad n_2(1 - \hat p_2) \ge 10.
+    \]
+    Intuition: we want enough successes and failures in each group for the normal approximation to be reasonable.
+  </li>
+</ol>
+
+<h3>Step 3. Pooled proportion under the null</h3>
+
+<p>
+Under \(H_0: p_1 = p_2\), both samples are treated as if they come from one big population
+with a single true proportion \(p\).
+We estimate this common proportion by “pooling” the data:
+</p>
+
+<p>
+\[
+\hat p = \frac{x_1 + x_2}{n_1 + n_2}.
+\]
+</p>
+
+<p>
+This is our best guess for the common \(p\) assuming the null is true.
+</p>
+
+<h3>Step 4. Standard error and test statistic</h3>
+
+<p>
+The standard error of \(\hat p_1 - \hat p_2\) under the null is:
+</p>
+
+<p>
+\[
+SE = \sqrt{\,\hat p(1 - \hat p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}.
+\]
+</p>
+
+<p>
+The test statistic is a \(z\)-score:
+</p>
+
+<p>
+\[
+z = \frac{(\hat p_1 - \hat p_2) - 0}{SE}.
+\]
+</p>
+
+<p>
+This tells us how many standard errors away from 0 (no difference) our observed difference is.
+</p>
+
+<h3>Step 5. p-value and decision</h3>
+
+<p>
+The p-value is the probability, under the null hypothesis, of seeing a \(z\)-value as extreme
+as (or more extreme than) the one we observed.
+We use the standard normal distribution:
+</p>
+
+<ul>
+  <li>Two-sided: \(p\text{-value} = 2P(Z \ge |z|)\)</li>
+  <li>Right-tailed: \(p\text{-value} = P(Z \ge z)\)</li>
+  <li>Left-tailed: \(p\text{-value} = P(Z \le z)\)</li>
+</ul>
+
+<p>
+Then we compare the p-value to a significance level \(\alpha\) (for example, \(\alpha = 0.05\)):
+</p>
+
+<ul>
+  <li>If \(p\text{-value} \le \alpha\): reject \(H_0\) (evidence of a difference).</li>
+  <li>If \(p\text{-value} > \alpha\): fail to reject \(H_0\) (no strong evidence of a difference).</li>
+</ul>
+
+<p>
+Finally, we write a conclusion in the context of the problem, using plain language.
+</p>
+
+<hr>
+
+<h2>Worked Example: Belief in Aliens in Two Classes</h2>
+
+<div class="example-box">
+  <p>
+    Suppose we survey two college classes about the statement:
+    <em>“Aliens have visited Earth.”</em>
+  </p>
+  <ul>
+    <li><strong>Group 1:</strong> Intro Statistics students.  
+      In this class, 40 out of 80 students say they think aliens have visited Earth.</li>
+    <li><strong>Group 2:</strong> Astronomy students.  
+      In this class, 90 out of 160 students say they think aliens have visited Earth.</li>
+  </ul>
+  <p>
+    We will test whether the <strong>true proportions</strong> of belief in the two populations (Intro Stats vs Astronomy students)
+    are different.
+  </p>
+</div>
+
+<h3>Step 1. Define parameters and hypotheses</h3>
+
+<p>
+Let:
+</p>
+
+<ul>
+  <li>\(p_1\) = true proportion of Intro Statistics students who believe aliens have visited Earth.</li>
+  <li>\(p_2\) = true proportion of Astronomy students who believe aliens have visited Earth.</li>
+</ul>
+
+<p>
+We want to know if \(p_1\) and \(p_2\) are different. So we set up:
+</p>
+
+<p>
+\[
+\begin{aligned}
+H_0 &: p_1 - p_2 = 0 \quad (\text{no difference in the populations}),\\[4pt]
+H_a &: p_1 - p_2 \neq 0 \quad (\text{some difference in the populations}).
+\end{aligned}
+\]
+</p>
+
+<h3>Step 2. Compute sample proportions and check conditions</h3>
+
+<p>
+From the data:
+</p>
+
+<ul>
+  <li>Group 1: \(n_1 = 80\), \(x_1 = 40\)  
+    \[
+    \hat p_1 = \frac{40}{80} = 0.50.
+    \]
+  </li>
+  <li>Group 2: \(n_2 = 160\), \(x_2 = 90\)  
+    \[
+    \hat p_2 = \frac{90}{160} = 0.5625.
+    \]
+  </li>
+</ul>
+
+<p>
+Now check the “large counts” condition:
+</p>
+
+<p>
+Group 1:
+\[
+n_1\hat p_1 = 80 \cdot 0.50 = 40 \ge 10, \quad
+n_1(1 - \hat p_1) = 80 \cdot 0.50 = 40 \ge 10.
+\]
+Group 2:
+\[
+n_2\hat p_2 = 160 \cdot 0.5625 = 90 \ge 10, \quad
+n_2(1 - \hat p_2) = 160 \cdot 0.4375 = 70 \ge 10.
+\]
+</p>
+
+<p>
+All values are at least 10, so the normal approximation is reasonable.
+We also assume the classes are independent groups and that each sample behaves like a random sample.
+</p>
+
+<h3>Step 3. Pooled proportion under the null</h3>
+
+<p>
+Under \(H_0\), we treat both samples as coming from one big population with a single true proportion \(p\).
+We estimate this \(p\) by pooling:
+</p>
+
+<p>
+\[
+\hat p = \frac{x_1 + x_2}{n_1 + n_2}
+       = \frac{40 + 90}{80 + 160}
+       = \frac{130}{240}
+       \approx 0.5417.
+\]
+</p>
+
+<p>
+So our best guess for the common proportion of “yes” responses, if there is no true difference, is about \(0.5417\) (54.17%).
+</p>
+
+<h3>Step 4. Standard error and test statistic</h3>
+
+<p>
+First, compute the standard error:
+</p>
+
+<p>
+\[
+SE = \sqrt{\,\hat p(1 - \hat p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}.
+\]
+</p>
+
+<p>
+We already have \(\hat p \approx 0.5417\), so:
+</p>
+
+<p>
+\[
+\hat p(1 - \hat p)
+\approx 0.5417 \cdot (1 - 0.5417)
+= 0.5417 \cdot 0.4583
+\approx 0.248.
+\]
+</p>
+
+<p>
+Next:
+\[
+\frac{1}{n_1} + \frac{1}{n_2}
+= \frac{1}{80} + \frac{1}{160}
+= 0.0125 + 0.00625
+= 0.01875.
+\]
+</p>
+
+<p>
+So:
+\[
+SE \approx \sqrt{0.248 \cdot 0.01875}
+\approx \sqrt{0.00465}
+\approx 0.0682.
+\]
+</p>
+
+<p>
+Now compute the difference in sample proportions:
+</p>
+
+<p>
+\[
+\hat p_1 - \hat p_2 = 0.50 - 0.5625 = -0.0625.
+\]
+</p>
+
+<p>
+This means the Intro Stats sample has about 6.25 percentage points <em>lower</em> belief than the Astronomy sample.
+</p>
+
+<p>
+Now compute the \(z\)-statistic:
+</p>
+
+<p>
+\[
+z = \frac{(\hat p_1 - \hat p_2) - 0}{SE}
+  = \frac{-0.0625}{0.0682}
+  \approx -0.92.
+\]
+</p>
+
+<p>
+So our observed difference is about \(-0.92\) standard errors away from 0.
+In other words, less than 1 standard error away from “no difference.”
+</p>
+
+<h3>Step 5. p-value and decision</h3>
+
+<p>
+Because this is a two-sided test (\(H_a: p_1 - p_2 \neq 0\)), the p-value is:
+</p>
+
+<p>
+\[
+p\text{-value} = 2P(Z \ge |z|) = 2P(Z \ge 0.92).
+\]
+</p>
+
+<p>
+From the standard normal distribution,
+\(P(Z \ge 0.92)\) is about \(0.18\).
+So:
+</p>
+
+<p>
+\[
+p\text{-value} \approx 2 \cdot 0.18 = 0.36.
+\]
+</p>
+
+<p>
+If we use a significance level of \(\alpha = 0.05\), then:
+</p>
+
+<ul>
+  <li>p-value \(\approx 0.36\) is much larger than \(0.05\).</li>
+  <li>We <strong>fail to reject</strong> \(H_0\).</li>
+</ul>
+
+<h3>Step 6. Conclusion in context</h3>
+
+<p>
+A clear, contextual conclusion might sound like:
+</p>
+
+<p class="example-box">
+At the 5% significance level, we do not have strong evidence that the true proportion of students who believe aliens have visited Earth is different between Intro Statistics students and Astronomy students. The difference we see in the samples (50% vs 56.25%) is small relative to the amount of random variation we expect from sampling alone, so it is plausible that the two populations actually have the same belief rate.
+</p>
+
+<h2>Summary</h2>
+
+<ul>
+  <li>The two-population proportion test compares \(p_1\) and \(p_2\) via their difference \(p_1 - p_2\).</li>
+  <li>We form a pooled estimate \(\hat p\) under the null, compute a standard error, and then a \(z\)-statistic.</li>
+  <li>The p-value tells us how surprising our observed difference is if there were really no difference in the populations.</li>
+  <li>A large p-value (like 0.36) means the difference could easily be due to random sampling; a small p-value would suggest a real difference.</li>
+</ul>
+
+</body>
+</html>
