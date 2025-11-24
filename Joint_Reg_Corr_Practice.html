@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Week 10 Practice: Linear Regression and Correlation</title>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js">
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6fb;
+      --card-bg: #ffffff;
+      --border-soft: #d7dce8;
+      --accent: #3b6ea8;
+      --accent-soft: #e4ecf8;
+      --text-main: #1f2833;
+      --text-muted: #5f6470;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top left, #eef2ff, #f5f6fb 50%, #f9fafc);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 2.5rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: 0.03em;
+      color: var(--accent);
+    }
+
+    h2 {
+      margin: 0.35rem 0 0.5rem;
+      font-weight: 500;
+      font-size: 1.15rem;
+      color: var(--text-muted);
+    }
+
+    .note {
+      max-width: 650px;
+      margin: 0.75rem auto 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 999px;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid rgba(215, 220, 232, 0.8);
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(215, 220, 232, 0.9);
+      margin: 2rem 0 1.75rem;
+    }
+
+    .problem {
+      border-radius: 16px;
+      padding: 1.3rem 1.4rem 1.5rem;
+      margin-bottom: 1.5rem;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      box-shadow:
+        0 12px 25px rgba(15, 23, 42, 0.05),
+        0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    .problem h3 {
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    .problem > p {
+      margin-top: 0.4rem;
+    }
+
+    .problem ol {
+      padding-left: 1.25rem;
+      margin-top: 0.6rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .problem li {
+      margin-bottom: 0.35rem;
+    }
+
+    details.step {
+      margin-top: 0.5rem;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      padding: 0.45rem 0.8rem 0.55rem;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+      list-style: none;
+      position: relative;
+    }
+
+    summary::marker {
+      display: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      content: "▾";
+      display: inline-block;
+      margin-right: 0.4rem;
+      transition: transform 0.15s ease;
+    }
+
+    details[open] summary::before {
+      transform: rotate(180deg);
+    }
+
+    details.step > *:not(summary) {
+      margin-top: 0.55rem;
+    }
+
+    h4 {
+      margin: 0.2rem 0 0.2rem;
+      font-size: 1rem;
+      color: #243447;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 0.4rem 0 0.6rem;
+      width: auto;
+      max-width: 100%;
+      font-size: 0.9rem;
+      background: #fdfdff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 1px solid #d9dfec;
+      padding: 0.3rem 0.6rem;
+      text-align: center;
+    }
+
+    th {
+      background: #edf1fb;
+      font-weight: 600;
+    }
+
+    code {
+      background: #eef0f7;
+      padding: 0.1rem 0.25rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    ul {
+      margin-top: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        margin-top: 1.5rem;
+        padding: 0 1rem;
+      }
+
+      .problem {
+        padding: 1.1rem 1.1rem 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <h1>Week 10 Practice</h1>
+    <h2>Linear Regression, Covariance, and Correlation</h2>
+    <p class="note">
+      Based on the Week 10 summary. Try each problem first, then unfold the solution step by step to check your work.
+    </p>
+  </header>
+
+  <hr>
+
+  <div class="problem">
+    <h3>Problem 1: Finding the Regression Line and Correlation</h3>
+
+    <p>
+      A teacher records the number of online practice sessions each student completes before a quiz,
+      and their quiz score (out of 10). The data for five students are:
+    </p>
+
+    <table>
+      <tr>
+        <th>Student</th>
+        <th>$x_i$ (sessions)</th>
+        <th>$y_i$ (quiz score)</th>
+      </tr>
+      <tr>
+        <td>1</td><td>1</td><td>3</td>
+      </tr>
+      <tr>
+        <td>2</td><td>2</td><td>4</td>
+      </tr>
+      <tr>
+        <td>3</td><td>3</td><td>6</td>
+      </tr>
+      <tr>
+        <td>4</td><td>4</td><td>5</td>
+      </tr>
+      <tr>
+        <td>5</td><td>5</td><td>7</td>
+      </tr>
+    </table>
+
+    <ol>
+      <li>Compute the sample means $\bar x$ and $\bar y$.</li>
+      <li>Compute $s_x^2$, $s_y^2$, and the sample covariance $s_{xy}$.</li>
+      <li>Compute the sample correlation coefficient $r = \dfrac{s_{xy}}{s_x s_y}$.</li>
+      <li>Find the least squares regression line $\hat y = a + bx$.</li>
+      <li>Interpret the slope $b$ in context.</li>
+      <li>Compute $R^2$ and briefly interpret it.</li>
+    </ol>
+
+    <!-- Stepwise solution -->
+    <details class="step">
+      <summary>Step 1: Compute $\bar x$ and $\bar y$</summary>
+      <p>
+        Compute the means:
+      </p>
+      <p>
+        $\displaystyle
+        \bar x = \frac{1 + 2 + 3 + 4 + 5}{5}
+               = \frac{15}{5} = 3.
+        $
+      </p>
+      <p>
+        $\displaystyle
+        \bar y = \frac{3 + 4 + 6 + 5 + 7}{5}
+               = \frac{25}{5} = 5.
+        $
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 2: Compute $s_x^2$, $s_y^2$, and $s_{xy}$</summary>
+      <p>
+        Make a table of deviations, squares, and products:
+      </p>
+
+      <table>
+        <tr>
+          <th>$i$</th>
+          <th>$x_i$</th>
+          <th>$y_i$</th>
+          <th>$x_i - \bar x$</th>
+          <th>$y_i - \bar y$</th>
+          <th>$(x_i - \bar x)^2$</th>
+          <th>$(y_i - \bar y)^2$</th>
+          <th>$(x_i - \bar x)(y_i - \bar y)$</th>
+        </tr>
+        <tr>
+          <td>1</td><td>1</td><td>3</td>
+          <td>$1 - 3 = -2$</td>
+          <td>$3 - 5 = -2$</td>
+          <td>$(-2)^2 = 4$</td>
+          <td>$(-2)^2 = 4$</td>
+          <td>$(-2)(-2) = 4$</td>
+        </tr>
+        <tr>
+          <td>2</td><td>2</td><td>4</td>
+          <td>$2 - 3 = -1$</td>
+          <td>$4 - 5 = -1$</td>
+          <td>$(-1)^2 = 1$</td>
+          <td>$(-1)^2 = 1$</td>
+          <td>$(-1)(-1) = 1$</td>
+        </tr>
+        <tr>
+          <td>3</td><td>3</td><td>6</td>
+          <td>$3 - 3 = 0$</td>
+          <td>$6 - 5 = 1$</td>
+          <td>$0^2 = 0$</td>
+          <td>$1^2 = 1$</td>
+          <td>$0 \cdot 1 = 0$</td>
+        </tr>
+        <tr>
+          <td>4</td><td>4</td><td>5</td>
+          <td>$4 - 3 = 1$</td>
+          <td>$5 - 5 = 0$</td>
+          <td>$1^2 = 1$</td>
+          <td>$0^2 = 0$</td>
+          <td>$1 \cdot 0 = 0$</td>
+        </tr>
+        <tr>
+          <td>5</td><td>5</td><td>7</td>
+          <td>$5 - 3 = 2$</td>
+          <td>$7 - 5 = 2$</td>
+          <td>$2^2 = 4$</td>
+          <td>$2^2 = 4$</td>
+          <td>$2 \cdot 2 = 4$</td>
+        </tr>
+        <tr>
+          <td colspan="5" style="text-align:right;"><strong>Sums:</strong></td>
+          <td>$10$</td>
+          <td>$10$</td>
+          <td>$9$</td>
+        </tr>
+      </table>
+
+      <p>
+        Now compute the variances:
+      </p>
+      <p>
+        $\displaystyle
+        s_x^2 = \frac{10}{n-1} = \frac{10}{4} = 2.5,
+        \quad
+        s_y^2 = \frac{10}{4} = 2.5.
+        $
+      </p>
+      <p>
+        So $s_x = s_y = \sqrt{2.5} \approx 1.58$.
+      </p>
+      <p>
+        The sample covariance is
+      </p>
+      <p>
+        $\displaystyle
+        s_{xy} = \frac{9}{n-1} = \frac{9}{4} = 2.25.
+        $
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 3: Compute the correlation $r$</summary>
+      <p>
+        Use the formula
+        $\displaystyle r = \frac{s_{xy}}{s_x s_y}$:
+      </p>
+      <p>
+        $\displaystyle
+        r = \frac{2.25}{(\sqrt{2.5})(\sqrt{2.5})}
+          = \frac{2.25}{2.5}
+          = 0.9.
+        $
+      </p>
+      <p>
+        So $r = 0.9$, which indicates a strong positive linear association between practice sessions and quiz score.
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 4: Find the regression line $\hat y = a + bx$</summary>
+      <p>
+        The slope can be computed from
+        $\displaystyle b = \frac{s_{xy}}{s_x^2}$:
+      </p>
+      <p>
+        $\displaystyle
+        b = \frac{2.25}{2.5} = 0.9.
+        $
+      </p>
+      <p>
+        Then the intercept is
+      </p>
+      <p>
+        $\displaystyle
+        a = \bar y - b\,\bar x
+          = 5 - 0.9 \cdot 3
+          = 5 - 2.7
+          = 2.3.
+        $
+      </p>
+      <p>
+        So the least squares regression line is
+      </p>
+      <p>
+        $\displaystyle
+        \hat y = 2.3 + 0.9\,x.
+        $
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 5: Interpret the slope</summary>
+      <p>
+        The slope $b = 0.9$ means:
+      </p>
+      <p>
+        <em>For each additional practice session, the model predicts an average increase of about $0.9$ points on the quiz (out of 10).</em>
+      </p>
+      <p>
+        This describes the average trend; individual students can still be above or below the line.
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 6: Compute and interpret $R^2$</summary>
+      <p>
+        In simple linear regression (one $X$ and one $Y$),
+        $\displaystyle R^2 = r^2$.
+      </p>
+      <p>
+        $\displaystyle
+        R^2 = r^2 = (0.9)^2 = 0.81.
+        $
+      </p>
+      <p>
+        Interpretation:
+      </p>
+      <p>
+        <em>About $81\%$ of the variability in quiz scores can be explained by a straight-line relationship with the number of practice sessions. The remaining $19\%$ is due to other factors or random variation.</em>
+      </p>
+    </details>
+  </div>
+
+  <div class="problem">
+    <h3>Problem 2: Using Correlation to Find the Slope</h3>
+
+    <p>
+      In another class, a teacher studies the relationship between hours of sleep the night before an exam ($X$)
+      and the exam score ($Y$). For a sample of $n = 20$ students, the computer output reports:
+    </p>
+
+    <ul>
+      <li>Sample mean hours of sleep: $\bar x = 6.5$</li>
+      <li>Sample mean exam score: $\bar y = 78$</li>
+      <li>Sample standard deviation of $X$: $s_x = 1.2$ hours</li>
+      <li>Sample standard deviation of $Y$: $s_y = 8.0$ points</li>
+      <li>Sample correlation: $r = 0.6$</li>
+    </ul>
+
+    <ol>
+      <li>Use $r$, $s_x$, and $s_y$ to find the slope $b$ of the least squares regression line $\hat y = a + bx$.</li>
+      <li>Find the intercept $a$.</li>
+      <li>Write the regression equation for predicting exam score from hours of sleep.</li>
+      <li>Interpret the slope $b$ in context.</li>
+      <li>Compute $R^2$ and explain what it means in this context.</li>
+    </ol>
+
+    <!-- Stepwise solution -->
+    <details class="step">
+      <summary>Step 1: Find the slope $b$ using $r$</summary>
+      <p>
+        In simple linear regression, the slope can be written as
+      </p>
+      <p>
+        $\displaystyle
+        b = r\,\frac{s_y}{s_x}.
+        $
+      </p>
+      <p>
+        Plug in the values:
+      </p>
+      <p>
+        $\displaystyle
+        b = 0.6 \cdot \frac{8.0}{1.2}
+          = 0.6 \cdot \frac{8}{1.2}.
+        $
+      </p>
+      <p>
+        Compute $\dfrac{8}{1.2}$:
+        $\displaystyle \frac{8}{1.2} \approx 6.67$ (since $1.2 \cdot 6.67 \approx 8$).
+      </p>
+      <p>
+        Then
+      </p>
+      <p>
+        $\displaystyle
+        b \approx 0.6 \cdot 6.67 \approx 4.00.
+        $
+      </p>
+      <p>
+        So the slope is approximately $b = 4.0$.
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 2: Find the intercept $a$</summary>
+      <p>
+        The regression line passes through $(\bar x, \bar y)$, so
+      </p>
+      <p>
+        $\displaystyle
+        a = \bar y - b\,\bar x.
+        $
+      </p>
+      <p>
+        Plug in the values:
+      </p>
+      <p>
+        $\displaystyle
+        a = 78 - 4.0 \cdot 6.5
+          = 78 - 26
+          = 52.
+        $
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 3: Write the regression equation</summary>
+      <p>
+        The least squares regression line for predicting exam score from hours of sleep is
+      </p>
+      <p>
+        $\displaystyle
+        \hat y = 52 + 4.0\,x,
+        $
+      </p>
+      <p>
+        where $x$ is the number of hours of sleep the night before the exam and $\hat y$ is the predicted exam score.
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 4: Interpret the slope $b$</summary>
+      <p>
+        The slope $b = 4.0$ means:
+      </p>
+      <p>
+        <em>For each additional hour of sleep, the model predicts an average increase of about 4 points on the exam.</em>
+      </p>
+      <p>
+        This describes the linear trend in the data; it does <em>not</em> by itself prove that more sleep causes higher scores.
+      </p>
+    </details>
+
+    <details class="step">
+      <summary>Step 5: Compute and interpret $R^2$</summary>
+      <p>
+        In simple linear regression,
+      </p>
+      <p>
+        $\displaystyle
+        R^2 = r^2 = (0.6)^2 = 0.36.
+        $
+      </p>
+      <p>
+        So $R^2 = 0.36$, or $36\%$.
+      </p>
+      <p>
+        Interpretation:
+      </p>
+      <p>
+        <em>About $36\%$ of the variability in exam scores can be explained by a straight-line relationship with hours of sleep the night before the exam. The remaining $64\%$ of the variability is due to other factors or random variation.</em>
+      </p>
+    </details>
+  </div>
+</div>
+
+</body>
+</html>

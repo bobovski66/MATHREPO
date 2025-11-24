@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Week 10 Summary: Linear Regression and Correlation</title>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js">
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6fb;
+      --card-bg: #ffffff;
+      --border-soft: #d7dce8;
+      --accent: #3b6ea8;
+      --accent-soft: #e4ecf8;
+      --text-main: #1f2833;
+      --text-muted: #5f6470;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top left, #eef2ff, #f5f6fb 50%, #f9fafc);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 2.5rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: 0.03em;
+      color: var(--accent);
+    }
+
+    h2 {
+      margin: 0.35rem 0 0.4rem;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+
+    .note {
+      max-width: 700px;
+      margin: 0.75rem auto 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 999px;
+      padding: 0.55rem 1.3rem;
+      border: 1px solid rgba(215, 220, 232, 0.8);
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(215, 220, 232, 0.9);
+      margin: 2rem 0 1.75rem;
+    }
+
+    details.section {
+      border-radius: 16px;
+      padding: 0.9rem 1.2rem 1.1rem;
+      margin-bottom: 1.1rem;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      box-shadow:
+        0 10px 24px rgba(15, 23, 42, 0.05),
+        0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+      list-style: none;
+      position: relative;
+      font-size: 1.02rem;
+    }
+
+    summary::marker,
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      content: "▾";
+      display: inline-block;
+      margin-right: 0.45rem;
+      transition: transform 0.15s ease;
+    }
+
+    details[open] summary::before {
+      transform: rotate(180deg);
+    }
+
+    details.section > *:not(summary) {
+      margin-top: 0.65rem;
+    }
+
+    p {
+      margin: 0.35rem 0;
+      line-height: 1.6;
+    }
+
+    .running-example {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      background: #f0f3ff;
+      border-radius: 12px;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid #d7dff5;
+      margin-top: 0.5rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 0.5rem 0 0.7rem;
+      width: auto;
+      max-width: 100%;
+      font-size: 0.9rem;
+      background: #fdfdff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 1px solid #d9dfec;
+      padding: 0.3rem 0.7rem;
+      text-align: center;
+    }
+
+    th {
+      background: #edf1fb;
+      font-weight: 600;
+    }
+
+    ul, ol {
+      margin-top: 0.4rem;
+      margin-bottom: 0.4rem;
+      padding-left: 1.3rem;
+    }
+
+    h3 {
+      margin: 0.1rem 0 0.2rem;
+      font-size: 1rem;
+      color: #243447;
+    }
+
+    code {
+      background: #eef0f7;
+      padding: 0.1rem 0.25rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    .plot-box {
+      margin-top: 0.7rem;
+      background: #f7f8ff;
+      border-radius: 12px;
+      border: 1px solid #d7dff5;
+      padding: 0.6rem 0.75rem 0.8rem;
+    }
+
+    .plot-title {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .plot-title strong {
+      color: var(--accent);
+    }
+
+    .plot-box svg {
+      margin-top: 0.4rem;
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        margin-top: 1.8rem;
+        padding: 0 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <h1>Week 10 Summary</h1>
+    <h2>Joint Distributions, Linear Regression, and Correlation</h2>
+    
+  </header>
+
+  <hr>
+
+  <!-- Introduction + running example -->
+  <details class="section" open>
+    <summary>1. Introduction and Running Example</summary>
+
+    <p>
+      We study the relationship between two numerical variables:
+      an explanatory (input) variable $X$ and a response (output) variable $Y$.
+      Our data are $n$ pairs
+      \[
+      (x_1,y_1),\ (x_2,y_2),\ \ldots,\ (x_n,y_n),
+      \]
+      where each $(x_i,y_i)$ comes from one individual in the sample.
+    </p>
+
+    <div class="running-example">
+      <strong>Running example: practice sessions and quiz scores.</strong>
+      <p>
+        Five students each choose how many online practice sessions to complete before a 10-question quiz.
+      </p>
+      <ul>
+        <li>$X =$ number of practice sessions in the week before the quiz.</li>
+        <li>$Y =$ number of questions correct on the quiz (out of 10).</li>
+      </ul>
+
+      <table>
+        <tr>
+          <th>Student</th>
+          <th>$x_i$ (sessions)</th>
+          <th>$y_i$ (correct answers)</th>
+        </tr>
+        <tr><td>1</td><td>1</td><td>2</td></tr>
+        <tr><td>2</td><td>2</td><td>4</td></tr>
+        <tr><td>3</td><td>3</td><td>5</td></tr>
+        <tr><td>4</td><td>4</td><td>4</td></tr>
+        <tr><td>5</td><td>5</td><td>7</td></tr>
+      </table>
+
+      <p>
+        We will use this same dataset as a reference example in each section.
+      </p>
+    </div>
+  </details>
+
+  <!-- Joint distributions and scatterplots -->
+  <details class="section">
+    <summary>2. Joint Distributions and Scatterplots</summary>
+
+    <p>
+      A <strong>joint distribution</strong> describes how two variables $X$ and $Y$ vary
+      <em>together</em> in a population.
+    </p>
+
+    <ul>
+      <li>For discrete variables, we can use a two-way table or probabilities $P(X=x, Y=y)$.</li>
+      <li>
+        For continuous/numeric variables, we often use a <strong>scatterplot</strong>:
+        one point $(x_i,y_i)$ for each individual.
+      </li>
+    </ul>
+
+    <p>
+      A scatterplot can show:
+    </p>
+    <ul>
+      <li>Direction of association: positive, negative, or none.</li>
+      <li>Strength of an approximately linear relationship.</li>
+      <li>Outliers and non-linear patterns.</li>
+    </ul>
+
+    <h3>Running example</h3>
+    <p>
+      Plotting the five pairs
+      \[
+      (1,2),\ (2,4),\ (3,5),\ (4,4),\ (5,7)
+      \]
+      gives a scatter of points that trends upward: as the number of practice sessions increases,
+      quiz scores tend to increase. The pattern is not perfectly straight, but there is a clear
+      <em>positive</em> trend.
+    </p>
+
+    <div class="plot-box">
+      <p class="plot-title">
+        <strong>Figure:</strong> Scatterplot of practice sessions vs. quiz scores.
+      </p>
+      <svg viewBox="0 0 320 220" role="img" aria-labelledby="scatter1Title scatter1Desc">
+        <title id="scatter1Title">Scatterplot of practice sessions and quiz scores</title>
+        <desc id="scatter1Desc">
+          Points at (1,2), (2,4), (3,5), (4,4), and (5,7) showing a positive trend.
+        </desc>
+        <!-- axes -->
+        <line x1="50" y1="40" x2="50" y2="180" stroke="#555" stroke-width="1.2"/>
+        <line x1="50" y1="180" x2="290" y2="180" stroke="#555" stroke-width="1.2"/>
+        <!-- tick marks and labels -->
+        <!-- x ticks: 1 to 5 -->
+        <g font-size="10" fill="#444">
+          <!-- x ticks -->
+          <line x1="90" y1="180" x2="90" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="90" y="198" text-anchor="middle">1</text>
+          <line x1="130" y1="180" x2="130" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="130" y="198" text-anchor="middle">2</text>
+          <line x1="170" y1="180" x2="170" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="170" y="198" text-anchor="middle">3</text>
+          <line x1="210" y1="180" x2="210" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="210" y="198" text-anchor="middle">4</text>
+          <line x1="250" y1="180" x2="250" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="250" y="198" text-anchor="middle">5</text>
+
+          <!-- y ticks: 0,2,4,6,8 -->
+          <line x1="45" y1="180" x2="50" y2="180" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="183" text-anchor="end">0</text>
+          <line x1="45" y1="145" x2="50" y2="145" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="148" text-anchor="end">2</text>
+          <line x1="45" y1="110" x2="50" y2="110" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="113" text-anchor="end">4</text>
+          <line x1="45" y1="75" x2="50" y2="75" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="78" text-anchor="end">6</text>
+          <line x1="45" y1="40" x2="50" y2="40" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="43" text-anchor="end">8</text>
+        </g>
+        <!-- axis labels -->
+        <text x="170" y="212" text-anchor="middle" font-size="11">Practice sessions $x$</text>
+        <text x="18" y="110" text-anchor="middle" font-size="11" transform="rotate(-90 18 110)">
+          Quiz score $y$
+        </text>
+
+        <!-- data points (mapping: x -> 50+40x, y -> 180-17.5y) -->
+        <circle cx="90"  cy="145" r="4" fill="#3b6ea8"/>
+        <circle cx="130" cy="110" r="4" fill="#3b6ea8"/>
+        <circle cx="170" cy="93"  r="4" fill="#3b6ea8"/>
+        <circle cx="210" cy="110" r="4" fill="#3b6ea8"/>
+        <circle cx="250" cy="58"  r="4" fill="#3b6ea8"/>
+      </svg>
+    </div>
+
+    <p>
+      This visual pattern is what motivates using a straight line to summarize and predict $Y$ from $X$.
+    </p>
+  </details>
+
+  <!-- Regression line -->
+  <details class="section">
+    <summary>3. The Regression Line and Residuals</summary>
+
+    <p>
+      If the scatterplot suggests an approximately linear pattern, we fit a line
+      \[
+      \hat y = a + b x
+      \]
+      to predict $Y$ from $X$.
+    </p>
+
+    <ul>
+      <li>$\hat y$ = predicted value of $Y$ for a given $x$.</li>
+      <li>$a$ = intercept (predicted value when $x = 0$).</li>
+      <li>$b$ = slope (change in predicted $Y$ for a 1-unit increase in $X$).</li>
+    </ul>
+
+    <p>
+      The <strong>least squares regression line</strong> is the unique line that minimizes the sum of
+      squared vertical errors:
+      \[
+      \sum_{i=1}^n \bigl(y_i - (a + b x_i)\bigr)^2.
+      \]
+      For each observation, the vertical difference
+      \[
+      e_i = y_i - \hat y_i = y_i - (a + b x_i)
+      \]
+      is called the <strong>residual</strong>.
+    </p>
+
+    <p>
+      If we denote the sample means by
+      \[
+      \bar x = \frac{1}{n}\sum_{i=1}^n x_i,
+      \quad
+      \bar y = \frac{1}{n}\sum_{i=1}^n y_i,
+      \]
+      then a key fact is:
+    </p>
+
+    <p>
+      <strong>The least squares regression line always passes through $(\bar x, \bar y)$.</strong>
+    </p>
+
+    <p>
+      Once we know the slope $b$, the intercept is
+      \[
+      a = \bar y - b\,\bar x.
+      \]
+    </p>
+
+    <h3>Running example</h3>
+    <p>
+      For the practice and quiz data,
+      \[
+      \bar x = 3, \qquad \bar y = 4.4.
+      \]
+      We will see later that the slope is $b = 1.0$. Then the intercept is
+      \[
+      a = \bar y - b\,\bar x = 4.4 - 1.0\cdot 3 = 1.4,
+      \]
+      so the regression line is
+      \[
+      \hat y = 1.4 + 1.0\,x.
+      \]
+    </p>
+
+    <div class="plot-box">
+      <p class="plot-title">
+        <strong>Figure:</strong> Scatterplot with least squares regression line $\hat y = 1.4 + x$.
+      </p>
+      <svg viewBox="0 0 320 220" role="img" aria-labelledby="regTitle regDesc">
+        <title id="regTitle">Scatterplot with regression line</title>
+        <desc id="regDesc">
+          Same five data points with a straight regression line rising from left to right.
+        </desc>
+        <!-- axes -->
+        <line x1="50" y1="40" x2="50" y2="180" stroke="#555" stroke-width="1.2"/>
+        <line x1="50" y1="180" x2="290" y2="180" stroke="#555" stroke-width="1.2"/>
+
+        <!-- ticks -->
+        <g font-size="10" fill="#444">
+          <!-- x ticks -->
+          <line x1="90" y1="180" x2="90" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="90" y="198" text-anchor="middle">1</text>
+          <line x1="130" y1="180" x2="130" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="130" y="198" text-anchor="middle">2</text>
+          <line x1="170" y1="180" x2="170" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="170" y="198" text-anchor="middle">3</text>
+          <line x1="210" y1="180" x2="210" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="210" y="198" text-anchor="middle">4</text>
+          <line x1="250" y1="180" x2="250" y2="185" stroke="#555" stroke-width="0.8"/>
+          <text x="250" y="198" text-anchor="middle">5</text>
+
+          <!-- y ticks -->
+          <line x1="45" y1="180" x2="50" y2="180" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="183" text-anchor="end">0</text>
+          <line x1="45" y1="145" x2="50" y2="145" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="148" text-anchor="end">2</text>
+          <line x1="45" y1="110" x2="50" y2="110" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="113" text-anchor="end">4</text>
+          <line x1="45" y1="75" x2="50" y2="75" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="78" text-anchor="end">6</text>
+          <line x1="45" y1="40" x2="50" y2="40" stroke="#555" stroke-width="0.8"/>
+          <text x="38" y="43" text-anchor="end">8</text>
+        </g>
+
+        <!-- axis labels -->
+        <text x="170" y="212" text-anchor="middle" font-size="11">Practice sessions $x$</text>
+        <text x="18" y="110" text-anchor="middle" font-size="11" transform="rotate(-90 18 110)">
+          Quiz score $y$
+        </text>
+
+        <!-- regression line: y = 1.4 + x from x=0 to x=6 -->
+        <!-- mapping: x -> 50 + 40x, y -> 180 - 17.5y -->
+        <line x1="50" y1="156" x2="290" y2="51"
+              stroke="#c0392b" stroke-width="1.7" stroke-linecap="round"/>
+
+        <!-- data points -->
+        <circle cx="90"  cy="145" r="4" fill="#3b6ea8"/>
+        <circle cx="130" cy="110" r="4" fill="#3b6ea8"/>
+        <circle cx="170" cy="93"  r="4" fill="#3b6ea8"/>
+        <circle cx="210" cy="110" r="4" fill="#3b6ea8"/>
+        <circle cx="250" cy="58"  r="4" fill="#3b6ea8"/>
+      </svg>
+    </div>
+
+    <p>
+      Residuals measure how far each student is above or below this predicted line.
+      A good linear fit leaves residuals scattered around zero with no remaining linear pattern.
+    </p>
+  </details>
+
+  <!-- Variance and covariance -->
+  <details class="section">
+    <summary>4. Variance and Covariance</summary>
+
+    <p>
+      For a single variable, we measure spread with the sample variance and standard deviation:
+    </p>
+    <p>
+      \[
+      s_x^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar x)^2,
+      \quad
+      s_y^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i - \bar y)^2,
+      \]
+      and $s_x = \sqrt{s_x^2}$, $s_y = \sqrt{s_y^2}$.
+    </p>
+
+    <p>
+      To measure how $X$ and $Y$ move together, we look at deviations from the mean:
+      \[
+      x_i - \bar x \quad\text{and}\quad y_i - \bar y.
+      \]
+      For each point, the product
+      \[
+      (x_i - \bar x)(y_i - \bar y)
+      \]
+      tells us:
+    </p>
+
+    <ul>
+      <li>Both deviations positive or both negative $\Rightarrow$ product $> 0$ (pulls toward a positive relationship).</li>
+      <li>One positive, one negative $\Rightarrow$ product $< 0$ (pulls toward a negative relationship).</li>
+    </ul>
+
+    <p>
+      The <strong>sample covariance</strong> is the average of these products:
+      \[
+      s_{xy} = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y).
+      \]
+    </p>
+
+    <ul>
+      <li>$s_{xy} > 0$: $X$ and $Y$ tend to be above or below their means together (positive linear association).</li>
+      <li>$s_{xy} < 0$: when $X$ is above its mean, $Y$ tends to be below its mean, and vice versa (negative association).</li>
+      <li>$s_{xy} \approx 0$: no clear linear pattern.</li>
+    </ul>
+
+    <h3>Running example</h3>
+    <p>
+      For our data,
+      \[
+      \bar x = 3,\qquad \bar y = 4.4.
+      \]
+      If we make a table of deviations and products, we find:
+    </p>
+
+    <table>
+      <tr>
+        <th>$i$</th>
+        <th>$x_i$</th>
+        <th>$y_i$</th>
+        <th>$x_i - \bar x$</th>
+        <th>$y_i - \bar y$</th>
+        <th>$(x_i - \bar x)^2$</th>
+        <th>$(y_i - \bar y)^2$</th>
+        <th>$(x_i - \bar x)(y_i - \bar y)$</th>
+      </tr>
+      <tr>
+        <td>1</td><td>1</td><td>2</td>
+        <td>$-2.0$</td><td>$-2.4$</td>
+        <td>$4.0$</td><td>$5.76$</td><td>$4.8$</td>
+      </tr>
+      <tr>
+        <td>2</td><td>2</td><td>4</td>
+        <td>$-1.0$</td><td>$-0.4$</td>
+        <td>$1.0$</td><td>$0.16$</td><td>$0.4$</td>
+      </tr>
+      <tr>
+        <td>3</td><td>3</td><td>5</td>
+        <td>$0.0$</td><td>$0.6$</td>
+        <td>$0.0$</td><td>$0.36$</td><td>$0.0$</td>
+      </tr>
+      <tr>
+        <td>4</td><td>4</td><td>4</td>
+        <td>$1.0$</td><td>$-0.4$</td>
+        <td>$1.0$</td><td>$0.16$</td><td>$-0.4$</td>
+      </tr>
+      <tr>
+        <td>5</td><td>5</td><td>7</td>
+        <td>$2.0$</td><td>$2.6$</td>
+        <td>$4.0$</td><td>$6.76$</td><td>$5.2$</td>
+      </tr>
+      <tr>
+        <td colspan="5" style="text-align:right;"><strong>Sums:</strong></td>
+        <td>$10.0$</td><td>$13.2$</td><td>$10.0$</td>
+      </tr>
+    </table>
+
+    <p>
+      From this:
+      \[
+      s_x^2 = \frac{10.0}{4} = 2.5,\quad
+      s_y^2 = \frac{13.2}{4} = 3.3,
+      \]
+      so
+      \[
+      s_x \approx 1.58,\quad s_y \approx 1.82,
+      \]
+      and
+      \[
+      s_{xy} = \frac{10.0}{4} = 2.5.
+      \]
+    </p>
+    <p>
+      The positive covariance $s_{xy} = 2.5$ reflects the positive association in the data.
+    </p>
+  </details>
+
+  <!-- Correlation -->
+  <details class="section">
+    <summary>5. Correlation as a Standardized Covariance</summary>
+
+    <p>
+      The <strong>sample correlation coefficient</strong> $r$ is a unit-free measure of linear association:
+      \[
+      r = \frac{s_{xy}}{s_x s_y}.
+      \]
+      It always satisfies $-1 \le r \le 1$.
+    </p>
+
+    <ul>
+      <li>$r > 0$: positive linear association.</li>
+      <li>$r < 0$: negative linear association.</li>
+      <li>$|r|$ close to $1$: strong linear association.</li>
+      <li>$|r|$ near $0$: weak or no linear association.</li>
+    </ul>
+
+    <p>
+      If we standardize $X$ and $Y$ to $Z$-scores,
+      \[
+      Z_X = \frac{X - \bar x}{s_x},\quad Z_Y = \frac{Y - \bar y}{s_y},
+      \]
+      then $r$ is essentially the average product of these $Z$-scores.
+    </p>
+
+    <p>
+      In more geometric language, if we view the centered data vectors
+      \[
+      \tilde x = (x_1 - \bar x,\ldots,x_n - \bar x),\quad
+      \tilde y = (y_1 - \bar y,\ldots,y_n - \bar y)
+      \]
+      as vectors in $\mathbb{R}^n$, then
+      \[
+      r = \frac{\langle \tilde x, \tilde y\rangle}{\|\tilde x\|\,\|\tilde y\|},
+      \]
+      so $r$ is the cosine of the angle between these two centered vectors.
+    </p>
+
+    <h3>Running example</h3>
+    <p>
+      From our calculations,
+      \[
+      s_x \approx 1.58,\quad s_y \approx 1.82,\quad s_{xy} = 2.5.
+      \]
+      Thus
+      \[
+      r = \frac{2.5}{(1.58)(1.82)} \approx 0.87.
+      \]
+      So there is a strong positive linear association between practice sessions and quiz scores.
+    </p>
+  </details>
+
+  <!-- Regression slope and residual plot -->
+  <details class="section">
+    <summary>6. Regression Slope via Covariance and Correlation (and Residuals)</summary>
+
+    <p>
+      The slope $b$ of the least squares regression line $\hat y = a + bx$ can be written in several ways.
+    </p>
+
+    <p>
+      Using deviations:
+      \[
+      b = \frac{\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)}
+               {\sum_{i=1}^n (x_i - \bar x)^2}.
+      \]
+    </p>
+
+    <p>
+      Using covariance and variance:
+      \[
+      b = \frac{s_{xy}}{s_x^2}.
+      \]
+    </p>
+
+    <p>
+      Using correlation:
+      \[
+      b = r\,\frac{s_y}{s_x}.
+      \]
+    </p>
+
+    <p>
+      This last formula shows:
+    </p>
+    <ul>
+      <li>$r$ captures the strength and direction of the linear association.</li>
+      <li>$s_y/s_x$ rescales this into actual “change in $y$ per 1 unit change in $x$”.</li>
+      <li>So the slope is just the correlation, stretched into the real-world units of the data.</li>
+    </ul>
+
+    <h3>Running example</h3>
+    <p>
+      We have
+      \[
+      s_x^2 = 2.5,\quad s_y^2 = 3.3,\quad s_{xy} = 2.5,\quad r \approx 0.87.
+      \]
+      Then
+      \[
+      b = \frac{s_{xy}}{s_x^2} = \frac{2.5}{2.5} = 1.0,
+      \]
+      and also
+      \[
+      b = r\,\frac{s_y}{s_x} \approx 0.87 \cdot \frac{1.82}{1.58} \approx 1.0.
+      \]
+      This matches our earlier regression line:
+      \[
+      \hat y = 1.4 + 1.0\,x.
+      \]
+    </p>
+
+    <p>
+      For each $x_i$, the predicted value and residual are:
+      \[
+      \hat y_i = 1.4 + x_i,\quad e_i = y_i - \hat y_i.
+      \]
+    </p>
+
+    <table>
+      <tr>
+        <th>$i$</th>
+        <th>$x_i$</th>
+        <th>$y_i$</th>
+        <th>$\hat y_i$</th>
+        <th>$e_i$</th>
+      </tr>
+      <tr>
+        <td>1</td><td>1</td><td>2</td><td>2.4</td><td>$-0.4$</td>
+      </tr>
+      <tr>
+        <td>2</td><td>2</td><td>4</td><td>3.4</td><td>$0.6$</td>
+      </tr>
+      <tr>
+        <td>3</td><td>3</td><td>5</td><td>4.4</td><td>$0.6$</td>
+      </tr>
+      <tr>
+        <td>4</td><td>4</td><td>4</td><td>5.4</td><td>$-1.4$</td>
+      </tr>
+      <tr>
+        <td>5</td><td>5</td><td>7</td><td>6.4</td><td>$0.6$</td>
+      </tr>
+    </table>
+
+    <div class="plot-box">
+      <p class="plot-title">
+        <strong>Figure:</strong> Residuals versus number of practice sessions.
+      </p>
+      <svg viewBox="0 0 320 220" role="img" aria-labelledby="residTitle residDesc">
+        <title id="residTitle">Residual plot</title>
+        <desc id="residDesc">
+          Residuals at x = 1..5 around a horizontal zero line, with no strong pattern.
+        </desc>
+        <!-- axes: x from 1 to 5, residuals from -2 to 2 -->
+        <line x1="50" y1="30" x2="50" y2="190" stroke="#555" stroke-width="1.2"/>
+        <line x1="50" y1="110" x2="290" y2="110" stroke="#555" stroke-width="1.2"/>
+
+        <g font-size="10" fill="#444">
+          <!-- x ticks -->
+          <line x1="90" y1="110" x2="90" y2="115" stroke="#555" stroke-width="0.8"/>
+          <text x="90" y="128" text-anchor="middle">1</text>
+          <line x1="130" y1="110" x2="130" y2="115" stroke="#555" stroke-width="0.8"/>
+          <text x="130" y="128" text-anchor="middle">2</text>
+          <line x1="170" y1="110" x2="170" y2="115" stroke="#555" stroke-width="0.8"/>
+          <text x="170" y="128" text-anchor="middle">3</text>
+          <line x1="210" y1="110" x2="210" y2="115" stroke="#555" stroke-width="0.8"/>
+          <text x="210" y="128" text-anchor="middle">4</text>
+          <line x1="250" y1="110" x2="250" y2="115" stroke="#555" stroke-width="0.8"/>
+          <text x="250" y="128" text-anchor="middle">5</text>
+
+          <!-- y ticks: -2, -1, 0, 1, 2 -->
+          <line x1="45" y1="190" x2="50" y2="190" stroke="#555" stroke-width="0.8"/>
+          <text x="40" y="193" text-anchor="end">-2</text>
+          <line x1="45" y1="150" x2="50" y2="150" stroke="#555" stroke-width="0.8"/>
+          <text x="40" y="153" text-anchor="end">-1</text>
+          <line x1="45" y1="110" x2="50" y2="110" stroke="#555" stroke-width="0.8"/>
+          <text x="40" y="113" text-anchor="end">0</text>
+          <line x1="45" y1="70" x2="50" y2="70" stroke="#555" stroke-width="0.8"/>
+          <text x="40" y="73" text-anchor="end">1</text>
+          <line x1="45" y1="30" x2="50" y2="30" stroke="#555" stroke-width="0.8"/>
+          <text x="40" y="33" text-anchor="end">2</text>
+        </g>
+
+        <!-- axis labels -->
+        <text x="170" y="210" text-anchor="middle" font-size="11">
+          Practice sessions $x$
+        </text>
+        <text x="20" y="110" text-anchor="middle" font-size="11"
+              transform="rotate(-90 20 110)">
+          Residual $e_i$
+        </text>
+
+        <!-- horizontal zero line already drawn as x-axis -->
+
+        <!-- residuals mapped: x -> 50+40x, e -> 110 - 40e -->
+        <!-- e: -0.4, 0.6, 0.6, -1.4, 0.6 -->
+        <circle cx="90"  cy="126" r="4" fill="#3b6ea8"/>
+        <circle cx="130" cy="86"  r="4" fill="#3b6ea8"/>
+        <circle cx="170" cy="86"  r="4" fill="#3b6ea8"/>
+        <circle cx="210" cy="166" r="4" fill="#3b6ea8"/>
+        <circle cx="250" cy="86"  r="4" fill="#3b6ea8"/>
+      </svg>
+    </div>
+
+    <p>
+      In this residual plot, the points are scattered around the horizontal line at 0 with no strong pattern.
+      That is what we hope to see when a linear model is appropriate.
+    </p>
+  </details>
+
+  <!-- Sample vs population correlation -->
+  <details class="section">
+    <summary>7. Sample vs. Population Correlation</summary>
+
+    <p>
+      The number $r$ that we compute from data is the <strong>sample correlation</strong>. It is a statistic
+      used to estimate the <strong>population correlation</strong> $\rho = \mathrm{Corr}(X,Y)$.
+    </p>
+
+    <p>
+      Different random samples from the same population give different $r$ values, but they are all trying to
+      approximate the same underlying parameter $\rho$.
+    </p>
+
+    <h3>Running example</h3>
+    <p>
+      For our five students, we found $r \approx 0.87$. If we collected data from many more students, that sample
+      correlation would move around a bit from sample to sample, but all of those $r$ values would be estimates
+      of the same underlying population correlation $\rho$ between practice sessions and quiz performance.
+    </p>
+  </details>
+
+  <!-- R and R^2 -->
+  <details class="section">
+    <summary>8. Coefficient of Determination $R^2$ and the Symbol $R$</summary>
+
+    <p>
+      In regression output from software, you often see three related quantities:
+      \[
+      r,\quad R,\quad R^2.
+      \]
+    </p>
+
+    <ul>
+      <li>
+        In <strong>simple linear regression</strong> (one $X$, one $Y$),
+        <strong>Multiple $R$</strong> is just the magnitude of the correlation:
+        \[
+        R = |r|.
+        \]
+      </li>
+      <li>
+        The <strong>coefficient of determination</strong> is
+        \[
+        R^2 = \frac{\text{explained variation in }Y}{\text{total variation in }Y}
+            = 1 - \frac{\sum_{i=1}^n (y_i - \hat y_i)^2}{\sum_{i=1}^n (y_i - \bar y)^2}.
+        \]
+        It measures the proportion of variability in $Y$ explained by the regression model.
+      </li>
+    </ul>
+
+    <p>
+      In simple linear regression, there is a special relationship:
+      \[
+      R^2 = r^2.
+      \]
+    </p>
+
+    <ul>
+      <li>$r$ (or $R$) tells you direction and strength of the linear relationship.</li>
+      <li>$R^2$ tells you what fraction of the variance in $Y$ is explained by the regression model.</li>
+    </ul>
+
+    <p>
+      In multiple regression (several $X$ variables), $R$ is the correlation between the observed $Y$ values and
+      the fitted values $\hat Y$, and $R^2$ is still the fraction of variance in $Y$ explained by the model.
+    </p>
+
+    <h3>Running example</h3>
+    <p>
+      We found $r \approx 0.87$, so
+      \[
+      R = |r| \approx 0.87,\quad R^2 = r^2 \approx (0.87)^2 \approx 0.76.
+      \]
+    </p>
+    <p>
+      The total variation in $Y$ is
+      \[
+      \text{SST} = \sum_{i=1}^n (y_i - \bar y)^2 = 13.2,
+      \]
+      and for the line $\hat y = 1.4 + x$, the residual sum of squares is
+      \[
+      \text{SSE} = \sum_{i=1}^n (y_i - \hat y_i)^2 = 3.2.
+      \]
+      Thus
+      \[
+      R^2 = 1 - \frac{3.2}{13.2} \approx 0.76,
+      \]
+      consistent with $R^2 \approx r^2$.
+    </p>
+    <p>
+      Interpretation: about $76\%$ of the variability in quiz scores is explained by a straight-line relationship
+      with the number of practice sessions; the remaining $24\%$ is due to other factors or random variation.
+    </p>
+  </details>
+
+  <!-- Notation and key formulas -->
+  <details class="section">
+    <summary>9. Notation and Key Formulas</summary>
+
+    <h3>Data and basic quantities</h3>
+    <ul>
+      <li>$n$: sample size (number of data pairs).</li>
+      <li>$(x_i, y_i)$: the $i$th observed pair, $i = 1,\ldots,n$.</li>
+      <li>$X$: explanatory (input) variable; $Y$: response (output) variable.</li>
+      <li>$\displaystyle \bar x = \frac{1}{n}\sum_{i=1}^n x_i$ : sample mean of $X$.</li>
+      <li>$\displaystyle \bar y = \frac{1}{n}\sum_{i=1}^n y_i$ : sample mean of $Y$.</li>
+      <li>$x_i - \bar x$, $y_i - \bar y$: deviations from the mean.</li>
+    </ul>
+
+    <h3>Spread: variance and standard deviation</h3>
+    <ul>
+      <li>$\displaystyle s_x^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar x)^2$.</li>
+      <li>$\displaystyle s_y^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i - \bar y)^2$.</li>
+      <li>$s_x = \sqrt{s_x^2}$, $s_y = \sqrt{s_y^2}$.</li>
+    </ul>
+
+    <h3>Covariance and correlation</h3>
+    <ul>
+      <li>$\displaystyle s_{xy} = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$: sample covariance.</li>
+      <li>$\displaystyle r = \frac{s_{xy}}{s_x s_y}$: sample correlation.</li>
+      <li>$\rho = \mathrm{Corr}(X,Y)$: population correlation (parameter estimated by $r$).</li>
+    </ul>
+
+    <h3>Regression line and residuals</h3>
+    <ul>
+      <li>$\hat y = a + bx$: least squares regression line.</li>
+      <li>$b$: slope; $a$: intercept.</li>
+      <li>$\displaystyle b = \frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sum (x_i - \bar x)^2}$.</li>
+      <li>$\displaystyle b = \frac{s_{xy}}{s_x^2}$.</li>
+      <li>$\displaystyle b = r\,\frac{s_y}{s_x}$.</li>
+      <li>$a = \bar y - b\,\bar x$.</li>
+      <li>$e_i = y_i - \hat y_i$: residual for the $i$th point.</li>
+    </ul>
+
+    <h3>Sums of squares and $R^2$</h3>
+    <ul>
+      <li>$\displaystyle \text{SST} = \sum_{i=1}^n (y_i - \bar y)^2$ (total variation in $Y$).</li>
+      <li>$\displaystyle \text{SSE} = \sum_{i=1}^n (y_i - \hat y_i)^2$ (unexplained variation).</li>
+      <li>$\displaystyle R^2 = 1 - \frac{\text{SSE}}{\text{SST}}$ (fraction of $Y$-variance explained).</li>
+      <li>In simple regression: $R^2 = r^2$ and $R = |r|$.</li>
+    </ul>
+
+    <p>
+      These formulas form the core toolkit for Week 10: they connect the geometry of the scatterplot
+      to the algebra of the regression line and the summary numbers $r$ and $R^2$.
+    </p>
+  </details>
+</div>
+
+</body>
+</html>
