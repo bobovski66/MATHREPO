@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Chi-Squared Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            font-size: 1.2em;
+        }
+        
+        .label-input {
+            margin-bottom: 15px;
+        }
+        
+        .label-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+            font-weight: 500;
+        }
+        
+        .label-input input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .label-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .total-cell {
+            background-color: #e3f2fd;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .result-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .stat-display {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .p-value-interpretation {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .calculate-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: all 0.3s;
+        }
+        
+        .calculate-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .reset-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px auto;
+            display: block;
+            transition: all 0.3s;
+        }
+        
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+        
+        .details-table {
+            font-size: 0.9em;
+        }
+        
+        .details-table th {
+            background: #34495e;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #856404;
+        }
+        
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #721c24;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #155724;
+        }
+        
+        .formula {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border: 2px solid #e9ecef;
+        }
+        
+        .example-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .example-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .example-btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 Interactive Chi-Squared Test Calculator</h1>
+        <p class="subtitle">Test for independence in 2×2 contingency tables</p>
+        
+        <div class="example-links">
+            <strong>Load Example:</strong>
+            <button class="example-btn" onclick="loadTutoringExample()">Tutoring & Passing</button>
+            <button class="example-btn" onclick="loadPetExample()">Pets & Apartments</button>
+            <button class="example-btn" onclick="loadCommuteExample()">Commute & Lateness</button>
+        </div>
+        
+        <div class="grid">
+            <div class="section">
+                <h2><span class="icon">📝</span> Variable Labels</h2>
+                
+                <div class="label-input">
+                    <label>Row Variable Name (e.g., "Tutoring"):</label>
+                    <input type="text" id="rowVarName" value="X" placeholder="X">
+                </div>
+                
+                <div class="label-input">
+                    <label>Row Category 1 (e.g., "No"):</label>
+                    <input type="text" id="rowCat1" value="No" placeholder="Category 1">
+                </div>
+                
+                <div class="label-input">
+                    <label>Row Category 2 (e.g., "Yes"):</label>
+                    <input type="text" id="rowCat2" value="Yes" placeholder="Category 2">
+                </div>
+                
+                <div class="label-input">
+                    <label>Column Variable Name (e.g., "Passed"):</label>
+                    <input type="text" id="colVarName" value="Y" placeholder="Y">
+                </div>
+                
+                <div class="label-input">
+                    <label>Column Category 1 (e.g., "No"):</label>
+                    <input type="text" id="colCat1" value="No" placeholder="Category 1">
+                </div>
+                
+                <div class="label-input">
+                    <label>Column Category 2 (e.g., "Yes"):</label>
+                    <input type="text" id="colCat2" value="Yes" placeholder="Category 2">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><span class="icon">📊</span> Observed Counts</h2>
+                <p style="margin-bottom: 15px; color: #6c757d;">Enter your observed data (counts must be ≥ 0)</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th id="colHeader1">Category 1</th>
+                            <th id="colHeader2">Category 2</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th id="rowHeader1">Category 1</th>
+                            <td><input type="number" id="o11" value="30" min="0" oninput="updateTotals()"></td>
+                            <td><input type="number" id="o12" value="20" min="0" oninput="updateTotals()"></td>
+                            <td class="total-cell" id="rowTotal1">50</td>
+                        </tr>
+                        <tr>
+                            <th id="rowHeader2">Category 2</th>
+                            <td><input type="number" id="o21" value="10" min="0" oninput="updateTotals()"></td>
+                            <td><input type="number" id="o22" value="40" min="0" oninput="updateTotals()"></td>
+                            <td class="total-cell" id="rowTotal2">50</td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <td class="total-cell" id="colTotal1">40</td>
+                            <td class="total-cell" id="colTotal2">60</td>
+                            <td class="total-cell" id="grandTotal">100</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculate()">🧮 Calculate Chi-Squared Test</button>
+        <button class="reset-btn" onclick="resetForm()">↺ Reset</button>
+        
+        <div id="results" style="display: none;">
+            <div class="section">
+                <h2><span class="icon">🎯</span> Expected Counts Under Independence</h2>
+                <p style="margin-bottom: 15px; color: #6c757d;">Formula: E = (row total × column total) / n</p>
+                
+                <table id="expectedTable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th id="expColHeader1">Category 1</th>
+                            <th id="expColHeader2">Category 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th id="expRowHeader1">Category 1</th>
+                            <td id="e11"></td>
+                            <td id="e12"></td>
+                        </tr>
+                        <tr>
+                            <th id="expRowHeader2">Category 2</th>
+                            <td id="e21"></td>
+                            <td id="e22"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div id="conditionCheck"></div>
+            </div>
+            
+            <div class="section">
+                <h2><span class="icon">🔍</span> Cell-by-Cell Analysis</h2>
+                <table class="details-table" id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th>Cell</th>
+                            <th>O</th>
+                            <th>E</th>
+                            <th>O - E</th>
+                            <th>(O - E)²</th>
+                            <th>(O - E)²/E</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsBody">
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="result-box">
+                <h3>📈 Chi-Squared Test Results</h3>
+                <div>
+                    <strong>χ² Statistic:</strong>
+                    <div class="stat-display" id="chiSquared"></div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <strong>Degrees of Freedom:</strong> <span style="font-size: 1.5em; font-weight: bold;" id="df">1</span>
+                </div>
+                <div class="p-value-interpretation" id="pValueInterpretation">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><span class="icon">💡</span> Interpretation</h2>
+                <div id="interpretation"></div>
+            </div>
+            
+            <div class="note">
+                <strong>Remember:</strong> The chi-squared test tells you whether variables are associated (statistically significant), but doesn't tell you the size or practical importance of the association. Always examine the actual differences in conditional probabilities to understand the relationship.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function updateTotals() {
+            const o11 = parseFloat(document.getElementById('o11').value) || 0;
+            const o12 = parseFloat(document.getElementById('o12').value) || 0;
+            const o21 = parseFloat(document.getElementById('o21').value) || 0;
+            const o22 = parseFloat(document.getElementById('o22').value) || 0;
+            
+            const rowTotal1 = o11 + o12;
+            const rowTotal2 = o21 + o22;
+            const colTotal1 = o11 + o21;
+            const colTotal2 = o12 + o22;
+            const grandTotal = o11 + o12 + o21 + o22;
+            
+            document.getElementById('rowTotal1').textContent = rowTotal1;
+            document.getElementById('rowTotal2').textContent = rowTotal2;
+            document.getElementById('colTotal1').textContent = colTotal1;
+            document.getElementById('colTotal2').textContent = colTotal2;
+            document.getElementById('grandTotal').textContent = grandTotal;
+            
+            updateHeaders();
+        }
+        
+        function updateHeaders() {
+            document.getElementById('colHeader1').textContent = document.getElementById('colCat1').value || 'Category 1';
+            document.getElementById('colHeader2').textContent = document.getElementById('colCat2').value || 'Category 2';
+            document.getElementById('rowHeader1').textContent = document.getElementById('rowCat1').value || 'Category 1';
+            document.getElementById('rowHeader2').textContent = document.getElementById('rowCat2').value || 'Category 2';
+            
+            document.getElementById('expColHeader1').textContent = document.getElementById('colCat1').value || 'Category 1';
+            document.getElementById('expColHeader2').textContent = document.getElementById('colCat2').value || 'Category 2';
+            document.getElementById('expRowHeader1').textContent = document.getElementById('rowCat1').value || 'Category 1';
+            document.getElementById('expRowHeader2').textContent = document.getElementById('rowCat2').value || 'Category 2';
+        }
+        
+        function chiSquaredCDF(x, df) {
+            // Approximation for p-value using chi-squared distribution
+            // This is a simplified approximation - for df=1
+            if (df === 1) {
+                // Using normal approximation for df=1
+                const z = Math.sqrt(x);
+                return 2 * (1 - normalCDF(z));
+            }
+            // For other df values, return a rough estimate
+            return null;
+        }
+        
+        function normalCDF(x) {
+            // Approximation of standard normal CDF
+            const t = 1 / (1 + 0.2316419 * Math.abs(x));
+            const d = 0.3989423 * Math.exp(-x * x / 2);
+            const prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+            return x > 0 ? 1 - prob : prob;
+        }
+        
+        function calculate() {
+            updateTotals();
+            
+            const o11 = parseFloat(document.getElementById('o11').value) || 0;
+            const o12 = parseFloat(document.getElementById('o12').value) || 0;
+            const o21 = parseFloat(document.getElementById('o21').value) || 0;
+            const o22 = parseFloat(document.getElementById('o22').value) || 0;
+            
+            if (o11 < 0 || o12 < 0 || o21 < 0 || o22 < 0) {
+                alert('All counts must be non-negative!');
+                return;
+            }
+            
+            const rowTotal1 = o11 + o12;
+            const rowTotal2 = o21 + o22;
+            const colTotal1 = o11 + o21;
+            const colTotal2 = o12 + o22;
+            const n = o11 + o12 + o21 + o22;
+            
+            if (n === 0) {
+                alert('Total count cannot be zero!');
+                return;
+            }
+            
+            // Calculate expected counts
+            const e11 = (rowTotal1 * colTotal1) / n;
+            const e12 = (rowTotal1 * colTotal2) / n;
+            const e21 = (rowTotal2 * colTotal1) / n;
+            const e22 = (rowTotal2 * colTotal2) / n;
+            
+            // Display expected counts
+            document.getElementById('e11').textContent = e11.toFixed(2);
+            document.getElementById('e12').textContent = e12.toFixed(2);
+            document.getElementById('e21').textContent = e21.toFixed(2);
+            document.getElementById('e22').textContent = e22.toFixed(2);
+            
+            // Check conditions
+            const minExpected = Math.min(e11, e12, e21, e22);
+            let conditionHTML = '';
+            if (minExpected < 1) {
+                conditionHTML = '<div class="warning"><strong>⚠️ Warning:</strong> Some expected counts are less than 1. The chi-squared test may not be reliable. Consider combining categories or using Fisher\'s exact test.</div>';
+            } else if (minExpected < 5) {
+                conditionHTML = '<div class="note"><strong>Note:</strong> Some expected counts are less than 5. The chi-squared approximation may be less accurate, but is generally acceptable for a 2×2 table.</div>';
+            } else {
+                conditionHTML = '<div class="success"><strong>✓ Conditions met:</strong> All expected counts are ≥ 5. The chi-squared test is appropriate.</div>';
+            }
+            document.getElementById('conditionCheck').innerHTML = conditionHTML;
+            
+            // Calculate chi-squared contributions
+            const cells = [
+                {name: `${document.getElementById('rowCat1').value}, ${document.getElementById('colCat1').value}`, o: o11, e: e11},
+                {name: `${document.getElementById('rowCat1').value}, ${document.getElementById('colCat2').value}`, o: o12, e: e12},
+                {name: `${document.getElementById('rowCat2').value}, ${document.getElementById('colCat1').value}`, o: o21, e: e21},
+                {name: `${document.getElementById('rowCat2').value}, ${document.getElementById('colCat2').value}`, o: o22, e: e22}
+            ];
+            
+            let chiSquared = 0;
+            let detailsHTML = '';
+            let maxContribution = 0;
+            let maxCell = '';
+            
+            cells.forEach(cell => {
+                const diff = cell.o - cell.e;
+                const diffSq = diff * diff;
+                const contribution = diffSq / cell.e;
+                chiSquared += contribution;
+                
+                if (contribution > maxContribution) {
+                    maxContribution = contribution;
+                    maxCell = cell.name;
+                }
+                
+                detailsHTML += `
+                    <tr>
+                        <td>${cell.name}</td>
+                        <td>${cell.o}</td>
+                        <td>${cell.e.toFixed(2)}</td>
+                        <td>${diff.toFixed(2)}</td>
+                        <td>${diffSq.toFixed(2)}</td>
+                        <td>${contribution.toFixed(3)}</td>
+                    </tr>
+                `;
+            });
+            
+            document.getElementById('detailsBody').innerHTML = detailsHTML;
+            document.getElementById('chiSquared').textContent = chiSquared.toFixed(3);
+            document.getElementById('df').textContent = '1';
+            
+            // P-value interpretation
+            const pValue = chiSquaredCDF(chiSquared, 1);
+            let pValueHTML = '<strong>P-value interpretation:</strong><br>';
+            
+            if (chiSquared < 3.84) {
+                pValueHTML += 'p > 0.05<br>The data are consistent with independence. No significant evidence of association.';
+            } else if (chiSquared < 6.63) {
+                pValueHTML += 'p < 0.05<br>Statistically significant evidence of association at the 0.05 level.';
+            } else if (chiSquared < 10.83) {
+                pValueHTML += 'p < 0.01<br>Strong evidence of association (significant at the 0.01 level).';
+            } else {
+                pValueHTML += 'p < 0.001<br>Very strong evidence of association.';
+            }
+            
+            document.getElementById('pValueInterpretation').innerHTML = pValueHTML;
+            
+            // Interpretation
+            const rowVar = document.getElementById('rowVarName').value || 'X';
+            const colVar = document.getElementById('colVarName').value || 'Y';
+            
+            let interpretationHTML = '';
+            if (chiSquared < 3.84) {
+                interpretationHTML = `
+                    <p><strong>Conclusion:</strong> We do not have sufficient evidence to reject the hypothesis of independence. The data are consistent with ${rowVar} and ${colVar} being independent.</p>
+                    <p>The differences between observed and expected counts could reasonably be due to random sampling variation.</p>
+                `;
+            } else {
+                interpretationHTML = `
+                    <p><strong>Conclusion:</strong> We reject the hypothesis of independence (p < 0.05). There is statistically significant evidence that ${rowVar} and ${colVar} are associated.</p>
+                    <p><strong>Largest contribution:</strong> The cell "${maxCell}" contributes most to the chi-squared statistic (${maxContribution.toFixed(3)}), indicating this is where the data deviates most from what independence would predict.</p>
+                `;
+                
+                // Add conditional probability analysis
+                const pCol2 = colTotal2 / n;
+                const pCol2GivenRow1 = o12 / rowTotal1;
+                const pCol2GivenRow2 = o22 / rowTotal2;
+                
+                interpretationHTML += `
+                    <div class="formula">
+                    <strong>Conditional Probability Analysis:</strong><br>
+                    Overall rate of ${document.getElementById('colCat2').value}: ${(pCol2 * 100).toFixed(1)}%<br>
+                    Rate among ${document.getElementById('rowCat1').value}: ${(pCol2GivenRow1 * 100).toFixed(1)}%<br>
+                    Rate among ${document.getElementById('rowCat2').value}: ${(pCol2GivenRow2 * 100).toFixed(1)}%
+                    </div>
+                `;
+                
+                const diff1 = ((pCol2GivenRow1 - pCol2) * 100).toFixed(1);
+                const diff2 = ((pCol2GivenRow2 - pCol2) * 100).toFixed(1);
+                interpretationHTML += `<p>The ${document.getElementById('colCat2').value} rate differs by ${Math.abs(diff1)}pp and ${Math.abs(diff2)}pp from the overall rate across the two groups.</p>`;
+            }
+            
+            document.getElementById('interpretation').innerHTML = interpretationHTML;
+            document.getElementById('results').style.display = 'block';
+            
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function loadTutoringExample() {
+            document.getElementById('rowVarName').value = 'Tutoring';
+            document.getElementById('rowCat1').value = 'No';
+            document.getElementById('rowCat2').value = 'Yes';
+            document.getElementById('colVarName').value = 'Passed';
+            document.getElementById('colCat1').value = 'No';
+            document.getElementById('colCat2').value = 'Yes';
+            
+            document.getElementById('o11').value = 30;
+            document.getElementById('o12').value = 20;
+            document.getElementById('o21').value = 10;
+            document.getElementById('o22').value = 40;
+            
+            updateTotals();
+            document.getElementById('results').style.display = 'none';
+        }
+        
+        function loadPetExample() {
+            document.getElementById('rowVarName').value = 'Pet Owner';
+            document.getElementById('rowCat1').value = 'No';
+            document.getElementById('rowCat2').value = 'Yes';
+            document.getElementById('colVarName').value = 'Apartment';
+            document.getElementById('colCat1').value = 'No';
+            document.getElementById('colCat2').value = 'Yes';
+            
+            document.getElementById('o11').value = 18;
+            document.getElementById('o12').value = 42;
+            document.getElementById('o21').value = 30;
+            document.getElementById('o22').value = 30;
+            
+            updateTotals();
+            document.getElementById('results').style.display = 'none';
+        }
+        
+        function loadCommuteExample() {
+            document.getElementById('rowVarName').value = 'Car';
+            document.getElementById('rowCat1').value = 'No';
+            document.getElementById('rowCat2').value = 'Yes';
+            document.getElementById('colVarName').value = 'Late';
+            document.getElementById('colCat1').value = 'No';
+            document.getElementById('colCat2').value = 'Yes';
+            
+            document.getElementById('o11').value = 78;
+            document.getElementById('o12').value = 22;
+            document.getElementById('o21').value = 92;
+            document.getElementById('o22').value = 8;
+            
+            updateTotals();
+            document.getElementById('results').style.display = 'none';
+        }
+        
+        function resetForm() {
+            document.getElementById('rowVarName').value = 'X';
+            document.getElementById('rowCat1').value = 'No';
+            document.getElementById('rowCat2').value = 'Yes';
+            document.getElementById('colVarName').value = 'Y';
+            document.getElementById('colCat1').value = 'No';
+            document.getElementById('colCat2').value = 'Yes';
+            
+            document.getElementById('o11').value = 30;
+            document.getElementById('o12').value = 20;
+            document.getElementById('o21').value = 10;
+            document.getElementById('o22').value = 40;
+            
+            updateTotals();
+            document.getElementById('results').style.display = 'none';
+        }
+        
+        // Initialize on load
+        window.onload = function() {
+            updateTotals();
+        };
+    </script>
+</body>
+</html>

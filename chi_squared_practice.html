@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi-Squared Practice Problems</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .problem {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .solution-toggle {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .solution-toggle:hover {
+            background-color: #229954;
+        }
+        .solution {
+            display: none;
+            background-color: #e8f5e9;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        .solution.show {
+            display: block;
+        }
+        .formula {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .computation-table {
+            font-size: 0.9em;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chi-Squared Test Practice Problems</h1>
+    <p>Work through these problems to practice computing expected counts, calculating chi-squared statistics, and interpreting results. Click "Show Solution" to check your work.</p>
+
+    <div class="problem">
+        <h2>Problem 1: Expected Counts Under Independence</h2>
+        <p>A survey recorded whether someone owns a pet (X) and whether they live in an apartment (Y) for n = 120 people:</p>
+        
+        <table>
+            <tr>
+                <th></th>
+                <th>Y = No</th>
+                <th>Y = Yes</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <th>X = No</th>
+                <td>18</td>
+                <td>42</td>
+                <td>60</td>
+            </tr>
+            <tr>
+                <th>X = Yes</th>
+                <td>30</td>
+                <td>30</td>
+                <td>60</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>48</td>
+                <td>72</td>
+                <td>120</td>
+            </tr>
+        </table>
+
+        <p><strong>(a)</strong> Compute all four expected counts under independence.</p>
+        <p><strong>(b)</strong> Which cell has the largest difference O − E?</p>
+
+        <button class="solution-toggle" onclick="toggleSolution('sol1')">Show Solution</button>
+        <div id="sol1" class="solution">
+            <h3>Solution:</h3>
+            
+            <h4>Part (a): Expected Counts</h4>
+            <p>Formula: E<sub>ij</sub> = (row total × column total) / n</p>
+            
+            <p><strong>Cell (No pet, No apartment):</strong></p>
+            <div class="formula">
+                E₁₁ = (60 × 48) / 120 = 2880 / 120 = 24
+            </div>
+            
+            <p><strong>Cell (No pet, Yes apartment):</strong></p>
+            <div class="formula">
+                E₁₂ = (60 × 72) / 120 = 4320 / 120 = 36
+            </div>
+            
+            <p><strong>Cell (Yes pet, No apartment):</strong></p>
+            <div class="formula">
+                E₂₁ = (60 × 48) / 120 = 2880 / 120 = 24
+            </div>
+            
+            <p><strong>Cell (Yes pet, Yes apartment):</strong></p>
+            <div class="formula">
+                E₂₂ = (60 × 72) / 120 = 4320 / 120 = 36
+            </div>
+            
+            <p><strong>Expected counts table:</strong></p>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Y = No</th>
+                    <th>Y = Yes</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <th>X = No</th>
+                    <td>24</td>
+                    <td>36</td>
+                    <td>60</td>
+                </tr>
+                <tr>
+                    <th>X = Yes</th>
+                    <td>24</td>
+                    <td>36</td>
+                    <td>60</td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <td>48</td>
+                    <td>72</td>
+                    <td>120</td>
+                </tr>
+            </table>
+            
+            <h4>Part (b): Largest Difference</h4>
+            <table class="computation-table">
+                <tr>
+                    <th>Cell</th>
+                    <th>O</th>
+                    <th>E</th>
+                    <th>O - E</th>
+                </tr>
+                <tr>
+                    <td>No pet, No apt</td>
+                    <td>18</td>
+                    <td>24</td>
+                    <td>-6</td>
+                </tr>
+                <tr>
+                    <td>No pet, Yes apt</td>
+                    <td>42</td>
+                    <td>36</td>
+                    <td>+6</td>
+                </tr>
+                <tr>
+                    <td>Yes pet, No apt</td>
+                    <td>30</td>
+                    <td>24</td>
+                    <td>+6</td>
+                </tr>
+                <tr>
+                    <td>Yes pet, Yes apt</td>
+                    <td>30</td>
+                    <td>36</td>
+                    <td>-6</td>
+                </tr>
+            </table>
+            
+            <p><strong>Answer:</strong> All cells have the same absolute difference of 6. Looking at just positive differences, "No pet, Yes apartment" and "Yes pet, No apartment" both have O - E = +6.</p>
+        </div>
+    </div>
+
+    <div class="problem">
+        <h2>Problem 2: Computing Chi-Squared Statistic</h2>
+        <p>Using the same table from Problem 1:</p>
+        
+        <p><strong>(a)</strong> Compute χ² = Σ (O−E)²/E.</p>
+        <p><strong>(b)</strong> State the degrees of freedom.</p>
+        <p><strong>(c)</strong> Without computing a p-value, explain whether the data appear close to independence or far from independence.</p>
+
+        <button class="solution-toggle" onclick="toggleSolution('sol2')">Show Solution</button>
+        <div id="sol2" class="solution">
+            <h3>Solution:</h3>
+            
+            <h4>Part (a): Chi-Squared Statistic</h4>
+            <p>For each cell, compute (O - E)²/E:</p>
+            
+            <table class="computation-table">
+                <tr>
+                    <th>Cell</th>
+                    <th>O</th>
+                    <th>E</th>
+                    <th>O - E</th>
+                    <th>(O - E)²</th>
+                    <th>(O - E)²/E</th>
+                </tr>
+                <tr>
+                    <td>No pet, No apt</td>
+                    <td>18</td>
+                    <td>24</td>
+                    <td>-6</td>
+                    <td>36</td>
+                    <td>1.50</td>
+                </tr>
+                <tr>
+                    <td>No pet, Yes apt</td>
+                    <td>42</td>
+                    <td>36</td>
+                    <td>+6</td>
+                    <td>36</td>
+                    <td>1.00</td>
+                </tr>
+                <tr>
+                    <td>Yes pet, No apt</td>
+                    <td>30</td>
+                    <td>24</td>
+                    <td>+6</td>
+                    <td>36</td>
+                    <td>1.50</td>
+                </tr>
+                <tr>
+                    <td>Yes pet, Yes apt</td>
+                    <td>30</td>
+                    <td>36</td>
+                    <td>-6</td>
+                    <td>36</td>
+                    <td>1.00</td>
+                </tr>
+            </table>
+            
+            <div class="formula">
+                χ² = 1.50 + 1.00 + 1.50 + 1.00 = 5.00
+            </div>
+            
+            <h4>Part (b): Degrees of Freedom</h4>
+            <p>For a 2 × 2 table:</p>
+            <div class="formula">
+                df = (r - 1)(c - 1) = (2 - 1)(2 - 1) = 1
+            </div>
+            
+            <h4>Part (c): Interpretation</h4>
+            <p>With df = 1, a χ² value of 5.00 is moderate. For reference:</p>
+            <ul>
+                <li>χ² close to 0 would suggest data very consistent with independence</li>
+                <li>χ² around 3.84 corresponds to p ≈ 0.05 for df = 1</li>
+                <li>Our χ² = 5.00 is above this threshold</li>
+            </ul>
+            <p><strong>Conclusion:</strong> The data appear to deviate somewhat from independence. The p-value would be less than 0.05, suggesting statistically significant evidence of association.</p>
+        </div>
+    </div>
+
+    <div class="problem">
+        <h2>Problem 3: Independence Check and Chi-Squared Test</h2>
+        <p>A college recorded whether students commute by car (X) and whether they arrived late (Y) for n = 200 students:</p>
+        
+        <table>
+            <tr>
+                <th></th>
+                <th>Not late</th>
+                <th>Late</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <th>No car</th>
+                <td>78</td>
+                <td>22</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <th>Car</th>
+                <td>92</td>
+                <td>8</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>170</td>
+                <td>30</td>
+                <td>200</td>
+            </tr>
+        </table>
+
+        <p><strong>(a)</strong> Compute P(Late).</p>
+        <p><strong>(b)</strong> Compute P(Late | Car) and P(Late | No car).</p>
+        <p><strong>(c)</strong> Compute the expected counts under independence.</p>
+        <p><strong>(d)</strong> Compute χ² and identify the cell with the largest contribution.</p>
+
+        <button class="solution-toggle" onclick="toggleSolution('sol3')">Show Solution</button>
+        <div id="sol3" class="solution">
+            <h3>Solution:</h3>
+            
+            <h4>Part (a): Marginal Probability</h4>
+            <div class="formula">
+                P(Late) = 30/200 = 0.15
+            </div>
+            
+            <h4>Part (b): Conditional Probabilities</h4>
+            <div class="formula">
+                P(Late | No car) = 22/100 = 0.22<br>
+                P(Late | Car) = 8/100 = 0.08
+            </div>
+            
+            <div class="note">
+                <strong>Note:</strong> The conditional probabilities differ from the marginal probability, suggesting the variables are not independent. Students with cars are less likely to be late (8%) compared to the overall rate (15%) and especially compared to students without cars (22%).
+            </div>
+            
+            <h4>Part (c): Expected Counts</h4>
+            <table class="computation-table">
+                <tr>
+                    <th>Cell</th>
+                    <th>Calculation</th>
+                    <th>Expected Count</th>
+                </tr>
+                <tr>
+                    <td>No car, Not late</td>
+                    <td>(100 × 170) / 200</td>
+                    <td>85</td>
+                </tr>
+                <tr>
+                    <td>No car, Late</td>
+                    <td>(100 × 30) / 200</td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td>Car, Not late</td>
+                    <td>(100 × 170) / 200</td>
+                    <td>85</td>
+                </tr>
+                <tr>
+                    <td>Car, Late</td>
+                    <td>(100 × 30) / 200</td>
+                    <td>15</td>
+                </tr>
+            </table>
+            
+            <h4>Part (d): Chi-Squared Computation</h4>
+            <table class="computation-table">
+                <tr>
+                    <th>Cell</th>
+                    <th>O</th>
+                    <th>E</th>
+                    <th>O - E</th>
+                    <th>(O - E)²</th>
+                    <th>(O - E)²/E</th>
+                </tr>
+                <tr>
+                    <td>No car, Not late</td>
+                    <td>78</td>
+                    <td>85</td>
+                    <td>-7</td>
+                    <td>49</td>
+                    <td>0.576</td>
+                </tr>
+                <tr>
+                    <td>No car, Late</td>
+                    <td>22</td>
+                    <td>15</td>
+                    <td>+7</td>
+                    <td>49</td>
+                    <td>3.267</td>
+                </tr>
+                <tr>
+                    <td>Car, Not late</td>
+                    <td>92</td>
+                    <td>85</td>
+                    <td>+7</td>
+                    <td>49</td>
+                    <td>0.576</td>
+                </tr>
+                <tr>
+                    <td>Car, Late</td>
+                    <td>8</td>
+                    <td>15</td>
+                    <td>-7</td>
+                    <td>49</td>
+                    <td>3.267</td>
+                </tr>
+            </table>
+            
+            <div class="formula">
+                χ² = 0.576 + 3.267 + 0.576 + 3.267 ≈ 7.69
+            </div>
+            
+            <p><strong>Largest contribution:</strong> The cells "No car, Late" (3.267) and "Car, Late" (3.267) have the largest contributions.</p>
+            
+            <p><strong>Interpretation:</strong> Students without cars are late more often than independence would predict (O = 22, E = 15), while students with cars are late less often than independence would predict (O = 8, E = 15). This suggests having a car is associated with lower lateness rates.</p>
+            
+            <div class="note">
+                <strong>Statistical conclusion:</strong> With df = 1, χ² = 7.69 corresponds to p ≈ 0.0055, providing strong evidence that commute method and lateness are associated (not independent).
+            </div>
+        </div>
+    </div>
+
+    <div class="problem">
+        <h2>Problem 4: Complete Chi-Squared Test</h2>
+        <p>A study recorded whether students attended office hours (X) and whether they earned a B or higher (Y) for n = 50 students:</p>
+        
+        <table>
+            <tr>
+                <th></th>
+                <th>Grade < B</th>
+                <th>Grade ≥ B</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <th>No office hours</th>
+                <td>18</td>
+                <td>12</td>
+                <td>30</td>
+            </tr>
+            <tr>
+                <th>Office hours</th>
+                <td>6</td>
+                <td>14</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>24</td>
+                <td>26</td>
+                <td>50</td>
+            </tr>
+        </table>
+
+        <p><strong>(a)</strong> Check the conditions for a chi-squared test.</p>
+        <p><strong>(b)</strong> Compute expected counts and the chi-squared statistic.</p>
+        <p><strong>(c)</strong> State the degrees of freedom and interpret the result.</p>
+
+        <button class="solution-toggle" onclick="toggleSolution('sol4')">Show Solution</button>
+        <div id="sol4" class="solution">
+            <h3>Solution:</h3>
+            
+            <h4>Part (a): Check Conditions</h4>
+            <ol>
+                <li><strong>Random sample:</strong> Assuming students represent a random or representative sample ✓</li>
+                <li><strong>Independent observations:</strong> Each student appears once ✓</li>
+                <li><strong>Expected counts:</strong> Need to verify all E ≥ 1 and most E ≥ 5 (will check next)</li>
+            </ol>
+            
+            <h4>Part (b): Expected Counts and Chi-Squared</h4>
+            <p><strong>Expected counts:</strong></p>
+            <table class="computation-table">
+                <tr>
+                    <th>Cell</th>
+                    <th>Calculation</th>
+                    <th>E</th>
+                </tr>
+                <tr>
+                    <td>No OH, Grade < B</td>
+                    <td>(30 × 24) / 50</td>
+                    <td>14.4</td>
+                </tr>
+                <tr>
+                    <td>No OH, Grade ≥ B</td>
+                    <td>(30 × 26) / 50</td>
+                    <td>15.6</td>
+                </tr>
+                <tr>
+                    <td>Yes OH, Grade < B</td>
+                    <td>(20 × 24) / 50</td>
+                    <td>9.6</td>
+                </tr>
+                <tr>
+                    <td>Yes OH, Grade ≥ B</td>
+                    <td>(20 × 26) / 50</td>
+                    <td>10.4</td>
+                </tr>
+            </table>
+            
+            <div class="note">
+                All expected counts are ≥ 5, so the chi-squared test is appropriate ✓
+            </div>
+            
+            <p><strong>Chi-squared calculation:</strong></p>
+            <table class="computation-table">
+                <tr>
+                    <th>Cell</th>
+                    <th>O</th>
+                    <th>E</th>
+                    <th>(O - E)²/E</th>
+                </tr>
+                <tr>
+                    <td>No OH, < B</td>
+                    <td>18</td>
+                    <td>14.4</td>
+                    <td>(3.6)²/14.4 = 0.900</td>
+                </tr>
+                <tr>
+                    <td>No OH, ≥ B</td>
+                    <td>12</td>
+                    <td>15.6</td>
+                    <td>(-3.6)²/15.6 = 0.831</td>
+                </tr>
+                <tr>
+                    <td>Yes OH, < B</td>
+                    <td>6</td>
+                    <td>9.6</td>
+                    <td>(-3.6)²/9.6 = 1.350</td>
+                </tr>
+                <tr>
+                    <td>Yes OH, ≥ B</td>
+                    <td>14</td>
+                    <td>10.4</td>
+                    <td>(3.6)²/10.4 = 1.246</td>
+                </tr>
+            </table>
+            
+            <div class="formula">
+                χ² = 0.900 + 0.831 + 1.350 + 1.246 ≈ 4.33
+            </div>
+            
+            <h4>Part (c): Degrees of Freedom and Interpretation</h4>
+            <div class="formula">
+                df = (2 - 1)(2 - 1) = 1
+            </div>
+            
+            <p><strong>Hypotheses:</strong></p>
+            <ul>
+                <li>H₀: Office hour attendance and grade are independent</li>
+                <li>Hₐ: Office hour attendance and grade are associated</li>
+            </ul>
+            
+            <p><strong>Result:</strong> With df = 1 and χ² ≈ 4.33, the p-value ≈ 0.037</p>
+            
+            <p><strong>Conclusion:</strong> Since p < 0.05, we reject H₀. There is statistically significant evidence that attending office hours and earning a B or higher are associated. Looking at the table, students who attended office hours had higher rates of earning B or better (14/20 = 70%) compared to those who didn't attend (12/30 = 40%).</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            const button = solution.previousElementSibling;
+            
+            if (solution.classList.contains('show')) {
+                solution.classList.remove('show');
+                button.textContent = 'Show Solution';
+                button.style.backgroundColor = '#27ae60';
+            } else {
+                solution.classList.add('show');
+                button.textContent = 'Hide Solution';
+                button.style.backgroundColor = '#e74c3c';
+            }
+        }
+    </script>
+</body>
+</html>
