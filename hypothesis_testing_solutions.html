@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypothesis Testing - Solution Key</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <style>
+        body {
+            font-family: Georgia, serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 25px;
+        }
+        .problem {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+        .solution {
+            margin: 20px 0;
+        }
+        .step {
+            margin: 20px 0;
+            padding-left: 10px;
+        }
+        .conclusion {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+        }
+        .ci-connection {
+            background-color: #fff3e0;
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        ul {
+            line-height: 1.8;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #ddd;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hypothesis Testing Practice Problems - Solution Key</h1>
+
+    <h2>Problem 1: Blood Pressure Medication (Left-Tailed Test)</h2>
+    
+    <div class="problem">
+        <strong>Problem:</strong> A pharmaceutical company claims their new medication lowers systolic blood pressure. Historical data shows the general population has a mean systolic blood pressure of 130 mmHg with a standard deviation of 15 mmHg. A clinical trial with 36 patients taking the medication shows a mean blood pressure of 124 mmHg. Does this provide evidence that the medication works? Use \(\alpha = 0.05\).
+    </div>
+
+    <div class="solution">
+        <h3>Step 1: State the hypotheses</h3>
+        <div class="step">
+            <p>\(H_0: \mu = 130\) (The medication doesn't change blood pressure)</p>
+            <p>\(H_1: \mu < 130\) (The medication lowers blood pressure)</p>
+            <p><em>Note: We use a one-sided test because we specifically want to know if it lowers blood pressure.</em></p>
+        </div>
+
+        <h3>Step 2: Check assumptions and identify the test</h3>
+        <div class="step">
+            <ul>
+                <li>Random sample from the population? Yes (clinical trial participants)</li>
+                <li>Sample size: \(n = 36 \geq 30\), so CLT applies</li>
+                <li>Population \(\sigma = 15\) is known</li>
+            </ul>
+            <p>Therefore, we use a <strong>z-test</strong> with standard error:</p>
+            <p>\[SE = \frac{\sigma}{\sqrt{n}} = \frac{15}{\sqrt{36}} = 2.5\]</p>
+        </div>
+
+        <h3>Step 3: Calculate the test statistic</h3>
+        <div class="step">
+            <p>\[z = \frac{\bar{x} - \mu_0}{SE} = \frac{124 - 130}{2.5} = \frac{-6}{2.5} = -2.4\]</p>
+        </div>
+
+        <h3>Step 4: Find the p-value</h3>
+        <div class="step">
+            <p>For a left-tailed test: \(p\text{-value} = P(Z < -2.4) \approx 0.0082\)</p>
+        </div>
+
+        <h3>Step 5: Conclusion</h3>
+        <div class="conclusion">
+            <p>Since \(p = 0.0082 < \alpha = 0.05\), we <strong>reject \(H_0\)</strong>.</p>
+            <p><strong>In context:</strong> The 6 mmHg reduction in blood pressure is statistically significant. If the medication had no effect, we would only see a drop this large or larger about 0.82% of the time by chance alone. This provides strong evidence that the medication does lower blood pressure.</p>
+        </div>
+
+        <div class="ci-connection">
+            <h3>Confidence Interval Connection</h3>
+            <p>The 95% confidence interval for the population mean is:</p>
+            <p>\[\bar{x} \pm 1.96 \cdot SE = 124 \pm 1.96(2.5) = 124 \pm 4.9 = [119.1, 128.9]\]</p>
+            <p>Notice that \(\mu_0 = 130\) is <strong>not</strong> in this interval, which is consistent with rejecting \(H_0\) at \(\alpha = 0.05\). The confidence interval tells us the plausible range for the true mean blood pressure under the medication, and 130 (the old population mean) falls outside this plausible range.</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Problem 2: Manufacturing Quality Control (Two-Tailed Test)</h2>
+    
+    <div class="problem">
+        <strong>Problem:</strong> A factory produces bolts with a target diameter of 10.0 mm. The manufacturing process has a standard deviation of 0.3 mm. A quality inspector measures a random sample of 50 bolts and finds a mean diameter of 10.08 mm. Is there evidence that the manufacturing process is off-target (either too large or too small)? Use \(\alpha = 0.05\).
+    </div>
+
+    <div class="solution">
+        <h3>Step 1: State the hypotheses</h3>
+        <div class="step">
+            <p>\(H_0: \mu = 10.0\) (The process is on target)</p>
+            <p>\(H_1: \mu \neq 10.0\) (The process is off-target, either too large or too small)</p>
+            <p><em>Note: We use a two-sided test because we care about deviations in either direction.</em></p>
+        </div>
+
+        <h3>Step 2: Check assumptions and identify the test</h3>
+        <div class="step">
+            <ul>
+                <li>Random sample? Yes (quality control sample)</li>
+                <li>Sample size: \(n = 50 \geq 30\), so CLT applies</li>
+                <li>Population \(\sigma = 0.3\) is known</li>
+            </ul>
+            <p>Therefore, we use a <strong>z-test</strong> with standard error:</p>
+            <p>\[SE = \frac{\sigma}{\sqrt{n}} = \frac{0.3}{\sqrt{50}} \approx 0.0424\]</p>
+        </div>
+
+        <h3>Step 3: Calculate the test statistic</h3>
+        <div class="step">
+            <p>\[z = \frac{\bar{x} - \mu_0}{SE} = \frac{10.08 - 10.0}{0.0424} = \frac{0.08}{0.0424} \approx 1.89\]</p>
+        </div>
+
+        <h3>Step 4: Find the p-value</h3>
+        <div class="step">
+            <p>For a two-tailed test, we need to find the probability in both tails:</p>
+            <p>\(P(Z > 1.89) \approx 0.0294\)</p>
+            <p>\(p\text{-value} = 2 \times 0.0294 = 0.0588\)</p>
+            <p><em>(We double it because we're testing for deviation in either direction)</em></p>
+        </div>
+
+        <h3>Step 5: Conclusion</h3>
+        <div class="conclusion">
+            <p>Since \(p = 0.0588 > \alpha = 0.05\), we <strong>fail to reject \(H_0\)</strong>.</p>
+            <p><strong>In context:</strong> While the mean diameter is slightly higher than the target (10.08 mm vs. 10.0 mm), this difference is not statistically significant at the 0.05 level. The data does not provide sufficient evidence that the manufacturing process is off-target. The observed difference could reasonably be due to random sampling variation.</p>
+        </div>
+
+        <div class="ci-connection">
+            <h3>Confidence Interval Connection</h3>
+            <p>The 95% confidence interval for the population mean is:</p>
+            <p>\[\bar{x} \pm 1.96 \cdot SE = 10.08 \pm 1.96(0.0424) = 10.08 \pm 0.083 = [9.997, 10.163]\]</p>
+            <p>Notice that \(\mu_0 = 10.0\) <strong>is</strong> in this interval (just barely!), which is consistent with failing to reject \(H_0\) at \(\alpha = 0.05\). The target value of 10.0 mm falls within the plausible range for the true mean diameter.</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Problem 3: Online Learning Platform (Right-Tailed Test)</h2>
+    
+    <div class="problem">
+        <strong>Problem:</strong> An online learning platform claims their courses improve student performance. Students nationally average 65% on a standardized assessment with a standard deviation of 18%. A study of 40 students who completed the platform's courses shows a mean score of 71%. Does this provide evidence that the platform improves scores? Use \(\alpha = 0.01\).
+    </div>
+
+    <div class="solution">
+        <h3>Step 1: State the hypotheses</h3>
+        <div class="step">
+            <p>\(H_0: \mu = 65\) (The platform doesn't change scores)</p>
+            <p>\(H_1: \mu > 65\) (The platform improves scores)</p>
+            <p><em>Note: We use a one-sided test because we specifically want to know if it improves performance.</em></p>
+        </div>
+
+        <h3>Step 2: Check assumptions and identify the test</h3>
+        <div class="step">
+            <ul>
+                <li>Random sample? Yes (study participants)</li>
+                <li>Sample size: \(n = 40 \geq 30\), so CLT applies</li>
+                <li>Population \(\sigma = 18\) is known</li>
+            </ul>
+            <p>Therefore, we use a <strong>z-test</strong> with standard error:</p>
+            <p>\[SE = \frac{\sigma}{\sqrt{n}} = \frac{18}{\sqrt{40}} \approx 2.846\]</p>
+        </div>
+
+        <h3>Step 3: Calculate the test statistic</h3>
+        <div class="step">
+            <p>\[z = \frac{\bar{x} - \mu_0}{SE} = \frac{71 - 65}{2.846} = \frac{6}{2.846} \approx 2.11\]</p>
+        </div>
+
+        <h3>Step 4: Find the p-value</h3>
+        <div class="step">
+            <p>For a right-tailed test: \(p\text{-value} = P(Z > 2.11) \approx 0.0174\)</p>
+        </div>
+
+        <h3>Step 5: Conclusion</h3>
+        <div class="conclusion">
+            <p>Since \(p = 0.0174 > \alpha = 0.01\), we <strong>fail to reject \(H_0\)</strong>.</p>
+            <p><strong>In context:</strong> While students who used the platform scored 6 percentage points higher on average (71% vs. 65%), this improvement is not statistically significant at the more stringent 0.01 level. The data does not provide sufficient evidence at this level to conclude that the platform improves scores. Note that we would have rejected \(H_0\) at \(\alpha = 0.05\), but the company chose a stricter standard to make a claim.</p>
+        </div>
+
+        <div class="ci-connection">
+            <h3>Confidence Interval Connection</h3>
+            <p>The 99% confidence interval (corresponding to \(\alpha = 0.01\)) for the population mean is:</p>
+            <p>\[\bar{x} \pm 2.576 \cdot SE = 71 \pm 2.576(2.846) = 71 \pm 7.33 = [63.67, 78.33]\]</p>
+            <p>Notice that \(\mu_0 = 65\) <strong>is</strong> in this interval, which is consistent with failing to reject \(H_0\) at \(\alpha = 0.01\). The national average of 65% falls within the plausible range at the 99% confidence level.</p>
+            <p><em>Interesting note: If we had used a 95% confidence interval instead, we would get [71 ± 5.58] = [65.42, 76.58], which just barely excludes 65, showing how the conclusion depends on our chosen significance level.</em></p>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Summary: Key Differences Between Test Types</h2>
+    
+    <div style="margin: 30px 0;">
+        <h3>Left-Tailed Test (Problem 1)</h3>
+        <ul>
+            <li><strong>Alternative:</strong> \(H_1: \mu < \mu_0\)</li>
+            <li><strong>When to use:</strong> Testing if a parameter is <em>less than</em> a value</li>
+            <li><strong>p-value:</strong> Area to the left of the test statistic</li>
+            <li><strong>Confidence interval:</strong> If \(\mu_0\) is above the CI, reject \(H_0\)</li>
+        </ul>
+
+        <h3>Two-Tailed Test (Problem 2)</h3>
+        <ul>
+            <li><strong>Alternative:</strong> \(H_1: \mu \neq \mu_0\)</li>
+            <li><strong>When to use:</strong> Testing if a parameter is <em>different from</em> a value (in either direction)</li>
+            <li><strong>p-value:</strong> 2 × area in the tail beyond |z|</li>
+            <li><strong>Confidence interval:</strong> If \(\mu_0\) is outside the CI, reject \(H_0\)</li>
+        </ul>
+
+        <h3>Right-Tailed Test (Problem 3)</h3>
+        <ul>
+            <li><strong>Alternative:</strong> \(H_1: \mu > \mu_0\)</li>
+            <li><strong>When to use:</strong> Testing if a parameter is <em>greater than</em> a value</li>
+            <li><strong>p-value:</strong> Area to the right of the test statistic</li>
+            <li><strong>Confidence interval:</strong> If \(\mu_0\) is below the CI, reject \(H_0\)</li>
+        </ul>
+    </div>
+
+</body>
+</html>
